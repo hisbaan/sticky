@@ -16,6 +16,7 @@ public class MainActivity extends AppCompatActivity {
      FloatingActionButton mainFab;
      FloatingActionButton photoFab;
      FloatingActionButton drawNoteFab;
+     FloatingActionButton newBoardFab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
         mainFab = findViewById(R.id.main_fab);
         photoFab = findViewById(R.id.new_photo_fab);
         drawNoteFab = findViewById(R.id.new_note_fab);
+        newBoardFab = findViewById(R.id.new_board_fab);
 
         mainFab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -48,6 +50,13 @@ public class MainActivity extends AppCompatActivity {
         });
 
         drawNoteFab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(MainActivity.this, "Feature to be added", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        newBoardFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Toast.makeText(MainActivity.this, "Feature to be added", Toast.LENGTH_SHORT).show();
@@ -82,6 +91,7 @@ public class MainActivity extends AppCompatActivity {
         mainFab.animate().rotation(45);
         photoFab.animate().translationY(-getResources().getDimension(R.dimen.standard_55));
         drawNoteFab.animate().translationY(-getResources().getDimension(R.dimen.standard_105));
+        newBoardFab.animate().translationY(-getResources().getDimension(R.dimen.standard_155));
     }
 
     private void closeFABMenu() {
@@ -89,5 +99,6 @@ public class MainActivity extends AppCompatActivity {
         mainFab.animate().rotation(0);
         photoFab.animate().translationY(0);
         drawNoteFab.animate().translationY(0);
+        newBoardFab.animate().translationY(0);
     }
 }
