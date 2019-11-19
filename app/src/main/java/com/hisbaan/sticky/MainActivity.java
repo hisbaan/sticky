@@ -1,5 +1,6 @@
 package com.hisbaan.sticky;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Toast;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -39,7 +40,10 @@ public class MainActivity extends AppCompatActivity {
         photoFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(MainActivity.this, "Feature to be added", Toast.LENGTH_SHORT).show();
+                Intent i = new Intent(getApplicationContext(), CameraActivity.class);
+                startActivity(i);
+
+//                Toast.makeText(MainActivity.this, "Feature to be added", Toast.LENGTH_SHORT).show();
             }
         });
 
