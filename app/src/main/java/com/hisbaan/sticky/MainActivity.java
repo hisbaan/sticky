@@ -1,6 +1,7 @@
 package com.hisbaan.sticky;
 
 import android.os.Bundle;
+import android.widget.Toast;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import androidx.appcompat.app.AppCompatActivity;
 import android.view.View;
@@ -9,11 +10,11 @@ import android.view.MenuItem;
 
 public class MainActivity extends AppCompatActivity {
 
-    private boolean isFABOpen = false;
+     boolean isFABOpen = false;
 
-    private FloatingActionButton mainFab;
-    private FloatingActionButton photoFab;
-    private FloatingActionButton drawNoteFab;
+     FloatingActionButton mainFab;
+     FloatingActionButton photoFab;
+     FloatingActionButton drawNoteFab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,11 +28,25 @@ public class MainActivity extends AppCompatActivity {
         mainFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (isFABOpen) {
+                if (!isFABOpen) {
                     showFABMenu();
                 } else {
                     closeFABMenu();
                 }
+            }
+        });
+
+        photoFab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(MainActivity.this, "Feature to be added", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        drawNoteFab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(MainActivity.this, "Feature to be added", Toast.LENGTH_SHORT).show();
             }
         });
     }
