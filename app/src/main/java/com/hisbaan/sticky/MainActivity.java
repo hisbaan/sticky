@@ -1,22 +1,40 @@
 package com.hisbaan.sticky;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.media.Image;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
+import android.widget.ImageView;
 import android.widget.Toast;
+import androidx.annotation.Nullable;
+import androidx.core.content.FileProvider;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import androidx.appcompat.app.AppCompatActivity;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import java.util.Calendar;
+
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class MainActivity extends AppCompatActivity {
 
-     boolean isFABOpen = false;
+    private boolean isFABOpen = false;
 
-     FloatingActionButton mainFab;
-     FloatingActionButton photoFab;
-     FloatingActionButton drawNoteFab;
-     FloatingActionButton newBoardFab;
+    private FloatingActionButton mainFab;
+    private FloatingActionButton photoFab;
+    private FloatingActionButton drawNoteFab;
+    private FloatingActionButton newBoardFab;
+
+    private String currentImagePath = null;
+
+    private static final int REQUEST_IMAGE_CAPTURE = 101;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,10 +60,24 @@ public class MainActivity extends AppCompatActivity {
         photoFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(getApplicationContext(), CameraActivity.class);
-                startActivity(i);
+//                Intent i = new Intent(getApplicationContext(), CameraActivity.class);
+//                startActivity(i);
 
-//                Toast.makeText(MainActivity.this, "Feature to be added", Toast.LENGTH_SHORT).show();
+                Intent imageTakeIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
+                if (imageTakeIntent.resolveActivity(getPackageManager()) != null) {
+
+                    File imageFile = getImageFile();
+
+                    if(imageFile != null) {
+                        Uri imageUri = FileProvider.getUriForFile(MainActivity.this, "com.hisbaan.android.fileprovider", imageFile);
+                        imageTakeIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+
+                        startActivityForResult(imageTakeIntent, REQUEST_IMAGE_CAPTURE);
+                    }
+
+                }
+
             }
         });
 
@@ -84,6 +116,54 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private File getImageFile() {
+        String timeStamp = new SimpleDateFormat("yyyyMMdd-HHmmss").format(new Date());
+
+//        Date rightNowDate = Calendar.getInstance().getTime();
+//        char[] rightNowTemp = rightNowDate.toString().toCharArray();
+//        String rightNow = "";
+//
+//        for(int i = 0; i < rightNowTemp.length; i++) {
+//            if (rightNowTemp[i] == ' ') {
+//                rightNowTemp[i] = '-';
+//            }
+//        }
+//
+//        for (char c : rightNowTemp) {
+//            rightNow += c;
+//        }
+
+        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+
+        File imageFile = null;
+        try {
+            imageFile = File.createTempFile(timeStamp, ".jpg", storageDir);
+            currentImagePath = imageFile.getAbsolutePath();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return imageFile;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+//            Bundle extras = data.getExtras();
+//            Bitmap imageBitmap = (Bitmap) extras.get("data");
+//
+//            ImageView imageView = findViewById(R.id.image_view);
+//            imageView.setImageBitmap(imageBitmap);
+
+            Intent i = new Intent(getApplicationContext(), CameraActivity.class);
+            i.putExtra("image_path", currentImagePath);
+            startActivity(i);
+        }
+
     }
 
     private void showFABMenu() {
