@@ -7,6 +7,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.core.content.FileProvider;
@@ -34,6 +36,15 @@ public class MainActivity extends AppCompatActivity {
     private FloatingActionButton photoFab;
     private FloatingActionButton drawNoteFab;
 
+    //Declaring animations
+    private Animation rotateAnimation;
+    private Animation rotateBackAnimation;
+
+    private Animation scaleAnimation;
+    private Animation scaleBackAnimation;
+
+    private Animation setScaleAnimation;
+
     private static final int REQUEST_IMAGE_CAPTURE = 101;
 
     @Override
@@ -45,10 +56,22 @@ public class MainActivity extends AppCompatActivity {
         photoFab = findViewById(R.id.new_photo_fab);
         drawNoteFab = findViewById(R.id.new_note_fab);
 
-        photoFab.setScaleX(0);
-        photoFab.setScaleY(0);
-        drawNoteFab.setScaleX(0);
-        drawNoteFab.setScaleY(0);
+        //Initializing animations.
+        rotateAnimation = AnimationUtils.loadAnimation(this, R.anim.rotate);
+        rotateBackAnimation = AnimationUtils.loadAnimation(this, R.anim.rotate_back);
+
+        scaleAnimation = AnimationUtils.loadAnimation(this, R.anim.scale);
+        scaleBackAnimation = AnimationUtils.loadAnimation(this, R.anim.scale_back);
+
+        setScaleAnimation = AnimationUtils.loadAnimation(this, R.anim.set_scale);
+
+        //Setting the initial scale of the buttons to 0 so that they don't show up
+        photoFab.startAnimation(setScaleAnimation);
+        setFAB(photoFab, false);
+
+        drawNoteFab.startAnimation(setScaleAnimation);
+        setFAB(drawNoteFab, false);
+
 
         mainFab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -141,46 +164,31 @@ public class MainActivity extends AppCompatActivity {
 
     private void showFABMenu() {
         isFABOpen = true;
-        mainFab.animate().rotation(45);
-//        photoFab.animate().translationY(-getResources().getDimension(R.dimen.standard_55));
-//        drawNoteFab.animate().translationY(-getResources().getDimension(R.dimen.standard_105));
 
-//        ScaleAnimation animation1 = new ScaleAnimation(
-//                0f, 1f,
-//                0f, 1f,
-//                Animation.RELATIVE_TO_SELF, 0f,
-//                Animation.RELATIVE_TO_SELF, 0f
-//        );
-//        animation1.setFillAfter(true);
-//        animation1.setDuration(200);
-//
-//        photoFab.startAnimation(animation1);
-//        drawNoteFab.startAnimation(animation1);
-        photoFab.animate().scaleX(1);
-        photoFab.animate().scaleY(1);
-        photoFab.setFocusable(true);
-        photoFab.setClickable(true);
-//
-        drawNoteFab.animate().scaleX(1);
-        drawNoteFab.animate().scaleY(1);
-        drawNoteFab.setFocusable(true);
-        drawNoteFab.setClickable(true);
+        mainFab.startAnimation(rotateAnimation);
+
+        photoFab.startAnimation(scaleAnimation);
+        setFAB(photoFab, true);
+
+        drawNoteFab.startAnimation(scaleAnimation);
+        setFAB(drawNoteFab, true);
     }
 
     private void closeFABMenu() {
         isFABOpen = false;
-        mainFab.animate().rotation(0);
-//        photoFab.animate().translationY(0);
-//        drawNoteFab.animate().translationY(0);
 
-        photoFab.animate().scaleX(0);
-        photoFab.animate().scaleY(0);
-        photoFab.setFocusable(false);
-        photoFab.setClickable(false);
+        mainFab.startAnimation(rotateBackAnimation);
 
-        drawNoteFab.animate().scaleX(0);
-        drawNoteFab.animate().scaleY(0);
-        drawNoteFab.setFocusable(false);
-        drawNoteFab.setClickable(false);
+        photoFab.startAnimation(scaleBackAnimation);
+        setFAB(photoFab, false);
+
+        drawNoteFab.startAnimation(scaleBackAnimation);
+        setFAB(drawNoteFab, false);
+    }
+
+    private void setFAB(FloatingActionButton fab, Boolean state) {
+        fab.setEnabled(state);
+        fab.setClickable(state);
+        fab.setFocusable(state);
     }
 }

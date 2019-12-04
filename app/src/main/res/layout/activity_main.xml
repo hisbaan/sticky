@@ -13,10 +13,10 @@
             app:srcCompat="@drawable/ic_note_add_black"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+
             android:clickable="false"
             android:focusable="false"
             app:fabSize="mini"
-            android:visibility="visible"
 
             app:layout_constraintBottom_toTopOf="@id/new_photo_fab"
             app:layout_constraintStart_toStartOf="@id/new_photo_fab"
@@ -28,15 +28,15 @@
             android:src="@drawable/ic_camera_black"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+
             android:clickable="false"
             android:focusable="false"
             app:fabSize="mini"
-            android:visibility="visible"
 
             app:layout_constraintBottom_toTopOf="@id/main_fab"
             app:layout_constraintStart_toStartOf="@id/main_fab"
             app:layout_constraintEnd_toEndOf="@id/main_fab"
-            android:layout_marginStart="7dp" android:layout_marginEnd="7dp" android:layout_marginBottom="20dp"
+            android:layout_marginStart="7dp" android:layout_marginEnd="7dp" android:layout_marginBottom="15dp"
             app:layout_constraintHorizontal_bias="0.0"/>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
