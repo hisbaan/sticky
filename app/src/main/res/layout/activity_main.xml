@@ -13,9 +13,6 @@
             app:srcCompat="@drawable/ic_note_add_black"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-
-            android:clickable="false"
-            android:focusable="false"
             app:fabSize="mini"
 
             app:layout_constraintBottom_toTopOf="@id/new_photo_fab"
@@ -28,9 +25,6 @@
             android:src="@drawable/ic_camera_black"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-
-            android:clickable="false"
-            android:focusable="false"
             app:fabSize="mini"
 
             app:layout_constraintBottom_toTopOf="@id/main_fab"
