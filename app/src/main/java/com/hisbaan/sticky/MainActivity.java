@@ -124,7 +124,7 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(MainActivity.this, "Feature to be added", Toast.LENGTH_SHORT).show();
             }
         });
-    }
+    } //End Method onCreate.
 
     /**
      * Gets a unique name for an image file based on the current date and time.
@@ -148,14 +148,14 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return imageFile;
-    }
+    } //End Method getImageFile.
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
-    }
+    } //End Method onCreateOptionsMenu.
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -170,7 +170,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
-    }
+    } //End Method onOptionsItemSelected.
 
     /**
      * Saves the file if a picture was successfully taken and deletes it if the action was cancelled.
@@ -193,7 +193,7 @@ public class MainActivity extends AppCompatActivity {
             file.delete();
         }
 
-    }
+    } //End Method onActivityResult.
 
     /**
      * Shows the FAB drawer when the mainFAB is clicked on.
@@ -211,7 +211,7 @@ public class MainActivity extends AppCompatActivity {
         //Setting the photoFAB and the drawNoteFAB to be clickable so they can be clicked on.
         setFAB(photoFAB, true);
         setFAB(drawNoteFAB, true);
-    }
+    } //End Method showFABMenu.
 
     /**
      * Hides the FAB drawer when the mainFAB is clicked on.
@@ -229,7 +229,7 @@ public class MainActivity extends AppCompatActivity {
         //Setting the photoFAB and drawNoteFAB to be un-clickable because they will be invisible.
         setFAB(photoFAB, false);
         setFAB(drawNoteFAB, false);
-    }
+    } //End Method closeFABMenu.
 
     /**
      * Sets the state of the FAB passed to it to be clickable or un-clickable.
@@ -241,5 +241,5 @@ public class MainActivity extends AppCompatActivity {
         fab.setEnabled(state);
         fab.setClickable(state);
         fab.setFocusable(state);
-    }
-}
+    } //End Method setFAB.
+} //End Class MainActivity.
