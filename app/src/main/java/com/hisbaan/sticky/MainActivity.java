@@ -42,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
     private FloatingActionButton mainFAB;
     private FloatingActionButton photoFAB;
     private FloatingActionButton drawNoteFAB;
+    private FloatingActionButton uploadPhotoFAB;
 
     //Declaring animations.
     private Animation rotateAnimation;
@@ -53,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Runs when the activity is created to initialize variables and create onClickListeners.
      *
-     * @param savedInstanceState
+     * @param savedInstanceState If used, stores whatever data was pushed to it on activity pause or destroy via methods such as the onPause() method.
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +65,7 @@ public class MainActivity extends AppCompatActivity {
         mainFAB = findViewById(R.id.main_fab);
         photoFAB = findViewById(R.id.new_photo_fab);
         drawNoteFAB = findViewById(R.id.new_note_fab);
+        uploadPhotoFAB = findViewById(R.id.upload_fab);
 
         //Initializing animations from XML files located in src/res/anim/.
         rotateAnimation = AnimationUtils.loadAnimation(this, R.anim.rotate);
@@ -76,10 +78,12 @@ public class MainActivity extends AppCompatActivity {
         //Setting the initial scale of the buttons in the FAB to 0 so that they don't show up on start.
         photoFAB.startAnimation(setScaleAnimation);
         drawNoteFAB.startAnimation(setScaleAnimation);
+        uploadPhotoFAB.startAnimation(setScaleAnimation);
 
         //Setting the state of the button to unresponsive so that they are not interacted with when invisible.
         setFAB(photoFAB, false);
         setFAB(drawNoteFAB, false);
+        setFAB(uploadPhotoFAB, false);
 
         //Setting an onClickListener on the main FAB that opens and closes the FAB drawer.
         mainFAB.setOnClickListener(new View.OnClickListener() {
@@ -121,6 +125,14 @@ public class MainActivity extends AppCompatActivity {
         drawNoteFAB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Toast.makeText(MainActivity.this, "Feature to be added", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        //Setting an onClickListener to the uploadPhotoFAB which shows a toast saying that the feature has yet to be added.
+        uploadPhotoFAB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
                 Toast.makeText(MainActivity.this, "Feature to be added", Toast.LENGTH_SHORT).show();
             }
         });
@@ -207,10 +219,12 @@ public class MainActivity extends AppCompatActivity {
         //Scale the photoFAB and drawNoteFAB from 0 to 1.2 to 1.
         photoFAB.startAnimation(scaleAnimation);
         drawNoteFAB.startAnimation(scaleAnimation);
+        uploadPhotoFAB.startAnimation(scaleAnimation);
 
         //Setting the photoFAB and the drawNoteFAB to be clickable so they can be clicked on.
         setFAB(photoFAB, true);
         setFAB(drawNoteFAB, true);
+        setFAB(uploadPhotoFAB, true);
     } //End Method showFABMenu.
 
     /**
@@ -225,10 +239,12 @@ public class MainActivity extends AppCompatActivity {
         //Scale the photoFAB and the drawNoteFAB back to 0 so they are invisible.
         photoFAB.startAnimation(scaleBackAnimation);
         drawNoteFAB.startAnimation(scaleBackAnimation);
+        uploadPhotoFAB.startAnimation(scaleBackAnimation);
 
         //Setting the photoFAB and drawNoteFAB to be un-clickable because they will be invisible.
         setFAB(photoFAB, false);
         setFAB(drawNoteFAB, false);
+        setFAB(uploadPhotoFAB, false);
     } //End Method closeFABMenu.
 
     /**

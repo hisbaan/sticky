@@ -9,6 +9,17 @@
         android:id="@+id/coordinatorLayout">
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/upload_fab"
+            app:srcCompat="@drawable/ic_upload_black"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:fabSize="mini"
+
+            app:layout_constraintBottom_toTopOf="@id/new_note_fab"
+            app:layout_constraintStart_toStartOf="@id/new_note_fab"
+            app:layout_constraintEnd_toEndOf="@id/new_photo_fab"
+            android:layout_marginBottom="15dp"/>
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/new_note_fab"
             app:srcCompat="@drawable/ic_note_add_black"
             android:layout_width="wrap_content"
@@ -19,7 +30,6 @@
             app:layout_constraintStart_toStartOf="@id/new_photo_fab"
             app:layout_constraintEnd_toEndOf="@id/new_photo_fab"
             android:layout_marginBottom="15dp"/>
-
     <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/new_photo_fab"
             android:src="@drawable/ic_camera_black"
@@ -32,7 +42,6 @@
             app:layout_constraintEnd_toEndOf="@id/main_fab"
             android:layout_marginStart="7dp" android:layout_marginEnd="7dp" android:layout_marginBottom="15dp"
             app:layout_constraintHorizontal_bias="0.0"/>
-
     <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/main_fab"
             android:layout_width="wrap_content"
