@@ -1,6 +1,7 @@
 package com.hisbaan.sticky;
 
 //Android imports.
+
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -10,7 +11,11 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Toast;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.FileProvider;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import androidx.appcompat.app.AppCompatActivity;
 import android.view.View;
@@ -44,6 +49,8 @@ public class MainActivity extends AppCompatActivity {
     private FloatingActionButton drawNoteFAB;
     private FloatingActionButton uploadPhotoFAB;
 
+    private DrawerLayout drawer;
+
     //Declaring animations.
     private Animation rotateAnimation;
     private Animation rotateBackAnimation;
@@ -60,6 +67,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
         //Initializing FloatingActionButtons.
         mainFAB = findViewById(R.id.main_fab);
@@ -84,6 +94,13 @@ public class MainActivity extends AppCompatActivity {
         setFAB(photoFAB, false);
         setFAB(drawNoteFAB, false);
         setFAB(uploadPhotoFAB, false);
+
+        //Opening and closing the navigation drawer as well as handling the rotation animation of the hamburger icon.
+        drawer = findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar,
+                R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
 
         //Setting an onClickListener on the main FAB that opens and closes the FAB drawer.
         mainFAB.setOnClickListener(new View.OnClickListener() {
@@ -139,6 +156,19 @@ public class MainActivity extends AppCompatActivity {
     } //End Method onCreate.
 
     /**
+     * Handles the pressing of the back button.
+     */
+    @Override
+    public void onBackPressed() {
+        //If the navigation drawer is open, close it instead of exiting out of the app.
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
+    } //End Method onBackPressed.
+
+    /**
      * Gets a unique name for an image file based on the current date and time.
      *
      * @return the name of the image.
@@ -188,8 +218,8 @@ public class MainActivity extends AppCompatActivity {
      * Saves the file if a picture was successfully taken and deletes it if the action was cancelled.
      *
      * @param requestCode Code of the request that identifies where it came from.
-     * @param resultCode Code of the result that indicates whether or not the action was cancelled.
-     * @param data
+     * @param resultCode  Code of the result that indicates whether or not the action was cancelled.
+     * @param data        Not used
      */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -250,7 +280,7 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Sets the state of the FAB passed to it to be clickable or un-clickable.
      *
-     * @param fab FloatingActionButton that is to have its interactability modified.
+     * @param fab   FloatingActionButton that is to have its interactability modified.
      * @param state Decides whether the passed FloatingActionButton will be clickable or not.
      */
     private void setFAB(FloatingActionButton fab, Boolean state) {

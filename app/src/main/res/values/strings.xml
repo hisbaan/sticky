@@ -1,7 +1,8 @@
 <resources>
     <string name="app_name">Sticky</string>
     <string name="action_settings">Settings</string>
-
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="incomplete_feature">Feature to be added</string>
 
     <string name="back">Back</string>
