@@ -37,7 +37,7 @@
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/upload_fab"
-                app:srcCompat="@drawable/ic_upload_black"
+                app:srcCompat="@drawable/ic_file_upload"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:fabSize="mini"
