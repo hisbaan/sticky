@@ -10,7 +10,7 @@
                 android:title="Board"/>
         <item
                 android:id="@+id/nav_organizer"
-                android:icon="@drawable/ic_organizer"
+                android:icon="@drawable/ic_apps"
                 android:title="Note Organizer"/>
     </group>
 
