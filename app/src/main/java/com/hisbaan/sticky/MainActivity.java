@@ -1,14 +1,17 @@
 package com.hisbaan.sticky;
 
 //Android imports.
+
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.view.*;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Toast;
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.widget.Toolbar;
@@ -17,9 +20,7 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import androidx.appcompat.app.AppCompatActivity;
-import android.view.View;
-import android.view.Menu;
-import android.view.MenuItem;
+import com.google.android.material.navigation.NavigationView;
 
 //Java imports.
 import java.io.File;
@@ -31,7 +32,7 @@ import java.util.Locale;
 /**
  * Creates the main activity for the program, launches other activities, and allows for user image capture.
  */
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
 
     //Code for image capture request. This is used to ensure that an intent meant to trigger the camera.
     private static final int REQUEST_IMAGE_CAPTURE = 101;
@@ -70,6 +71,13 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+
+        //TODO figure out what exactly this is doing
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION, WindowManager.LayoutParams.TYPE_STATUS_BAR);
+//        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+
         //Initializing FloatingActionButtons.
         mainFAB = findViewById(R.id.main_fab);
         photoFAB = findViewById(R.id.new_photo_fab);
@@ -101,22 +109,35 @@ public class MainActivity extends AppCompatActivity {
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        //Setting an onClickListener on the main FAB that opens and closes the FAB drawer.
-        mainFAB.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        //Opens the Board fragment so that the app does not start with a blank activity, only on the first run.
+        if (savedInstanceState == null) {
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new BoardFragment()).commit();
+            navigationView.setCheckedItem(R.id.nav_board);
+        }
+
+        //Setting OnClickListeners to the FABs
+        mainFAB.setOnClickListener(this);
+        photoFAB.setOnClickListener(this);
+        drawNoteFAB.setOnClickListener(this);
+        uploadPhotoFAB.setOnClickListener(this);
+    } //End Method onCreate.
+
+    /**
+     * Handles the presses of buttons that have had the OnClickListener added on to it.
+     *
+     * @param v the View of the item interacted with.
+     */
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.main_fab: //Opens and closes the FAB drawer.
                 if (isFABOpen) {
                     closeFABMenu();
                 } else {
                     showFABMenu();
                 }
-            }
-        });
-
-        //Setting an onClickListener on the photoFAB that triggers the camera.
-        photoFAB.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+                break;
+            case R.id.new_photo_fab: //Triggers the camera and saves the photo.
                 //Intent that triggers the camera intent.
                 Intent imageTakeIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
@@ -133,26 +154,47 @@ public class MainActivity extends AppCompatActivity {
                     }
 
                 }
+                break;
+            case R.id.new_note_fab: //Shows a toast saying th the feature is yet to be added.
+                Toast.makeText(this, "Feature to be added", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.upload_fab: //Shows a toast saying th the feature is yet to be added.
+                Toast.makeText(this, "Feature to be added", Toast.LENGTH_SHORT).show();
+                break;
+        }
+    } //End Method OnClickListener
 
-            }
-        });
+    /**
+     * Handles the clicks of buttons in the navigation drawer.
+     *
+     * @param item The item in the navigation drawer that was clicked on.
+     * @return Whether or not a button was clicked on.
+     */
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.nav_board: //Opens the board fragment.
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new BoardFragment()).commit();
+                break;
+            case R.id.nav_organizer: //Opens the note organizer fragment.
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new NoteOrganizerFragment()).commit();
+                break;
+            case R.id.nav_tips:
+                Toast.makeText(this, "Open Tips", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.nav_feedback:
+                Toast.makeText(this, "Open Feedback", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.nav_settings:
+                Intent i = new Intent(getApplicationContext(), SettingsActivity.class);
+                startActivity(i);
+                break;
+        }
 
-        //Setting an onClickListener to the drawNoteFAB which shows a toast saying that the feature has yet to be added.
-        drawNoteFAB.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Toast.makeText(MainActivity.this, "Feature to be added", Toast.LENGTH_SHORT).show();
-            }
-        });
+        drawer.closeDrawer(GravityCompat.START);
 
-        //Setting an onClickListener to the uploadPhotoFAB which shows a toast saying that the feature has yet to be added.
-        uploadPhotoFAB.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(MainActivity.this, "Feature to be added", Toast.LENGTH_SHORT).show();
-            }
-        });
-    } //End Method onCreate.
+        return true;
+    }
 
     /**
      * Handles the pressing of the back button.

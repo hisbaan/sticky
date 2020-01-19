@@ -7,24 +7,27 @@
         <item
                 android:id="@+id/nav_board"
                 android:icon="@drawable/ic_dashboard"
-                android:title="Board"/>
+                android:title="@string/navigation_drawer_board"/>
         <item
                 android:id="@+id/nav_organizer"
                 android:icon="@drawable/ic_apps"
-                android:title="Note Organizer"/>
+                android:title="@string/navigation_drawer_organizer"/>
     </group>
 
     <item android:title="Actions">
         <menu>
             <item
-                    android:id="@+id/nav_settings"
-                    android:icon="@drawable/ic_settings"
-                    android:title="Settings"/>
+                    android:id="@+id/nav_tips"
+                    android:icon="@drawable/ic_info_outline"
+                    android:title="@string/navigation_drawer_tips"/>
             <item
                     android:id="@+id/nav_feedback"
                     android:icon="@drawable/ic_feedback"
-                    android:title="Feedback"/>
-
+                    android:title="@string/navigation_drawer_feedback"/>
+            <item
+                    android:id="@+id/nav_settings"
+                    android:icon="@drawable/ic_settings"
+                    android:title="@string/navigation_drawer_settings"/>
         </menu>
     </item>
 </menu>

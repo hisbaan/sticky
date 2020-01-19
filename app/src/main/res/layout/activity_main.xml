@@ -48,7 +48,7 @@
                 android:layout_marginBottom="15dp"/>
         <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/new_note_fab"
-                app:srcCompat="@drawable/ic_brush"
+                app:srcCompat="@drawable/ic_edit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:fabSize="mini"
