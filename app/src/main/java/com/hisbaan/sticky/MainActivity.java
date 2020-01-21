@@ -10,11 +10,10 @@ import android.provider.MediaStore;
 import android.view.*;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.Button;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.FileProvider;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -49,7 +48,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private FloatingActionButton drawNoteFAB;
     private FloatingActionButton uploadPhotoFAB;
 
-    private DrawerLayout drawer;
+    private Button menuButton;
+    private DrawerLayout drawerLayout;
 
     //Declaring animations.
     private Animation rotateAnimation;
@@ -68,15 +68,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        drawerLayout = findViewById(R.id.drawer_layout);
+        menuButton = findViewById(R.id.menu_button);
+        menuButton.setOnClickListener(this);
 
+        //Initializing listener for the buttons on the nav drawer.
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        //TODO figure out what exactly this is doing
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION, WindowManager.LayoutParams.TYPE_STATUS_BAR);
+//        getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION, WindowManager.LayoutParams.TYPE_STATUS_BAR);
 //        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        //Making the status bar completely transparent but with colour behind it.
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
+//        getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
 
         //Initializing FloatingActionButtons.
         mainFAB = findViewById(R.id.main_fab);
@@ -102,13 +106,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setFAB(drawNoteFAB, false);
         setFAB(uploadPhotoFAB, false);
 
-        //Opening and closing the navigation drawer as well as handling the rotation animation of the hamburger icon.
-        drawer = findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar,
-                R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.addDrawerListener(toggle);
-        toggle.syncState();
-
         //Opens the Board fragment so that the app does not start with a blank activity, only on the first run.
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new BoardFragment()).commit();
@@ -130,6 +127,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.menu_button:
+                drawerLayout.openDrawer(GravityCompat.START);
+                break;
             case R.id.main_fab: //Opens and closes the FAB drawer.
                 if (isFABOpen) {
                     closeFABMenu();
@@ -191,7 +191,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
         }
 
-        drawer.closeDrawer(GravityCompat.START);
+        drawerLayout.closeDrawer(GravityCompat.START);
 
         return true;
     }
@@ -201,9 +201,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
      */
     @Override
     public void onBackPressed() {
+        //TODO if the user enables the setting, make the back button open the drawer instead of closing the app.
+        //TODO aks the user for confirmation before closing the app --> Closing the app with the back button will kill the process.
         //If the navigation drawer is open, close it instead of exiting out of the app.
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
+        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            drawerLayout.closeDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();
         }

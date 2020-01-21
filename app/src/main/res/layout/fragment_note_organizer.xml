@@ -10,8 +10,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Note Organizer Fragment"
-        android:textColor="#585858"
+        android:textColor="#808080"
         android:textSize="30sp"
-        android:background="#AC1818"
+        android:layout_centerInParent="true"
     />
 </RelativeLayout>
