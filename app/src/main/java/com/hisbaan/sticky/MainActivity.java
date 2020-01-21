@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -79,8 +80,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 //        getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION, WindowManager.LayoutParams.TYPE_STATUS_BAR);
 //        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         //Making the status bar completely transparent but with colour behind it.
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
+        Window window = this.getWindow();
+        window.addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
 //        getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
+
+//        // clear FLAG_TRANSLUCENT_STATUS flag:
+//        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+//        // add FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS flag to the window
+//        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+//        // finally change the color
+//        window.setStatusBarColor(ContextCompat.getColor(this, R.color.colorPrimary));
 
         //Initializing FloatingActionButtons.
         mainFAB = findViewById(R.id.main_fab);
@@ -179,15 +188,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.nav_organizer: //Opens the note organizer fragment.
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new NoteOrganizerFragment()).commit();
                 break;
-            case R.id.nav_tips:
+            case R.id.nav_tips: //Opens the tips menu. This will show some tips and tricks.
                 Toast.makeText(this, "Open Tips", Toast.LENGTH_SHORT).show();
                 break;
-            case R.id.nav_feedback:
-                Toast.makeText(this, "Open Feedback", Toast.LENGTH_SHORT).show();
+            case R.id.nav_feedback: //Links to a google form where the user can provide feedback. This could be a bug, personal issue or suggested feature.
+                Uri uri = Uri.parse("https://docs.google.com/forms/d/e/1FAIpQLScqm8FnLu_HyxQM1pKXTxy-C05B9tu9s3l3_F7HUeuGrEGFDA/viewform?usp=sf_link");
+                Intent feedbackIntent = new Intent(Intent.ACTION_VIEW, uri);
+                startActivity(feedbackIntent);
                 break;
-            case R.id.nav_settings:
-                Intent i = new Intent(getApplicationContext(), SettingsActivity.class);
-                startActivity(i);
+            case R.id.nav_settings: //Opens the settings activity.
+                Intent settingsIntent = new Intent(getApplicationContext(), SettingsActivity.class);
+                startActivity(settingsIntent);
                 break;
         }
 
