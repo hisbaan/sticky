@@ -14,7 +14,6 @@ import android.widget.Button;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -77,19 +76,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-//        getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION, WindowManager.LayoutParams.TYPE_STATUS_BAR);
-//        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         //Making the status bar completely transparent but with colour behind it.
-        Window window = this.getWindow();
-        window.addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
-//        getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
-
-//        // clear FLAG_TRANSLUCENT_STATUS flag:
-//        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-//        // add FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS flag to the window
-//        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-//        // finally change the color
-//        window.setStatusBarColor(ContextCompat.getColor(this, R.color.colorPrimary));
+//        Window window = this.getWindow();
+//        window.addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
 
         //Initializing FloatingActionButtons.
         mainFAB = findViewById(R.id.main_fab);
@@ -128,6 +117,23 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         uploadPhotoFAB.setOnClickListener(this);
     } //End Method onCreate.
 
+    @Override
+    protected void onPause() {
+//        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
+//        Toast.makeText(this, "App Paused", Toast.LENGTH_SHORT).show();
+
+        super.onPause();
+    }
+
+    @Override
+    protected void onResume() {
+
+//        getWindow().addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
+//        Toast.makeText(this, "App Resumed", Toast.LENGTH_SHORT).show();
+
+        super.onResume();
+    }
+
     /**
      * Handles the presses of buttons that have had the OnClickListener added on to it.
      *
@@ -147,6 +153,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 }
                 break;
             case R.id.new_photo_fab: //Triggers the camera and saves the photo.
+                closeFABMenu();
                 //Intent that triggers the camera intent.
                 Intent imageTakeIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
