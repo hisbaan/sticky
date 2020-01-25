@@ -1,8 +1,8 @@
 package com.hisbaan.sticky;
 
 //Android imports.
-
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.content.FileProvider;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -36,13 +37,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     //Code for image capture request. This is used to ensure that an intent meant to trigger the camera.
     private static final int REQUEST_IMAGE_CAPTURE = 101;
 
+    //Final variables that are used for SharedPreferences.
+    public static final String SHARED_PREFS = "sharedPrefs";
+    public static final String THEME = "theme";
+
     //Tracks the filepath of the current image that has been captured.
     private String currentImagePath = null;
 
     //Tracks whether the FAB drawer is open.
     private boolean isFABOpen = false;
 
-    //Member variables.
+    //Declaring Buttons.
     private FloatingActionButton mainFAB;
     private FloatingActionButton photoFAB;
     private FloatingActionButton drawNoteFAB;
@@ -76,6 +81,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        //Restores shared preference of the app theme when the activity is restored.
+        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
+        int mode = sharedPreferences.getInt(THEME, AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
+        AppCompatDelegate.setDefaultNightMode(mode);
+
         //Making the status bar completely transparent but with colour behind it.
 //        Window window = this.getWindow();
 //        window.addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
@@ -106,38 +116,24 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         //Opens the Board fragment so that the app does not start with a blank activity, only on the first run.
         if (savedInstanceState == null) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new BoardFragment()).commit();
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fragment_container, new BoardFragment())
+                    .commit();
             navigationView.setCheckedItem(R.id.nav_board);
         }
 
-        //Setting OnClickListeners to the FABs
+        //Setting OnClickListeners to the FABs.
         mainFAB.setOnClickListener(this);
         photoFAB.setOnClickListener(this);
         drawNoteFAB.setOnClickListener(this);
         uploadPhotoFAB.setOnClickListener(this);
     } //End Method onCreate.
 
-    @Override
-    protected void onPause() {
-//        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
-//        Toast.makeText(this, "App Paused", Toast.LENGTH_SHORT).show();
-
-        super.onPause();
-    }
-
-    @Override
-    protected void onResume() {
-
-//        getWindow().addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
-//        Toast.makeText(this, "App Resumed", Toast.LENGTH_SHORT).show();
-
-        super.onResume();
-    }
-
     /**
      * Handles the presses of buttons that have had the OnClickListener added on to it.
      *
-     * @param v the View of the item interacted with.
+     * @param v The View of the item interacted with.
      */
     @Override
     public void onClick(View v) {
@@ -190,10 +186,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.nav_board: //Opens the board fragment.
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new BoardFragment()).commit();
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.fragment_container, new BoardFragment())
+                        .commit();
                 break;
             case R.id.nav_organizer: //Opens the note organizer fragment.
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new NoteOrganizerFragment()).commit();
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.fragment_container, new NoteOrganizerFragment())
+                        .commit();
                 break;
             case R.id.nav_tips: //Opens the tips menu. This will show some tips and tricks.
                 Toast.makeText(this, "Open Tips", Toast.LENGTH_SHORT).show();
@@ -212,7 +214,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         drawerLayout.closeDrawer(GravityCompat.START);
 
         return true;
-    }
+    } //End Method onNavigationItemsSelected.
 
     /**
      * Handles the pressing of the back button.

@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#FFFFFF</color>
+    <color name="colorPrimary">#18191C</color>
     <color name="colorAccent">#FFAB00</color>
     <color name="colorAccentLight">#FFEEDE</color>
     <color name="colorAccentDark">#B97E00</color>
 
-    <color name="drawer_background">#FFEEDE</color>
+    <color name="drawer_background">#443C26</color>
     <color name="drawer_icon">#FFAB00</color>
 
-    <color name="colorText">#000000</color>
+    <color name="colorText">#FFFFFF</color>
     <color name="colorSubText">#808080</color>
 </resources>

@@ -4,7 +4,6 @@ package com.hisbaan.sticky;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
@@ -22,17 +21,17 @@ public class CameraActivity extends AppCompatActivity {
     /**
      * Initializes variables, creates a bitmap of the image that was captured and pushes the bitmap to an imageView in the program when the program.
      *
-     * @param savedInstanceState
+     * @param savedInstanceState Saved information that has been placed in it.
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_camera);
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar_camera);
         setSupportActionBar(toolbar);
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back);
-        toolbar.setTitle("Crop");
+        toolbar.setTitle(R.string.title_activity_camera);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

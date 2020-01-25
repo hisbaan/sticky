@@ -12,13 +12,14 @@
     <string name="navigation_drawer_tips">Tips</string>
     <string name="navigation_drawer_settings">Settings</string>
     <string name="title_activity_settings">Settings</string>
+    <string name="title_activity_camera">Crop</string>
 
     <!-- Preference Titles -->
-    <string name="messages_header">Messages</string>
+    <string name="appearance_header">Appearance</string>
     <string name="sync_header">Sync</string>
 
     <!-- Messages Preferences -->
-    <string name="signature_title">Your signature</string>
+    <string name="theme_title">App Theme</string>
     <string name="reply_title">Default reply action</string>
 
     <!-- Sync Preferences -->
