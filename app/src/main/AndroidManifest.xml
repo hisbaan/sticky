@@ -23,6 +23,12 @@
             android:theme="@style/AppTheme"
             tools:ignore="GoogleAppIndexingWarning">
         <activity
+                android:name=".TipsActivity"
+                android:label="@string/title_activity_tips"
+                android:parentActivityName=".MainActivity">
+
+        </activity>
+        <activity
                 android:name=".SettingsActivity"
                 android:label="@string/title_activity_settings"
                 android:parentActivityName=".MainActivity">
@@ -30,7 +36,10 @@
                     android:name="android.support.PARENT_ACTIVITY"
                     android:value="com.hisbaan.sticky.MainActivity"/>
         </activity>
-        <activity android:name=".CameraActivity">
+        <activity
+                android:name=".CameraActivity"
+                android:label="@string/title_activity_camera"
+                android:parentActivityName=".MainActivity">
         </activity>
         <activity
                 android:name=".MainActivity"

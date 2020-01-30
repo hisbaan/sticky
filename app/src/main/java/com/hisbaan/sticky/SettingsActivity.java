@@ -1,7 +1,9 @@
 package com.hisbaan.sticky;
 
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.view.View;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
@@ -30,15 +32,25 @@ public class SettingsActivity extends AppCompatActivity {
 
         //Setting up toolbar, adding icons, title, etc.
         Toolbar toolbar = findViewById(R.id.toolbar_settings);
-        setSupportActionBar(toolbar);
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back);
-        toolbar.setTitle(R.string.settings);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 NavUtils.navigateUpFromSameTask(SettingsActivity.this);
             }
         });
+        setSupportActionBar(toolbar);
+
+        int currentNightMode = getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
+        View decorView = getWindow().getDecorView();
+        switch (currentNightMode) {
+            case Configuration.UI_MODE_NIGHT_NO:
+                decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+                break;
+            case Configuration.UI_MODE_NIGHT_YES:
+                decorView.setSystemUiVisibility(decorView.getSystemUiVisibility() & ~View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+                break;
+        }
 
         //Put settings fragment into the settings activity
         getSupportFragmentManager()
@@ -92,6 +104,7 @@ public class SettingsActivity extends AppCompatActivity {
                             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY);
                             break;
                     }
+
                     return true;
                 }
             });

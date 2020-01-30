@@ -1,8 +1,10 @@
 package com.hisbaan.sticky;
 
 //Android imports.
+
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -12,14 +14,19 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.content.FileProvider;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.viewpager.widget.ViewPager;
+
 import com.google.android.material.navigation.NavigationView;
 
 //Java imports.
@@ -86,9 +93,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         int mode = sharedPreferences.getInt(THEME, AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
         AppCompatDelegate.setDefaultNightMode(mode);
 
-        //Making the status bar completely transparent but with colour behind it.
-//        Window window = this.getWindow();
-//        window.addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
+        int currentNightMode = getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
+        View decorView = getWindow().getDecorView();
+        switch (currentNightMode) {
+            case Configuration.UI_MODE_NIGHT_NO:
+                decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+                break;
+            case Configuration.UI_MODE_NIGHT_YES:
+                decorView.setSystemUiVisibility(decorView.getSystemUiVisibility() & ~View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+                break;
+        }
 
         //Initializing FloatingActionButtons.
         mainFAB = findViewById(R.id.main_fab);
@@ -99,7 +113,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         //Initializing animations from XML files located in src/res/anim/.
         rotateAnimation = AnimationUtils.loadAnimation(this, R.anim.rotate);
         rotateBackAnimation = AnimationUtils.loadAnimation(this, R.anim.rotate_back);
-
         scaleAnimation = AnimationUtils.loadAnimation(this, R.anim.scale);
         scaleBackAnimation = AnimationUtils.loadAnimation(this, R.anim.scale_back);
         setScaleAnimation = AnimationUtils.loadAnimation(this, R.anim.set_scale);
@@ -198,7 +211,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         .commit();
                 break;
             case R.id.nav_tips: //Opens the tips menu. This will show some tips and tricks.
-                Toast.makeText(this, "Open Tips", Toast.LENGTH_SHORT).show();
+                Intent tipsIntent = new Intent(getApplicationContext(), TipsActivity.class);
+                startActivity(tipsIntent);
                 break;
             case R.id.nav_feedback: //Links to a google form where the user can provide feedback. This could be a bug, personal issue or suggested feature.
                 Uri uri = Uri.parse("https://docs.google.com/forms/d/e/1FAIpQLScqm8FnLu_HyxQM1pKXTxy-C05B9tu9s3l3_F7HUeuGrEGFDA/viewform?usp=sf_link");

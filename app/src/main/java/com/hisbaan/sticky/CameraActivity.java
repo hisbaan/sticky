@@ -1,6 +1,7 @@
 package com.hisbaan.sticky;
 
 //Importing android packages
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.view.View;
@@ -29,15 +30,25 @@ public class CameraActivity extends AppCompatActivity {
         setContentView(R.layout.activity_camera);
 
         Toolbar toolbar = findViewById(R.id.toolbar_camera);
-        setSupportActionBar(toolbar);
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back);
-        toolbar.setTitle(R.string.title_activity_camera);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 NavUtils.navigateUpFromSameTask(CameraActivity.this);
             }
         });
+        setSupportActionBar(toolbar);
+
+        int currentNightMode = getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
+        View decorView = getWindow().getDecorView();
+        switch (currentNightMode) {
+            case Configuration.UI_MODE_NIGHT_NO:
+                decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+                break;
+            case Configuration.UI_MODE_NIGHT_YES:
+                decorView.setSystemUiVisibility(decorView.getSystemUiVisibility() & ~View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+                break;
+        }
 
         //Initializing member variables.
         imageView = findViewById(R.id.image_view);
