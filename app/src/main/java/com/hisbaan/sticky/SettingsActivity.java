@@ -3,8 +3,8 @@ package com.hisbaan.sticky;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.view.View;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
@@ -41,6 +41,7 @@ public class SettingsActivity extends AppCompatActivity {
         });
         setSupportActionBar(toolbar);
 
+        //Sets status bar colour based on current theme
         int currentNightMode = getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
         View decorView = getWindow().getDecorView();
         switch (currentNightMode) {
@@ -105,6 +106,20 @@ public class SettingsActivity extends AppCompatActivity {
                             break;
                     }
 
+                    return true;
+                }
+            });
+
+            final SwitchPreference keepScreenOn = findPreference("screen_on");
+            assert keepScreenOn != null;
+            keepScreenOn.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    if (keepScreenOn.isChecked()) {
+                        //TODO Keep screen on.
+                    } else {
+                        //TODO turn off keep screen on.
+                    }
                     return true;
                 }
             });

@@ -31,14 +31,9 @@
     <string name="attachment_summary_off">Only download attachments when manually requested</string>
 
     <!-- Tips Text  -->
-    <!--    <string name="tips_text">When scanning a note:\n\t\t1) Use flash to improve the quality of the image.\n\t\t2) Hold on the shutter button and let go when ready to\n\t\t   capture to reduce shake.</string>-->
-
-    <string name="tips_text"><![CDATA[
-        <style type="text/css">
-            .tab { margin-left: 40px; }
-        </style>
-        When scanning a note:<br/>
-        <p class="tab"><b>1) </b>Use flash to improve the quality of the image</p>
-        <p class="tab"><b>2) </b>Hold the shutter button and let go of it when ready to scan.<p>
-    ]]></string>
+    <string name="tips_title">When scanning a note:</string>
+    <string name="tips_number_1">1)</string>
+    <string name="tips_text_1">Use flash to improve the quality of the image.</string>
+    <string name="tips_number_2">2)</string>
+    <string name="tips_text_2">Hold the shutter button and let go of it when ready to capture the photo.</string>
 </resources>

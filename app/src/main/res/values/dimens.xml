@@ -1,2 +1,3 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
+    <dimen name="tips_start_margin">10dp</dimen>
 </resources>

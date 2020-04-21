@@ -21,12 +21,9 @@ import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.content.FileProvider;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.viewpager.widget.ViewPager;
-
 import com.google.android.material.navigation.NavigationView;
 
 //Java imports.
@@ -78,8 +75,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
 
+        //Finding button in XML and initializing matching java component.
         drawerLayout = findViewById(R.id.drawer_layout);
         menuButton = findViewById(R.id.menu_button);
         menuButton.setOnClickListener(this);
@@ -93,6 +92,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         int mode = sharedPreferences.getInt(THEME, AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
         AppCompatDelegate.setDefaultNightMode(mode);
 
+        //Sets status bar colour based on current theme
         int currentNightMode = getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
         View decorView = getWindow().getDecorView();
         switch (currentNightMode) {
@@ -152,6 +152,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.menu_button:
+                if (isFABOpen) {
+                    closeFABMenu();
+                }
                 drawerLayout.openDrawer(GravityCompat.START);
                 break;
             case R.id.main_fab: //Opens and closes the FAB drawer.
@@ -181,9 +184,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 }
                 break;
             case R.id.new_note_fab: //Shows a toast saying th the feature is yet to be added.
+                closeFABMenu();
                 Toast.makeText(this, "Feature to be added", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.upload_fab: //Shows a toast saying th the feature is yet to be added.
+                closeFABMenu();
                 Toast.makeText(this, "Feature to be added", Toast.LENGTH_SHORT).show();
                 break;
         }
@@ -269,6 +274,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return imageFile;
     } //End Method getImageFile.
 
+    /**
+     * Initialize the contents of the Activity's standard options menu.
+     *
+     * @param menu The menu in which items are placed.
+     * @return You must return true for the menu to be displayed; if you return false it will not be shown.
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -276,6 +287,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return true;
     } //End Method onCreateOptionsMenu.
 
+    /**
+     * This hook is called whenever an item in your options menu is selected.
+     * @param item Item that is selected.
+     * @return boolean Return false to allow normal menu processing to proceed, true to consume it here.
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -365,4 +381,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         fab.setClickable(state);
         fab.setFocusable(state);
     } //End Method setFAB.
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        final String key = "key";
+
+        Bundle bundle = new Bundle();
+        bundle.putString(key, "information put in bundle");
+    }
 } //End Class MainActivity.

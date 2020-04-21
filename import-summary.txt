@@ -231,10 +231,10 @@ Moved Files:
 Android Gradle projects use a different directory structure than ADT
 Eclipse projects. Here's how the projects were restructured:
 
-* AndroidManifest.xml => OpenCVLibrary420/src/main/AndroidManifest.xml
-* res/ => OpenCVLibrary420/src/main/res/
-* src/ => OpenCVLibrary420/src/main/java/
-* src/org/opencv/engine/OpenCVEngineInterface.aidl => OpenCVLibrary420/src/main/aidl/org/opencv/engine/OpenCVEngineInterface.aidl
+* AndroidManifest.xml => OpenCVLibrary430/src/main/AndroidManifest.xml
+* res/ => OpenCVLibrary430/src/main/res/
+* src/ => OpenCVLibrary430/src/main/java/
+* src/org/opencv/engine/OpenCVEngineInterface.aidl => OpenCVLibrary430/src/main/aidl/org/opencv/engine/OpenCVEngineInterface.aidl
 
 Next Steps:
 -----------

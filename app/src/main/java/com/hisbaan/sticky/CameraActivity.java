@@ -11,6 +11,16 @@ import android.os.Bundle;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.NavUtils;
 
+//Importing openCV packages
+import org.opencv.core.Core;
+import org.opencv.core.CvType;
+import org.opencv.core.Mat;
+import org.opencv.core.Point;
+import org.opencv.core.Scalar;
+//import org.opencv.highgui.HighGui;
+import org.opencv.imgcodecs.Imgcodecs;
+import org.opencv.imgproc.Imgproc;
+
 /**
  * Displays the image that was captured immediately before this activity is triggered.
  */
@@ -18,6 +28,13 @@ public class CameraActivity extends AppCompatActivity {
 
     //Declaring variable
     private ImageView imageView;
+
+    //Variables for corner detection
+    private Mat srcGray = new Mat();
+    private Mat dst = new Mat();
+    private Mat dstNorm = new Mat();
+    private static final int MAX_THRESHOLD = 255;
+    private int threshold = 200;
 
     /**
      * Initializes variables, creates a bitmap of the image that was captured and pushes the bitmap to an imageView in the program when the program.
@@ -39,6 +56,7 @@ public class CameraActivity extends AppCompatActivity {
         });
         setSupportActionBar(toolbar);
 
+        //Sets status bar colour based on the current theme.
         int currentNightMode = getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
         View decorView = getWindow().getDecorView();
         switch (currentNightMode) {
@@ -50,12 +68,34 @@ public class CameraActivity extends AppCompatActivity {
                 break;
         }
 
-        //Initializing member variables.
-        imageView = findViewById(R.id.image_view);
+        String filename = getIntent().getStringExtra("image_path");
 
+        //Corner detection
+        Mat src = Imgcodecs.imread(filename);
+        if (src.empty()) {
+            //TODO send an error here and open feedback to contact the developer
+        }
+
+        Imgproc.cvtColor(src, srcGray, Imgproc.COLOR_BayerRG2GRAY);
+
+        //Displaying image for manual cropping
+        imageView = findViewById(R.id.image_view);
         //Declaring and initialising bitmap that is used to display the captured image in the activity.
-        Bitmap bitmap = BitmapFactory.decodeFile(getIntent().getStringExtra("image_path"));
+        Bitmap bitmap = BitmapFactory.decodeFile(filename);
         //Setting imageView to display the bitmap.
         imageView.setImageBitmap(bitmap);
     } //End Method onCreate.
+
+    private void addComponentsToPane() {
+        //add a slider here that changes the threshold variable and then runs the update method again
+        //also make this method initialize the Mat blackImg and add the image to the screen
+        //basically, look at the method given and adapt it to work with android
+        //website --> https://docs.opencv.org/3.4/d4/d7d/tutorial_harris_detector.html
+    }
+
+    private void update() {
+        //again follow the website.
+    }
+
+
 } //End Class CameraActivity.

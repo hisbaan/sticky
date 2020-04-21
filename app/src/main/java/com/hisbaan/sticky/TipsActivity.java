@@ -28,6 +28,7 @@ public class TipsActivity extends AppCompatActivity {
         });
         setSupportActionBar(toolbar);
 
+        //Sets status bar colour based on current theme
         int currentNightMode = getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
         View decorView = getWindow().getDecorView();
         switch (currentNightMode) {
@@ -37,14 +38,6 @@ public class TipsActivity extends AppCompatActivity {
             case Configuration.UI_MODE_NIGHT_YES:
                 decorView.setSystemUiVisibility(decorView.getSystemUiVisibility() & ~View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
                 break;
-        }
-
-        TextView textView = findViewById(R.id.textView);
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            textView.setText(Html.fromHtml(getString(R.string.tips_text), Html.FROM_HTML_MODE_COMPACT));
-        } else {
-            textView.setText(Html.fromHtml(getString(R.string.tips_text)));
         }
     }
 }
