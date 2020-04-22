@@ -33,6 +33,7 @@ public class CameraActivity extends AppCompatActivity {
     private Mat srcGray = new Mat();
     private Mat dst = new Mat();
     private Mat dstNorm = new Mat();
+    private Mat dstNormScaled = new Mat();
     private static final int MAX_THRESHOLD = 255;
     private int threshold = 200;
 
@@ -76,7 +77,8 @@ public class CameraActivity extends AppCompatActivity {
             //TODO send an error here and open feedback to contact the developer
         }
 
-        Imgproc.cvtColor(src, srcGray, Imgproc.COLOR_BayerRG2GRAY);
+        Imgproc.cvtColor(src, srcGray, Imgproc.COLOR_BGR2GRAY);
+
 
         //Displaying image for manual cropping
         imageView = findViewById(R.id.image_view);
@@ -95,6 +97,31 @@ public class CameraActivity extends AppCompatActivity {
 
     private void update() {
         //again follow the website.
+        dst = Mat.zeros(srcGray.size(), CvType.CV_32F);
+
+        int blockSize = 2;
+        int apertureSize = 3;
+        double k = 0.04;
+
+        Imgproc.cornerHarris(srcGray, dst, blockSize, apertureSize, k);
+
+        Core.normalize(dst, dstNorm, 0, 255, Core.NORM_MINMAX);
+        Core.convertScaleAbs(dstNorm, dstNormScaled);
+
+        float[] dstNormData = new float[(int) (dstNorm.total() * dstNorm.channels())];
+        dstNorm.get(0,0, dstNormData);
+
+        for (int i = 0; i < dstNorm.rows(); i++) {
+            for (int j = 0; j < dstNorm.cols(); j++) {
+                if ((int) dstNormData[i* dstNorm.cols() + j] > threshold) {
+                    Imgproc.circle(dstNormScaled, new Point(j, i), 5, new Scalar(0), 2, 8, 0);
+                }
+            }
+        }
+
+        //draw circle on the image and refresh it.
+        //cornerLabel.setIcon(new ImageIcon(HighGui.toBufferedImage(dstNormScaled)));
+
     }
 
 

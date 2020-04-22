@@ -1,3 +1,0 @@
-/home/hisbaan/AndroidStudioProjects/sticky/openCVLibrary430/.cxx/cmake/release/armeabi-v7a/CMakeFiles/rebuild_cache.dir
-/home/hisbaan/AndroidStudioProjects/sticky/openCVLibrary430/.cxx/cmake/release/armeabi-v7a/CMakeFiles/edit_cache.dir
-/home/hisbaan/AndroidStudioProjects/sticky/openCVLibrary430/.cxx/cmake/release/armeabi-v7a/CMakeFiles/opencv_jni_shared.dir

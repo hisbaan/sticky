@@ -1,0 +1,42 @@
+{
+  "stringTable": {
+    "0": "/home/hisbaan/AndroidStudioProjects/sticky/opencv/.cxx/cmake/release/arm64-v8a",
+    "1": "--target=aarch64-none-linux-android23 --gcc-toolchain=/home/hisbaan/Android/Sdk/ndk/21.0.6113669/toolchains/llvm/prebuilt/linux-x86_64 --sysroot=/home/hisbaan/Android/Sdk/ndk/21.0.6113669/toolchains/llvm/prebuilt/linux-x86_64/sysroot -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security -O2 -DNDEBUG -fPIC"
+  },
+  "buildFiles": [
+    "/home/hisbaan/AndroidStudioProjects/sticky/opencv/libcxx_helper/CMakeLists.txt",
+    "/home/hisbaan/Android/Sdk/ndk/21.0.6113669/build/cmake/android.toolchain.cmake",
+    "/home/hisbaan/Android/Sdk/ndk/21.0.6113669/build/cmake/platforms.cmake"
+  ],
+  "cleanCommands": [
+    "/home/hisbaan/Android/Sdk/cmake/3.10.2.4988404/bin/ninja -C \"/home/hisbaan/AndroidStudioProjects/sticky/opencv/.cxx/cmake/release/arm64-v8a\" clean"
+  ],
+  "buildTargetsCommand": "/home/hisbaan/Android/Sdk/cmake/3.10.2.4988404/bin/ninja  -C \"/home/hisbaan/AndroidStudioProjects/sticky/opencv/.cxx/cmake/release/arm64-v8a\" {LIST_OF_TARGETS_TO_BUILD}",
+  "libraries": {
+    "opencv_jni_shared-Release-arm64-v8a": {
+      "buildCommand": "/home/hisbaan/Android/Sdk/cmake/3.10.2.4988404/bin/ninja -C \"/home/hisbaan/AndroidStudioProjects/sticky/opencv/.cxx/cmake/release/arm64-v8a\" opencv_jni_shared",
+      "buildType": "release",
+      "toolchain": "2617765156",
+      "abi": "arm64-v8a",
+      "artifactName": "opencv_jni_shared",
+      "files": [
+        {
+          "src": "/home/hisbaan/AndroidStudioProjects/sticky/opencv/libcxx_helper/dummy.cpp",
+          "flagsOrdinal": 1,
+          "workingDirectoryOrdinal": 0
+        }
+      ],
+      "headers": [],
+      "output": "/home/hisbaan/AndroidStudioProjects/sticky/opencv/.cxx/cmake/release/arm64-v8a/libopencv_jni_shared.a"
+    }
+  },
+  "toolchains": {
+    "2617765156": {
+      "cppCompilerExecutable": "/home/hisbaan/Android/Sdk/ndk/21.0.6113669/toolchains/llvm/prebuilt/linux-x86_64/bin/clang++"
+    }
+  },
+  "cFileExtensions": [],
+  "cppFileExtensions": [
+    "cpp"
+  ]
+}

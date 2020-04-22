@@ -26,6 +26,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 
+//openCV imports.
+import org.opencv.android.OpenCVLoader;
+import org.opencv.core.Core;
+
 //Java imports.
 import java.io.File;
 import java.io.IOException;
@@ -77,6 +81,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_main);
+
+        //System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
+        if(OpenCVLoader.initDebug()) {
+            Toast.makeText(this, "OpenCV loaded successfully", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(this, "OpenCV not loaded", Toast.LENGTH_SHORT).show();
+        }
 
         //Finding button in XML and initializing matching java component.
         drawerLayout = findViewById(R.id.drawer_layout);
