@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.*;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -71,6 +72,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private Animation scaleBackAnimation;
     private Animation setScaleAnimation;
 
+    static {
+        if (!OpenCVLoader.initDebug()) {
+            Log.d("ERROR", "Unable to load OpenCV");
+        } else {
+            Log.d("SUCCESS", "Successfully loaded OpenCV");
+        }
+    }
+
     /**
      * Runs when the activity is created to initialize variables and create onClickListeners.
      *
@@ -83,11 +92,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setContentView(R.layout.activity_main);
 
         //System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
-        if(OpenCVLoader.initDebug()) {
-            Toast.makeText(this, "OpenCV loaded successfully", Toast.LENGTH_SHORT).show();
-        } else {
-            Toast.makeText(this, "OpenCV not loaded", Toast.LENGTH_SHORT).show();
-        }
 
         //Finding button in XML and initializing matching java component.
         drawerLayout = findViewById(R.id.drawer_layout);
@@ -392,14 +396,4 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         fab.setClickable(state);
         fab.setFocusable(state);
     } //End Method setFAB.
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-
-        final String key = "key";
-
-        Bundle bundle = new Bundle();
-        bundle.putString(key, "information put in bundle");
-    }
 } //End Class MainActivity.
