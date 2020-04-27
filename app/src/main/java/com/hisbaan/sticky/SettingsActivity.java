@@ -3,7 +3,9 @@ package com.hisbaan.sticky;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
@@ -82,9 +84,7 @@ public class SettingsActivity extends AppCompatActivity {
         @Override
         public void onCreatePreferences(final Bundle savedInstanceState, String rootKey) {
             setPreferencesFromResource(R.xml.root_preferences, rootKey);
-
-            //TODO find a way to dynamically change the status bar text colour to match the theme.
-
+            //TODO fix bug where the selected theme changes but is not applied.
             //When the theme preference is changed, applies the appropriate code.
             Preference themeList = findPreference("theme");
             assert themeList != null;
@@ -94,15 +94,19 @@ public class SettingsActivity extends AppCompatActivity {
                     switch ((String) newValue) {
                         case "light": //If the light theme is selected, enable the light theme.
                             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                            Toast.makeText(getActivity(), "Light mode is selected", Toast.LENGTH_SHORT).show();
                             break;
                         case "dark": //If the dark theme is selected, enable the dark theme.
                             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                            Toast.makeText(getActivity(), "Dark mode is selected", Toast.LENGTH_SHORT).show();
                             break;
                         case "follow_system": //If the follow system theme is selected, allow the theme of the application to follow the system theme.
                             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
+                            Toast.makeText(getActivity(), "Follow system is selected", Toast.LENGTH_SHORT).show();
                             break;
                         case "follow_battery_saver": //If the follow battery saver theme is selected, allow the theme of the application to follow the battery saver state.
                             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY);
+                            Toast.makeText(getActivity(), "Follow battery saver is selected", Toast.LENGTH_SHORT).show();
                             break;
                     }
 

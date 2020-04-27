@@ -16,6 +16,19 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
+        android:id="@+id/cancel_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="10dp"
+        android:text="cancel"
+
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/select_button"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <Button
         android:id="@+id/select_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -23,8 +36,7 @@
         android:text="@string/select"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/image_view" />
+        app:layout_constraintStart_toEndOf="@+id/cancel_button" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/point_1"
@@ -36,7 +48,7 @@
         app:layout_constraintHorizontal_bias="0.209"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/toolbar_camera"
-        app:layout_constraintVertical_bias="0.14" />
+        app:layout_constraintVertical_bias="0.244" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/point_2"
@@ -48,7 +60,7 @@
         app:layout_constraintHorizontal_bias="0.818"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/toolbar_camera"
-        app:layout_constraintVertical_bias="0.14" />
+        app:layout_constraintVertical_bias="0.244" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/point_3"
@@ -76,19 +88,16 @@
 
     <ImageView
         android:id="@+id/image_view"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-
-        android:layout_marginStart="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:layout_marginEnd="10dp"
         android:layout_marginBottom="10dp"
+        android:adjustViewBounds="true"
         android:contentDescription="@string/app_name"
         app:layout_constraintBottom_toTopOf="@id/select_button"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/toolbar_camera"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintTop_toBottomOf="@id/toolbar_camera" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

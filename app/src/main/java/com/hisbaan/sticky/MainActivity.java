@@ -29,6 +29,7 @@ import com.google.android.material.navigation.NavigationView;
 
 //openCV imports.
 import org.opencv.android.OpenCVLoader;
+import org.opencv.android.Utils;
 import org.opencv.core.Core;
 
 //Java imports.
@@ -256,7 +257,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public void onBackPressed() {
         //TODO if the user enables the setting, make the back button open the drawer instead of closing the app.
-        //TODO aks the user for confirmation before closing the app --> Closing the app with the back button will kill the process.
+        //TODO aks the user for confirmation before closing the app --> Closing the app with the back button will kill the process (make this a setting).
         //If the navigation drawer is open, close it instead of exiting out of the app.
         if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
             drawerLayout.closeDrawer(GravityCompat.START);
@@ -304,6 +305,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     /**
      * This hook is called whenever an item in your options menu is selected.
+     *
      * @param item Item that is selected.
      * @return boolean Return false to allow normal menu processing to proceed, true to consume it here.
      */

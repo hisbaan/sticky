@@ -1,32 +1,35 @@
 package com.hisbaan.sticky;
 
-//Importing android packages
+//Android imports.
 
 import android.annotation.SuppressLint;
 import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.Paint;
 import android.os.Bundle;
-import android.util.Log;
+import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.NavUtils;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-////Importing openCV packages
+//OpenCV imports.
+import org.opencv.android.Utils;
+import org.opencv.core.CvException;
+import org.opencv.core.Mat;
+import org.opencv.core.MatOfPoint2f;
+import org.opencv.core.Point;
+import org.opencv.imgcodecs.Imgcodecs;
+import org.opencv.imgproc.Imgproc;
+
+////OpenCV imports. (for corner detection that is off right now)
 //import org.opencv.android.Utils;
 //import org.opencv.core.Core;
 //import org.opencv.core.CvException;
@@ -41,12 +44,22 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 /**
  * Displays the image that was captured immediately before this activity is triggered.
  */
-public class CameraActivity extends AppCompatActivity {
+public class CameraActivity extends AppCompatActivity implements View.OnTouchListener, View.OnClickListener {
 
-    //Declaring variable
+    //Declaring variables for cropping
+    String filename;
     private ImageView imageView;
 
-    //Variables for corner detection
+    FloatingActionButton point1;
+    FloatingActionButton point2;
+    FloatingActionButton point3;
+    FloatingActionButton point4;
+
+    //Declaring variables for dragging the points around.
+    float dX;
+    float dY;
+
+    //Variables for corner detection (off right now)
 //    private Mat src = new Mat();
 //    private Mat srcGray = new Mat();
 //    private int maxCorners = 12;
@@ -67,12 +80,7 @@ public class CameraActivity extends AppCompatActivity {
 
         Toolbar toolbar = findViewById(R.id.toolbar_camera);
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                NavUtils.navigateUpFromSameTask(CameraActivity.this);
-            }
-        });
+        toolbar.setNavigationOnClickListener(this);
         setSupportActionBar(toolbar);
 
         //Sets status bar colour based on the current theme.
@@ -87,29 +95,24 @@ public class CameraActivity extends AppCompatActivity {
                 break;
         }
 
+        //Initializes points that are used for selecting the corners of the sticky note.
+        point1 = findViewById(R.id.point_1);
+        point2 = findViewById(R.id.point_2);
+        point3 = findViewById(R.id.point_3);
+        point4 = findViewById(R.id.point_4);
+
+        point1.setOnTouchListener(this);
+        point2.setOnTouchListener(this);
+        point3.setOnTouchListener(this);
+        point4.setOnTouchListener(this);
+
         Button selectButton = findViewById(R.id.select_button);
-        selectButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(CameraActivity.this, "Sticky note cropped", Toast.LENGTH_SHORT).show();
+        selectButton.setOnClickListener(this);
 
-            }
-        });
+        Button cancelButton = findViewById(R.id.cancel_button);
+        cancelButton.setOnClickListener(this);
 
-        FloatingActionButton point1 = findViewById(R.id.point_1);
-        FloatingActionButton point2 = findViewById(R.id.point_2);
-        FloatingActionButton point3 = findViewById(R.id.point_3);
-        FloatingActionButton point4 = findViewById(R.id.point_4);
-
-        TouchListener touchListener = new TouchListener();
-        point1.setOnTouchListener(touchListener);
-        point2.setOnTouchListener(touchListener);
-        point3.setOnTouchListener(touchListener);
-        point4.setOnTouchListener(touchListener);
-
-
-        String filename = getIntent().getStringExtra("image_path");
-        Toast.makeText(this, filename, Toast.LENGTH_SHORT).show();
+        filename = getIntent().getStringExtra("image_path");
 
         //Corner detection
 //        src = Imgcodecs.imread(filename);
@@ -125,39 +128,127 @@ public class CameraActivity extends AppCompatActivity {
         imageView = findViewById(R.id.image_view);
         //Declaring and initialising bitmap that is used to display the captured image in the activity.
         Bitmap bitmap = BitmapFactory.decodeFile(filename);
+//        Bitmap bitmap = BitmapFactory.decodeFile("/storage/emulated/0/Android/data/com.hisbaan.sticky/files/Pictures/TestImage.jpg");
         //Setting imageView to display the bitmap.
         imageView.setImageBitmap(bitmap);
 //        update();
     } //End Method onCreate.
 
-    public class TouchListener implements View.OnTouchListener {
-        float dX, dY;
+    /**
+     * Listener that triggers an action based on what button was pressed.
+     *
+     * @param v View of the button that was pressed.
+     */
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.cancel_button:
+            case R.id.toolbar_camera:
+                NavUtils.navigateUpFromSameTask(CameraActivity.this);
+                break;
+            case R.id.select_button:
+                //Initializing image matrices.
+                Mat srcImage = Imgcodecs.imread(filename);
+                Imgproc.cvtColor(srcImage, srcImage, Imgproc.COLOR_RGB2BGR);
+                Mat dstImage = new Mat(1000, 1000, srcImage.type());
 
-        @SuppressLint("ClickableViewAccessibility")
-        @Override
-        public boolean onTouch(View v, MotionEvent event) {
-            switch (event.getAction()) {
+                //Getting values that wil be used for calculations later on.
+                float xAdjustment = imageView.getX();
+                float yAdjustment = imageView.getY();
+                float imageViewWidth = imageView.getWidth();
+                float imageViewHeight = imageView.getHeight();
+                float srcWidth = srcImage.cols();
+                float srcHeight = srcImage.rows();
 
-                case MotionEvent.ACTION_DOWN:
+                //Converting density independent pixels to regular pixels.
+                Resources r = getResources();
+                float offCenterAdjustment = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10, r.getDisplayMetrics());
 
-                    dX = v.getX() - event.getRawX();
-                    dY = v.getY() - event.getRawY();
-                    break;
+                //Calculating all the points.
+                float x1 = (point1.getX() - xAdjustment + offCenterAdjustment) * (srcWidth / imageViewWidth);
+                float x2 = (point2.getX() - xAdjustment + offCenterAdjustment) * (srcWidth / imageViewWidth);
+                float x3 = (point3.getX() - xAdjustment + offCenterAdjustment) * (srcWidth / imageViewWidth);
+                float x4 = (point4.getX() - xAdjustment + offCenterAdjustment) * (srcWidth / imageViewWidth);
+                float y1 = (point1.getY() - yAdjustment + offCenterAdjustment) * (srcHeight / imageViewHeight);
+                float y2 = (point2.getY() - yAdjustment + offCenterAdjustment) * (srcHeight / imageViewHeight);
+                float y3 = (point3.getY() - yAdjustment + offCenterAdjustment) * (srcHeight / imageViewHeight);
+                float y4 = (point4.getY() - yAdjustment + offCenterAdjustment) * (srcHeight / imageViewHeight);
 
-                case MotionEvent.ACTION_MOVE:
+                //Hiding the points that were used for corner selection.
+                setFAB(point1, false);
+                setFAB(point2, false);
+                setFAB(point3, false);
+                setFAB(point4, false);
 
-                    v.animate()
-                            .x(event.getRawX() + dX)
-                            .y(event.getRawY() + dY)
-                            .setDuration(0)
-                            .start();
-                    break;
-                default:
-                    return false;
-            }
-            return true;
+                //Creating matrices more matrices of the target and destination point values.
+                Mat src = new MatOfPoint2f(new Point(x1, y1), new Point(x2, y2), new Point(x3, y3), new Point(x4, y4));
+                Mat dst = new MatOfPoint2f(new Point(0, 0), new Point(dstImage.width() - 1, 0), new Point(0, dstImage.height() - 1), new Point(dstImage.width() - 1, dstImage.height() - 1));
+
+                //Doing the transformation.
+                Mat transform = Imgproc.getPerspectiveTransform(src, dst);
+                Imgproc.warpPerspective(srcImage, dstImage, transform, dstImage.size());
+
+                //Displaying the transformed image.
+                Bitmap bmp = null;
+
+                try {
+                    bmp = Bitmap.createBitmap(dstImage.cols(), dstImage.rows(), Bitmap.Config.ARGB_8888);
+                    Utils.matToBitmap(dstImage, bmp);
+                } catch (CvException e) {
+                    System.out.println(e.getMessage());
+                }
+
+                imageView = findViewById(R.id.image_view);
+                imageView.setImageBitmap(bmp);
+
+                Imgproc.cvtColor(dstImage, dstImage, Imgproc.COLOR_RGB2BGR);
+
+                Imgcodecs.imwrite(filename.substring(0, filename.length() - 5) + "-cropped.jpg", dstImage);
+                break;
         }
+
     }
+
+    /**
+     * Touch listener to allow for dragging the points around.
+     *
+     * @param v     View of the item being interacted with.
+     * @param event What is happening to the item.
+     * @return Whether or not to perform an action on the item.
+     */
+    @SuppressLint("ClickableViewAccessibility")
+    @Override
+    public boolean onTouch(View v, MotionEvent event) {
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                dX = v.getX() - event.getRawX();
+                dY = v.getY() - event.getRawY();
+                break;
+            case MotionEvent.ACTION_MOVE:
+                v.animate().x(event.getRawX() + dX).y(event.getRawY() + dY).setDuration(0).start();
+                break;
+            default:
+                return false;
+        }
+        return true;
+    }
+
+    /**
+     * Sets the state of the FAB passed to it to be clickable or un-clickable.
+     *
+     * @param fab   FloatingActionButton that is to have its intractability modified.
+     * @param state Decides whether the passed FloatingActionButton will be clickable or not.
+     */
+    private void setFAB(FloatingActionButton fab, Boolean state) {
+        fab.setEnabled(state);
+        fab.setClickable(state);
+        fab.setFocusable(state);
+        if (state) {
+            fab.show();
+        } else {
+            fab.hide();
+        }
+    } //End Method setFAB.
 
 //    private View.OnTouchListener onTouchListener() {
 //        return new View.OnTouchListener() {
@@ -193,40 +284,6 @@ public class CameraActivity extends AppCompatActivity {
 //        };
 //    }
 
-
-//    private View.OnTouchListener onTouchListener() {
-//        return new View.OnTouchListener() {
-//            @SuppressLint("ClickableViewAccessibility")
-//            @Override
-//            public boolean onTouch(View v, MotionEvent event) {
-//                final int X = (int) event.getRawX();
-//                final int Y = (int) event.getRawY();
-//
-//                switch (event.getAction() & MotionEvent.ACTION_MASK) {
-//                    case MotionEvent.ACTION_DOWN:
-//                        ConstraintLayout.LayoutParams layoutParamsDown = (ConstraintLayout.LayoutParams) v.getLayoutParams();
-//                        xDelta = X - layoutParamsDown.leftMargin;
-//                        yDelta = Y - layoutParamsDown.topMargin;
-//                        break;
-//                    case MotionEvent.ACTION_MOVE:
-//                        ConstraintLayout.LayoutParams layoutParamsMove = (ConstraintLayout.LayoutParams) v.getLayoutParams();
-//                        layoutParamsMove.leftMargin = X - xDelta;
-//                        layoutParamsMove.topMargin = Y - yDelta;
-//                        layoutParamsMove.rightMargin = -250;
-//                        layoutParamsMove.bottomMargin = -250;
-//                        imageView.setLayoutParams(layoutParamsMove);
-//                        break;
-//                }
-//                mainLayout.invalidate();
-//                return true;
-//            }
-//        };
-//
-//    }
-
-/**
- * Runs the corner detection, saves the file and then puts it on the screen.
- */
 //    private void update() {
 //        maxCorners = Math.max(maxCorners, 1);
 //        MatOfPoint corners = new MatOfPoint();
