@@ -3,6 +3,10 @@
     <string name="settings">Settings</string>
     <string name="back">Back</string>
     <string name="select">Select</string>
+    <string name="name">Name</string>
+    <string name="button_continue">continue</string>
+    <string name="cancel">cancel</string>
+    <string name="recrop">recrop</string>
 
     <!-- Navigation Drawer Items -->
     <string name="navigation_drawer_open">Open navigation drawer</string>
@@ -23,13 +27,6 @@
 
     <!-- Messages Preferences -->
     <string name="theme_title">App Theme</string>
-    <string name="reply_title">Default reply action</string>
-
-    <!-- Sync Preferences -->
-    <string name="sync_title">Sync email periodically</string>
-    <string name="attachment_title">Download incoming attachments</string>
-    <string name="attachment_summary_on">Automatically download attachments for incoming emails</string>
-    <string name="attachment_summary_off">Only download attachments when manually requested</string>
 
     <!-- Tips Text  -->
     <string name="tips_title">When scanning a note:</string>
@@ -37,4 +34,6 @@
     <string name="tips_text_1">Use flash to improve the quality of the image.</string>
     <string name="tips_number_2">2)</string>
     <string name="tips_text_2">Hold the shutter button and let go of it when ready to capture the photo.</string>
+    <string name="new_group_hint">New Group Name</string>
+    <string name="new_group">New Group</string>
 </resources>

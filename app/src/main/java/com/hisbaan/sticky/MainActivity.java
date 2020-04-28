@@ -1,7 +1,5 @@
 package com.hisbaan.sticky;
 
-//Android imports.
-
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
@@ -10,7 +8,9 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
-import android.view.*;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
@@ -18,21 +18,17 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.content.FileProvider;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 
-//openCV imports.
 import org.opencv.android.OpenCVLoader;
-import org.opencv.android.Utils;
-import org.opencv.core.Core;
 
-//Java imports.
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -232,17 +228,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         .commit();
                 break;
             case R.id.nav_tips: //Opens the tips menu. This will show some tips and tricks.
-                Intent tipsIntent = new Intent(getApplicationContext(), TipsActivity.class);
-                startActivity(tipsIntent);
+                startActivity(new Intent(getApplicationContext(), TipsActivity.class));
                 break;
             case R.id.nav_feedback: //Links to a google form where the user can provide feedback. This could be a bug, personal issue or suggested feature.
                 Uri uri = Uri.parse("https://docs.google.com/forms/d/e/1FAIpQLScqm8FnLu_HyxQM1pKXTxy-C05B9tu9s3l3_F7HUeuGrEGFDA/viewform?usp=sf_link");
-                Intent feedbackIntent = new Intent(Intent.ACTION_VIEW, uri);
-                startActivity(feedbackIntent);
+                startActivity(new Intent(Intent.ACTION_VIEW, uri));
                 break;
             case R.id.nav_settings: //Opens the settings activity.
-                Intent settingsIntent = new Intent(getApplicationContext(), SettingsActivity.class);
-                startActivity(settingsIntent);
+                startActivity(new Intent(getApplicationContext(), SettingsActivity.class));
                 break;
         }
 

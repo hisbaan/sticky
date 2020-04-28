@@ -8,7 +8,7 @@
         tools:context=".TipsActivity">
 
     <include
-            android:id="@+id/toolbar_tips"
+            android:id="@+id/toolbar"
             layout="@layout/toolbar_minimal" />
 
     <TextView

@@ -1,8 +1,7 @@
 package com.hisbaan.sticky;
 
-//Android imports.
-
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -20,16 +19,13 @@ import androidx.core.app.NavUtils;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-//OpenCV imports.
-import org.opencv.android.Utils;
-import org.opencv.core.CvException;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfPoint2f;
 import org.opencv.core.Point;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 
-////OpenCV imports. (for corner detection that is off right now)
+// (for corner detection that is off right now)
 //import org.opencv.android.Utils;
 //import org.opencv.core.Core;
 //import org.opencv.core.CvException;
@@ -50,14 +46,13 @@ public class CameraActivity extends AppCompatActivity implements View.OnTouchLis
     String filename;
     private ImageView imageView;
 
+    //Declaring variables for dragging the points around.
+    float dX;
+    float dY;
     FloatingActionButton point1;
     FloatingActionButton point2;
     FloatingActionButton point3;
     FloatingActionButton point4;
-
-    //Declaring variables for dragging the points around.
-    float dX;
-    float dY;
 
     //Variables for corner detection (off right now)
 //    private Mat src = new Mat();
@@ -78,7 +73,7 @@ public class CameraActivity extends AppCompatActivity implements View.OnTouchLis
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_camera);
 
-        Toolbar toolbar = findViewById(R.id.toolbar_camera);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back);
         toolbar.setNavigationOnClickListener(this);
         setSupportActionBar(toolbar);
@@ -143,7 +138,7 @@ public class CameraActivity extends AppCompatActivity implements View.OnTouchLis
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.cancel_button:
-            case R.id.toolbar_camera:
+            case R.id.toolbar:
                 NavUtils.navigateUpFromSameTask(CameraActivity.this);
                 break;
             case R.id.select_button:
@@ -174,6 +169,7 @@ public class CameraActivity extends AppCompatActivity implements View.OnTouchLis
                 float y3 = (point3.getY() - yAdjustment + offCenterAdjustment) * (srcHeight / imageViewHeight);
                 float y4 = (point4.getY() - yAdjustment + offCenterAdjustment) * (srcHeight / imageViewHeight);
 
+                //TODO find a way to remove this block without breaking the obj address.
                 //Hiding the points that were used for corner selection.
                 setFAB(point1, false);
                 setFAB(point2, false);
@@ -188,25 +184,26 @@ public class CameraActivity extends AppCompatActivity implements View.OnTouchLis
                 Mat transform = Imgproc.getPerspectiveTransform(src, dst);
                 Imgproc.warpPerspective(srcImage, dstImage, transform, dstImage.size());
 
-                //Displaying the transformed image.
-                Bitmap bmp = null;
-
-                try {
-                    bmp = Bitmap.createBitmap(dstImage.cols(), dstImage.rows(), Bitmap.Config.ARGB_8888);
-                    Utils.matToBitmap(dstImage, bmp);
-                } catch (CvException e) {
-                    System.out.println(e.getMessage());
-                }
-
-                imageView = findViewById(R.id.image_view);
-                imageView.setImageBitmap(bmp);
-
-                Imgproc.cvtColor(dstImage, dstImage, Imgproc.COLOR_RGB2BGR);
-
-                Imgcodecs.imwrite(filename.substring(0, filename.length() - 5) + "-cropped.jpg", dstImage);
+                Intent intent = new Intent(getApplicationContext(), NamingActivity.class);
+                long addr = dstImage.getNativeObjAddr();
+                intent.putExtra("dst_image_addr", addr);
+                startActivity(intent);
                 break;
         }
 
+    }
+
+    /**
+     * Method that is in place because something else breaks without it (see above TO-DO).
+     */
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        setFAB(point1, true);
+        setFAB(point2, true);
+        setFAB(point3, true);
+        setFAB(point4, true);
     }
 
     /**
@@ -249,40 +246,6 @@ public class CameraActivity extends AppCompatActivity implements View.OnTouchLis
             fab.hide();
         }
     } //End Method setFAB.
-
-//    private View.OnTouchListener onTouchListener() {
-//        return new View.OnTouchListener() {
-//            @SuppressLint("ClickableViewAccessibility")
-//            @Override
-//            public boolean onTouch(View view, MotionEvent event) {
-//                final int X = (int) event.getRawX();
-//                final int Y = (int) event.getRawY();
-//                switch (event.getAction() & MotionEvent.ACTION_MASK) {
-//                    case MotionEvent.ACTION_DOWN:
-//                        RelativeLayout.LayoutParams lParams = (RelativeLayout.LayoutParams) view.getLayoutParams();
-//                        xDelta = X - lParams.leftMargin;
-//                        yDelta = Y - lParams.topMargin;
-//                        break;
-//                    case MotionEvent.ACTION_UP:
-//                        break;
-//                    case MotionEvent.ACTION_POINTER_DOWN:
-//                        break;
-//                    case MotionEvent.ACTION_POINTER_UP:
-//                        break;
-//                    case MotionEvent.ACTION_MOVE:
-//                        RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) view.getLayoutParams();
-//                        layoutParams.leftMargin = X - xDelta;
-//                        layoutParams.topMargin = Y - yDelta;
-//                        layoutParams.rightMargin = -250;
-//                        layoutParams.bottomMargin = -250;
-//                        view.setLayoutParams(layoutParams);
-//                        break;
-//                }
-//                root.invalidate();
-//                return true;
-//            }
-//        };
-//    }
 
 //    private void update() {
 //        maxCorners = Math.max(maxCorners, 1);

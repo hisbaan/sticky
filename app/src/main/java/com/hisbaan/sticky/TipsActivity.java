@@ -1,10 +1,7 @@
 package com.hisbaan.sticky;
 
 import android.content.res.Configuration;
-import android.os.Build;
-import android.text.Html;
 import android.view.View;
-import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -21,7 +18,7 @@ public class TipsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_tips);
 
         //Setting up toolbar, adding icons, title, etc.
-        Toolbar toolbar = findViewById(R.id.toolbar_tips);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
