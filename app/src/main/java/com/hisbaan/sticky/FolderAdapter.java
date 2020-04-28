@@ -35,9 +35,10 @@ public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.FolderView
     static class FolderViewHolder extends RecyclerView.ViewHolder {
 
         //Declaring variables that will be initialized via the array list that was created earlier.
-        ImageView imageView;
-        TextView textView1;
-        TextView textView2;
+        ImageView imageView1;
+        ImageView imageView2;
+        ImageView imageView3;
+        ImageView imageView4;
 
         /**
          * Constructor that sets local variables based on array list.
@@ -47,9 +48,10 @@ public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.FolderView
         FolderViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            imageView = itemView.findViewById(R.id.image_view);
-            textView1 = itemView.findViewById(R.id.text_view);
-            textView2 = itemView.findViewById(R.id.text_view_2);
+            imageView1 = itemView.findViewById(R.id.image_view_1);
+            imageView2 = itemView.findViewById(R.id.image_view_2);
+            imageView3 = itemView.findViewById(R.id.image_view_3);
+            imageView4 = itemView.findViewById(R.id.image_view_4);
         }
     }
 
@@ -77,9 +79,11 @@ public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.FolderView
     public void onBindViewHolder(@NonNull FolderViewHolder holder, int position) {
         FolderItem currentItem = folderItems.get(position);
 
-        holder.imageView.setImageResource(currentItem.getImageResource());
-        holder.textView1.setText(currentItem.getText1());
-        holder.textView2.setText(currentItem.getText2());
+        holder.imageView1.setImageBitmap(currentItem.getImageBitmap1());
+        holder.imageView2.setImageBitmap(currentItem.getImageBitmap2());
+        holder.imageView3.setImageBitmap(currentItem.getImageBitmap3());
+        holder.imageView4.setImageBitmap(currentItem.getImageBitmap4());
+        //TODO maybe add a string to the preview image
     }
 
     /**

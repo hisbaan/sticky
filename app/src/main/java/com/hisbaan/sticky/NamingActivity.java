@@ -136,10 +136,13 @@ public class NamingActivity extends AppCompatActivity implements View.OnClickLis
                 if (groupName.equals("New Group")) {
                     openDialog();
                 } else {
-
                     Imgproc.cvtColor(dstImage, dstImage, Imgproc.COLOR_RGB2BGR);
                     Imgcodecs.imwrite(storageDir + "/" + groupName + "/" + imageName + ".jpg", dstImage);
                 }
+
+                Intent i2 = new Intent(this, MainActivity.class);
+                i2.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(i2);
                 break;
         }
     }
