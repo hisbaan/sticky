@@ -3,10 +3,7 @@ package com.hisbaan.sticky;
 import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
-
-import androidx.core.content.ContextCompat;
 
 /**
  * Item class that contains information about what is displayed as a folder preview (the four images).
@@ -17,8 +14,18 @@ public class FolderItem {
     private Bitmap imageBitmap3;
     private Bitmap imageBitmap4;
     private String name;
+    private int nullColor;
 
-    public FolderItem(Bitmap imageBitmap1, Bitmap imageBitmap2, Bitmap imageBitmap3, Bitmap imageBitmap4, String name) {
+    /**
+     * Constructor that check if the images passed to it are null and if they are, sets a default image.
+     *
+     * @param imageBitmap1 First image.
+     * @param imageBitmap2 Second image.
+     * @param imageBitmap3 Third image.
+     * @param imageBitmap4 Fourth image.
+     * @param name The name of the folder.
+     */
+    FolderItem(Bitmap imageBitmap1, Bitmap imageBitmap2, Bitmap imageBitmap3, Bitmap imageBitmap4, String name, int nullColor) {
         if (imageBitmap1 == null) {
             this.imageBitmap1 = makeNullBitmap();
         } else {
@@ -41,35 +48,40 @@ public class FolderItem {
         }
 
         this.name = name;
+        this.nullColor = nullColor;
     }
 
+    /**
+     * Coloring the null imageBitmap with the background color.
+     * @return A bitmap that is one solid color matching the background.
+     */
     @SuppressLint("ResourceAsColor")
     private Bitmap makeNullBitmap() {
         Bitmap bitmap = Bitmap.createBitmap(1000, 1000, Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(bitmap);
         Paint paint = new Paint();
-        paint.setColor(R.color.colorSubText);
+        paint.setColor(nullColor);
         canvas.drawRect(0F, 0F, 1000, 1000, paint);
         return bitmap;
-    }
+    } //End Method makeNullBitmap.
 
     Bitmap getImageBitmap1() {
         return imageBitmap1;
-    }
+    } //End method getImageBitmap1.
 
     Bitmap getImageBitmap2() {
         return imageBitmap2;
-    }
+    } //End Method getImageBitmap2.
 
     Bitmap getImageBitmap3() {
         return imageBitmap3;
-    }
+    } //End Method getImageBitmap3.
 
     Bitmap getImageBitmap4() {
         return imageBitmap4;
-    }
+    } //End Method getImageBitmap4.
 
     public String getName() {
         return name;
-    }
-}
+    } //End Method getName.
+} //End Class FolderItem.

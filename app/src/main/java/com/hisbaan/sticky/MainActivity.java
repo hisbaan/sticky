@@ -192,14 +192,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                         startActivityForResult(imageTakeIntent, REQUEST_IMAGE_CAPTURE);
                     }
-
                 }
                 break;
-            case R.id.new_note_fab: //Shows a toast saying th the feature is yet to be added.
+            case R.id.new_note_fab:
                 closeFABMenu();
                 Toast.makeText(this, "Feature to be added", Toast.LENGTH_SHORT).show();
                 break;
-            case R.id.upload_fab: //Shows a toast saying th the feature is yet to be added.
+            case R.id.upload_fab:
+                //TODO trigger a file browser and return the path. Then pass that image onto the crop activity.
                 closeFABMenu();
                 Toast.makeText(this, "Feature to be added", Toast.LENGTH_SHORT).show();
                 break;
@@ -215,22 +215,26 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.nav_board: //Opens the board fragment.
+            case R.id.nav_board:
+                //Opens the board fragment.
                 getSupportFragmentManager()
                         .beginTransaction()
                         .replace(R.id.fragment_container, new BoardFragment())
                         .commit();
                 break;
-            case R.id.nav_organizer: //Opens the note organizer fragment.
+            case R.id.nav_organizer:
+                //Opens the note organizer fragment.
                 getSupportFragmentManager()
                         .beginTransaction()
                         .replace(R.id.fragment_container, new NoteOrganizerFragment())
                         .commit();
                 break;
-            case R.id.nav_tips: //Opens the tips menu. This will show some tips and tricks.
+            case R.id.nav_tips:
+                //Opens the tips menu. This will show some tips and tricks.
                 startActivity(new Intent(getApplicationContext(), TipsActivity.class));
                 break;
-            case R.id.nav_feedback: //Links to a google form where the user can provide feedback. This could be a bug, personal issue or suggested feature.
+            case R.id.nav_feedback:
+                //Links to a google form where the user can provide feedback. This could be a bug, personal issue or suggested feature.
                 Uri uri = Uri.parse("https://docs.google.com/forms/d/e/1FAIpQLScqm8FnLu_HyxQM1pKXTxy-C05B9tu9s3l3_F7HUeuGrEGFDA/viewform?usp=sf_link");
                 startActivity(new Intent(Intent.ACTION_VIEW, uri));
                 break;
@@ -240,7 +244,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
 
         drawerLayout.closeDrawer(GravityCompat.START);
-
         return true;
     } //End Method onNavigationItemsSelected.
 

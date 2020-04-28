@@ -190,8 +190,7 @@ public class CameraActivity extends AppCompatActivity implements View.OnTouchLis
                 startActivity(intent);
                 break;
         }
-
-    }
+    } //End Method onClick.
 
     /**
      * Method that is in place because something else breaks without it (see above TO-DO).
@@ -204,7 +203,7 @@ public class CameraActivity extends AppCompatActivity implements View.OnTouchLis
         setFAB(point2, true);
         setFAB(point3, true);
         setFAB(point4, true);
-    }
+    } //End Method onResume.
 
     /**
      * Touch listener to allow for dragging the points around.
@@ -228,7 +227,7 @@ public class CameraActivity extends AppCompatActivity implements View.OnTouchLis
                 return false;
         }
         return true;
-    }
+    } //End Method onTouch.
 
     /**
      * Sets the state of the FAB passed to it to be clickable or un-clickable.

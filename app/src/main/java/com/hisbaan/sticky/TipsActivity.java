@@ -10,8 +10,16 @@ import android.os.Bundle;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.NavUtils;
 
+/**
+ * Shows tips and tricks for using the app to the user.
+ */
 public class TipsActivity extends AppCompatActivity {
 
+    /**
+     * Sets up the layout and displays the tips.
+     *
+     * @param savedInstanceState Saved instance state that can be used to get information from previous runs.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,5 +47,5 @@ public class TipsActivity extends AppCompatActivity {
                 decorView.setSystemUiVisibility(decorView.getSystemUiVisibility() & ~View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
                 break;
         }
-    }
-}
+    } //End Method onCreate.
+} //End Class TipsActivity.

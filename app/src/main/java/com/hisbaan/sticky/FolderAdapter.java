@@ -1,16 +1,12 @@
 package com.hisbaan.sticky;
 
-//Android imports
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
 
 import java.util.ArrayList;
 
@@ -52,8 +48,8 @@ public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.FolderView
             imageView2 = itemView.findViewById(R.id.image_view_2);
             imageView3 = itemView.findViewById(R.id.image_view_3);
             imageView4 = itemView.findViewById(R.id.image_view_4);
-        }
-    }
+        } //End Constructor FolderViewHolder.
+    } //End Class FolderViewHolder.
 
     /**
      * Inflates and returns the recycler view.
@@ -67,7 +63,7 @@ public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.FolderView
     public FolderViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.folder_layout, parent, false);
         return new FolderViewHolder(v);
-    }
+    } //End Method onCreateViewHolder.
 
     /**
      * Puts items in the appropriate positions of the recycler view.
@@ -84,7 +80,7 @@ public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.FolderView
         holder.imageView3.setImageBitmap(currentItem.getImageBitmap3());
         holder.imageView4.setImageBitmap(currentItem.getImageBitmap4());
         //TODO maybe add a string to the preview image
-    }
+    } //End Method onBindViewHolder.
 
     /**
      * Returns the size of the recycler view.
@@ -94,5 +90,5 @@ public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.FolderView
     @Override
     public int getItemCount() {
         return folderItems.size();
-    }
-}
+    } //End Method getItemCount.
+} //End Class FolderAdapter.

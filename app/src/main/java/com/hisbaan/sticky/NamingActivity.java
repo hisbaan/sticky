@@ -27,7 +27,11 @@ import java.io.File;
 import java.io.FileFilter;
 import java.util.ArrayList;
 
+/**
+ * Allows the user to select the name and the group of the note that they've just captured.
+ */
 public class NamingActivity extends AppCompatActivity implements View.OnClickListener, NewGroupDialog.NewGroupDialogListener {
+    //Declaring variables for layout.
     ImageView imageView;
     EditText nameTextField;
     Button cancelButton;
@@ -35,14 +39,19 @@ public class NamingActivity extends AppCompatActivity implements View.OnClickLis
     Spinner spinner;
     String groupName;
     String imageName;
-
     Mat dstImage;
+    //TODO make rotate buttons.
 
+    /**
+     * Initializes variables, displays image, displays spinner groups.
+     * @param savedInstanceState Saved instance state that can store information from previous runs.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_naming);
 
+        //Initializing toolbar.
         Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back);
         toolbar.setNavigationOnClickListener(this);
@@ -60,6 +69,7 @@ public class NamingActivity extends AppCompatActivity implements View.OnClickLis
                 break;
         }
 
+        //Getting the image from the previous activity.
         long addr = getIntent().getLongExtra("dst_image_addr", 0);
         Mat tempImg = new Mat(addr);
         System.out.println(tempImg);
@@ -74,8 +84,8 @@ public class NamingActivity extends AppCompatActivity implements View.OnClickLis
         cancelButton.setOnClickListener(this);
         continueButton.setOnClickListener(this);
 
-        //TODO issue here about the code on the getNativeObjAddr. Can't put anything ontop of it or it breaks.
-        //Displaying the transformed image.
+        //Converting matrix to bitmap.
+        //TODO fix error occurring here.
         Bitmap bmp = null;
 
         try {
@@ -86,9 +96,11 @@ public class NamingActivity extends AppCompatActivity implements View.OnClickLis
             System.out.println(e.getMessage());
         }
 
+        //Setting bitmap as imageView image.
         imageView = findViewById(R.id.image_view);
         imageView.setImageBitmap(bmp);
 
+        //Searching the pictures directory for file names that will then be displayed as groups.
         File directoryToSearch = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         assert directoryToSearch != null;
         File[] tempDirs = directoryToSearch.listFiles(new FileFilter() {
@@ -107,55 +119,68 @@ public class NamingActivity extends AppCompatActivity implements View.OnClickLis
         }
         dirsInPictures.add("New Group");
 
+        //Adding the strings of directory names into the spinner.
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, dirsInPictures);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
-    }
+    } //End Method onCreate.
 
+    /**
+     * Runs every time a component is clicked that has an onClickListener to perform an action.
+     * @param v The view that was clicked.
+     */
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.cancel_button:
+                //Goes back to main activity.
                 Intent i = new Intent(this, MainActivity.class);
                 i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(i);
             case R.id.recrop_button:
             case R.id.toolbar:
+                //Goes back to the crop screen.
                 NavUtils.navigateUpFromSameTask(NamingActivity.this);
                 break;
             case R.id.continue_button:
+                //Gets the image name and if it is empty, prompts the user to enter a name.
                 imageName = nameTextField.getText().toString().trim();
                 if (imageName.equals("") || imageName.equals(" ")) {
                     Toast.makeText(this, "Please enter a name for the note.", Toast.LENGTH_SHORT).show();
                     break;
                 }
 
+                //Gets the group name from the spinner.
                 File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
                 groupName = spinner.getSelectedItem().toString();
 
+                //If new group is selected, bring up a dialog to make the new group.
                 if (groupName.equals("New Group")) {
-                    openDialog();
+                    NewGroupDialog newGroupDialog = new NewGroupDialog();
+                    newGroupDialog.show(getSupportFragmentManager(), "new group dialog");
                 } else {
+                    //If the group name already exists, save the image there.
                     Imgproc.cvtColor(dstImage, dstImage, Imgproc.COLOR_RGB2BGR);
                     Imgcodecs.imwrite(storageDir + "/" + groupName + "/" + imageName + ".jpg", dstImage);
-                }
 
-                Intent i2 = new Intent(this, MainActivity.class);
-                i2.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(i2);
+                    //Go back to the main menu.
+                    Intent i2 = new Intent(this, MainActivity.class);
+                    i2.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(i2);
+                }
                 break;
         }
-    }
+    } //End Method onClick.
 
-    private void openDialog() {
-        NewGroupDialog newGroupDialog = new NewGroupDialog();
-        newGroupDialog.show(getSupportFragmentManager(), "new group dialog");
-    }
-
+    /**
+     * Runs once the user presses 'OKAY' on the dialog to apply the new group name and create a directory for it.
+     * @param newGroupName
+     */
     @Override
     public void applyText(String newGroupName) {
         groupName = newGroupName;
 
+        //Creating the new directory for the group.
         File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         File dir = new File(storageDir + "/" + groupName);
         try {
@@ -168,7 +193,13 @@ public class NamingActivity extends AppCompatActivity implements View.OnClickLis
             e.printStackTrace();
         }
 
+        //Saving image in the new group.
         Imgproc.cvtColor(dstImage, dstImage, Imgproc.COLOR_RGB2BGR);
         Imgcodecs.imwrite(storageDir + "/" + groupName + "/" + imageName + ".jpg", dstImage);
-    }
-}
+
+        //Go back to the main menu.
+        Intent i2 = new Intent(this, MainActivity.class);
+        i2.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(i2);
+    } //End Method applyText.
+} //End Class NamingActivity.
