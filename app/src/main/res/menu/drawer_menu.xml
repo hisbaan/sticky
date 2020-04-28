@@ -1,32 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-      xmlns:tools="http://schemas.android.com/tools"
-      tools:showIn="navigation_view">
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
 
 
-    <group android:id="@+id/group_divider1" android:checkableBehavior="single">
+    <group
+        android:id="@+id/group_divider1"
+        android:checkableBehavior="single">
         <item
-                android:id="@+id/nav_board"
-                android:icon="@drawable/ic_dashboard"
-                android:title="@string/navigation_drawer_board"/>
+            android:id="@+id/nav_board"
+            android:icon="@drawable/ic_dashboard"
+            android:title="@string/navigation_drawer_board" />
         <item
-                android:id="@+id/nav_organizer"
-                android:icon="@drawable/ic_apps"
-                android:title="@string/navigation_drawer_organizer"/>
+            android:id="@+id/nav_organizer"
+            android:icon="@drawable/ic_apps"
+            android:title="@string/navigation_drawer_organizer" />
     </group>
 
     <group android:id="@+id/group_divider2">
         <item
-                android:id="@+id/nav_tips"
-                android:icon="@drawable/ic_info_outline"
-                android:title="@string/navigation_drawer_tips"/>
+            android:id="@+id/nav_tips"
+            android:icon="@drawable/ic_info_outline"
+            android:title="@string/navigation_drawer_tips" />
         <item
-                android:id="@+id/nav_feedback"
-                android:icon="@drawable/ic_feedback"
-                android:title="@string/navigation_drawer_feedback"/>
+            android:id="@+id/nav_feedback"
+            android:icon="@drawable/ic_feedback"
+            android:title="@string/navigation_drawer_feedback" />
         <item
-                android:id="@+id/nav_settings"
-                android:icon="@drawable/ic_settings"
-                android:title="@string/navigation_drawer_settings"/>
+            android:id="@+id/nav_settings"
+            android:icon="@drawable/ic_settings"
+            android:title="@string/navigation_drawer_settings" />
     </group>
 </menu>

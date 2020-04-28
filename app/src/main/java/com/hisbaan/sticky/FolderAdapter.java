@@ -21,35 +21,9 @@ public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.FolderView
      *
      * @param folderItems List of items to be added to the recycler view.
      */
-    public FolderAdapter(ArrayList<FolderItem> folderItems) {
+    FolderAdapter(ArrayList<FolderItem> folderItems) {
         this.folderItems = folderItems;
     }
-
-    /**
-     * Adds the items to the recycler view.
-     */
-    static class FolderViewHolder extends RecyclerView.ViewHolder {
-
-        //Declaring variables that will be initialized via the array list that was created earlier.
-        ImageView imageView1;
-        ImageView imageView2;
-        ImageView imageView3;
-        ImageView imageView4;
-
-        /**
-         * Constructor that sets local variables based on array list.
-         *
-         * @param itemView view of the recycler view.
-         */
-        FolderViewHolder(@NonNull View itemView) {
-            super(itemView);
-
-            imageView1 = itemView.findViewById(R.id.image_view_1);
-            imageView2 = itemView.findViewById(R.id.image_view_2);
-            imageView3 = itemView.findViewById(R.id.image_view_3);
-            imageView4 = itemView.findViewById(R.id.image_view_4);
-        } //End Constructor FolderViewHolder.
-    } //End Class FolderViewHolder.
 
     /**
      * Inflates and returns the recycler view.
@@ -91,4 +65,30 @@ public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.FolderView
     public int getItemCount() {
         return folderItems.size();
     } //End Method getItemCount.
+
+    /**
+     * Adds the items to the recycler view.
+     */
+    static class FolderViewHolder extends RecyclerView.ViewHolder {
+
+        //Declaring variables that will be initialized via the array list that was created earlier.
+        ImageView imageView1;
+        ImageView imageView2;
+        ImageView imageView3;
+        ImageView imageView4;
+
+        /**
+         * Constructor that sets local variables based on array list.
+         *
+         * @param itemView view of the recycler view.
+         */
+        FolderViewHolder(@NonNull View itemView) {
+            super(itemView);
+
+            imageView1 = itemView.findViewById(R.id.image_view_1);
+            imageView2 = itemView.findViewById(R.id.image_view_2);
+            imageView3 = itemView.findViewById(R.id.image_view_3);
+            imageView4 = itemView.findViewById(R.id.image_view_4);
+        } //End Constructor FolderViewHolder.
+    } //End Class FolderViewHolder.
 } //End Class FolderAdapter.

@@ -17,31 +17,31 @@
 <PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <PreferenceCategory
-            app:iconSpaceReserved="false"
-            app:title="@string/appearance_header">
+        app:iconSpaceReserved="false"
+        app:title="@string/appearance_header">
 
         <ListPreference
-                app:defaultValue="follow_system"
-                app:entries="@array/theme_entries"
-                app:entryValues="@array/theme_values"
-                app:iconSpaceReserved="false"
-                app:key="theme"
-                app:title="@string/theme_title"
-                app:useSimpleSummaryProvider="true" />
+            app:defaultValue="follow_system"
+            app:entries="@array/theme_entries"
+            app:entryValues="@array/theme_values"
+            app:iconSpaceReserved="false"
+            app:key="theme"
+            app:title="@string/theme_title"
+            app:useSimpleSummaryProvider="true" />
 
         <SwitchPreferenceCompat
-                app:iconSpaceReserved="false"
-                app:key="amoled"
-                app:title="AMOLED Dark Theme" />
+            app:iconSpaceReserved="false"
+            app:key="amoled"
+            app:title="AMOLED Dark Theme" />
     </PreferenceCategory>
 
     <PreferenceCategory
-            app:title="Miscellaneous"
-            app:iconSpaceReserved="false">
+        app:iconSpaceReserved="false"
+        app:title="Miscellaneous">
         <SwitchPreference
-                app:iconSpaceReserved="false"
-                app:key="screen_on"
-                app:title="Keep Screen On" />
+            app:iconSpaceReserved="false"
+            app:key="screen_on"
+            app:title="Keep Screen On" />
     </PreferenceCategory>
 
 </PreferenceScreen>

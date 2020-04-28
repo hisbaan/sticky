@@ -1,12 +1,10 @@
 package com.hisbaan.sticky;
 
 import android.content.res.Configuration;
+import android.os.Bundle;
 import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
-
-import android.os.Bundle;
-
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.NavUtils;
 

@@ -42,17 +42,15 @@ import org.opencv.imgproc.Imgproc;
  */
 public class CameraActivity extends AppCompatActivity implements View.OnTouchListener, View.OnClickListener {
 
-    //Declaring variables for cropping
-    String filename;
+    //Declaring variables.
+    private String filename;
+    private float dX;
+    private float dY;
+    private FloatingActionButton point1;
+    private FloatingActionButton point2;
+    private FloatingActionButton point3;
+    private FloatingActionButton point4;
     private ImageView imageView;
-
-    //Declaring variables for dragging the points around.
-    float dX;
-    float dY;
-    FloatingActionButton point1;
-    FloatingActionButton point2;
-    FloatingActionButton point3;
-    FloatingActionButton point4;
 
     //Variables for corner detection (off right now)
 //    private Mat src = new Mat();
@@ -95,7 +93,6 @@ public class CameraActivity extends AppCompatActivity implements View.OnTouchLis
         point2 = findViewById(R.id.point_2);
         point3 = findViewById(R.id.point_3);
         point4 = findViewById(R.id.point_4);
-
         point1.setOnTouchListener(this);
         point2.setOnTouchListener(this);
         point3.setOnTouchListener(this);
@@ -123,7 +120,6 @@ public class CameraActivity extends AppCompatActivity implements View.OnTouchLis
         imageView = findViewById(R.id.image_view);
         //Declaring and initialising bitmap that is used to display the captured image in the activity.
         Bitmap bitmap = BitmapFactory.decodeFile(filename);
-//        Bitmap bitmap = BitmapFactory.decodeFile("/storage/emulated/0/Android/data/com.hisbaan.sticky/files/Pictures/TestImage.jpg");
         //Setting imageView to display the bitmap.
         imageView.setImageBitmap(bitmap);
 //        update();

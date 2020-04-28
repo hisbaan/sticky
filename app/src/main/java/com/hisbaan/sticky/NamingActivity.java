@@ -44,6 +44,7 @@ public class NamingActivity extends AppCompatActivity implements View.OnClickLis
 
     /**
      * Initializes variables, displays image, displays spinner groups.
+     *
      * @param savedInstanceState Saved instance state that can store information from previous runs.
      */
     @Override
@@ -127,6 +128,7 @@ public class NamingActivity extends AppCompatActivity implements View.OnClickLis
 
     /**
      * Runs every time a component is clicked that has an onClickListener to perform an action.
+     *
      * @param v The view that was clicked.
      */
     @Override
@@ -174,6 +176,7 @@ public class NamingActivity extends AppCompatActivity implements View.OnClickLis
 
     /**
      * Runs once the user presses 'OKAY' on the dialog to apply the new group name and create a directory for it.
+     *
      * @param newGroupName
      */
     @Override

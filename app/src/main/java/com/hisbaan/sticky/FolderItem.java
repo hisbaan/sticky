@@ -23,7 +23,7 @@ public class FolderItem {
      * @param imageBitmap2 Second image.
      * @param imageBitmap3 Third image.
      * @param imageBitmap4 Fourth image.
-     * @param name The name of the folder.
+     * @param name         The name of the folder.
      */
     FolderItem(Bitmap imageBitmap1, Bitmap imageBitmap2, Bitmap imageBitmap3, Bitmap imageBitmap4, String name, int nullColor) {
         if (imageBitmap1 == null) {
@@ -53,6 +53,7 @@ public class FolderItem {
 
     /**
      * Coloring the null imageBitmap with the background color.
+     *
      * @return A bitmap that is one solid color matching the background.
      */
     @SuppressLint("ResourceAsColor")

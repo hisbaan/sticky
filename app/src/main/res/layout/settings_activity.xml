@@ -1,18 +1,16 @@
-<LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fitsSystemWindows="false"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:orientation="vertical">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="false"
+    android:orientation="vertical">
 
     <include
-            android:id="@+id/toolbar"
-            layout="@layout/toolbar_minimal"
-    />
+        android:id="@+id/toolbar"
+        layout="@layout/toolbar_minimal" />
+
     <FrameLayout
-            android:id="@+id/settings"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/colorPrimary"/>
+        android:id="@+id/settings"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorPrimary" />
 </LinearLayout>

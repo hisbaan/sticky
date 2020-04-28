@@ -40,12 +40,20 @@ import java.util.Locale;
  */
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
 
-    //Code for image capture request. This is used to ensure that an intent meant to trigger the camera.
-    private static final int REQUEST_IMAGE_CAPTURE = 101;
-
     //Final variables that are used for SharedPreferences.
     public static final String SHARED_PREFS = "sharedPrefs";
     public static final String THEME = "theme";
+    //Code for image capture request. This is used to ensure that an intent meant to trigger the camera.
+    private static final int REQUEST_IMAGE_CAPTURE = 101;
+
+    //Initializing openCV.
+    static {
+        if (!OpenCVLoader.initDebug()) {
+            Log.d("ERROR", "Unable to load OpenCV");
+        } else {
+            Log.d("SUCCESS", "Successfully loaded OpenCV");
+        }
+    }
 
     //Tracks the filepath of the current image that has been captured.
     private String currentImagePath = null;
@@ -58,7 +66,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private FloatingActionButton photoFAB;
     private FloatingActionButton drawNoteFAB;
     private FloatingActionButton uploadPhotoFAB;
-
     private Button menuButton;
     private DrawerLayout drawerLayout;
 
@@ -68,14 +75,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private Animation scaleAnimation;
     private Animation scaleBackAnimation;
     private Animation setScaleAnimation;
-
-    static {
-        if (!OpenCVLoader.initDebug()) {
-            Log.d("ERROR", "Unable to load OpenCV");
-        } else {
-            Log.d("SUCCESS", "Successfully loaded OpenCV");
-        }
-    }
 
     /**
      * Runs when the activity is created to initialize variables and create onClickListeners.

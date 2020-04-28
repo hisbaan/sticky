@@ -1,98 +1,98 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/colorPrimary"
-        tools:context=".TipsActivity">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimary"
+    tools:context=".TipsActivity">
 
     <include
-            android:id="@+id/toolbar"
-            layout="@layout/toolbar_minimal" />
+        android:id="@+id/toolbar"
+        layout="@layout/toolbar_minimal" />
 
     <TextView
-            android:id="@+id/title_textView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
-            android:text="@string/tips_title"
-            android:textColor="@color/colorText"
+        android:id="@+id/title_textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:text="@string/tips_title"
+        android:textColor="@color/colorText"
 
-            android:textSize="20sp"
-            android:textStyle="bold"
+        android:textSize="20sp"
+        android:textStyle="bold"
 
-            />
-
-    <TextView
-            android:id="@+id/one_textView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-
-            android:layout_alignStart="@id/one_textView"
-            android:layout_alignTop="@id/title_textView"
-
-            android:layout_alignEnd="@id/tip1_textView"
-
-            android:layout_alignParentStart="true"
-            android:layout_marginStart="@dimen/tips_start_margin"
-
-            android:layout_marginTop="10dp"
-            android:text="@string/tips_number_1"
-            android:textColor="@color/colorText"
-            android:textSize="12sp"
-
-            app:layout_constraintBottom_toTopOf="@id/two_textView"
-            app:layout_constraintEnd_toStartOf="@id/tip1_textView"
-            app:layout_constraintStart_toStartOf="parent"
-
-            app:layout_constraintTop_toBottomOf="@id/title_textView" />
+        />
 
     <TextView
-            android:id="@+id/two_textView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/tips_start_margin"
-            android:text="@string/tips_number_2"
-            android:textColor="@color/colorText"
+        android:id="@+id/one_textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
 
-            android:textSize="12sp"
+        android:layout_alignStart="@id/one_textView"
+        android:layout_alignTop="@id/title_textView"
 
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/tip2_textView"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/one_textView" />
+        android:layout_alignEnd="@id/tip1_textView"
 
-    <TextView
-            android:id="@+id/tip1_textView"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:text="@string/tips_text_1"
-            android:textColor="@color/colorText"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="@dimen/tips_start_margin"
 
-            android:textSize="12sp"
+        android:layout_marginTop="10dp"
+        android:text="@string/tips_number_1"
+        android:textColor="@color/colorText"
+        android:textSize="12sp"
 
-            app:layout_constraintBottom_toTopOf="@id/tip2_textView"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@id/one_textView"
-            app:layout_constraintTop_toBottomOf="@id/title_textView"
-            app:layout_constraintWidth_percent="0.7" />
+        app:layout_constraintBottom_toTopOf="@id/two_textView"
+        app:layout_constraintEnd_toStartOf="@id/tip1_textView"
+        app:layout_constraintStart_toStartOf="parent"
+
+        app:layout_constraintTop_toBottomOf="@id/title_textView" />
 
     <TextView
-            android:id="@+id/tip2_textView"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:text="@string/tips_text_2"
-            android:textColor="@color/colorText"
-            android:textSize="12sp"
-            app:layout_constraintBottom_toBottomOf="parent"
+        android:id="@+id/two_textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/tips_start_margin"
+        android:text="@string/tips_number_2"
+        android:textColor="@color/colorText"
 
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/two_textView"
-            app:layout_constraintTop_toBottomOf="@id/tip1_textView"
-            app:layout_constraintWidth_percent="0.7" />
+        android:textSize="12sp"
+
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/tip2_textView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/one_textView" />
+
+    <TextView
+        android:id="@+id/tip1_textView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="@string/tips_text_1"
+        android:textColor="@color/colorText"
+
+        android:textSize="12sp"
+
+        app:layout_constraintBottom_toTopOf="@id/tip2_textView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/one_textView"
+        app:layout_constraintTop_toBottomOf="@id/title_textView"
+        app:layout_constraintWidth_percent="0.7" />
+
+    <TextView
+        android:id="@+id/tip2_textView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="@string/tips_text_2"
+        android:textColor="@color/colorText"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/two_textView"
+        app:layout_constraintTop_toBottomOf="@id/tip1_textView"
+        app:layout_constraintWidth_percent="0.7" />
 
 </RelativeLayout>
