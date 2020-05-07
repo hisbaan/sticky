@@ -1,4 +1,4 @@
-package com.hisbaan.sticky;
+package com.hisbaan.sticky.models;
 
 import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
@@ -25,7 +25,7 @@ public class FolderItem {
      * @param imageBitmap4 Fourth image.
      * @param name         The name of the folder.
      */
-    FolderItem(Bitmap imageBitmap1, Bitmap imageBitmap2, Bitmap imageBitmap3, Bitmap imageBitmap4, String name, int nullColor) {
+    public FolderItem(Bitmap imageBitmap1, Bitmap imageBitmap2, Bitmap imageBitmap3, Bitmap imageBitmap4, String name, int nullColor) {
         if (imageBitmap1 == null) {
             this.imageBitmap1 = makeNullBitmap();
         } else {
@@ -66,19 +66,19 @@ public class FolderItem {
         return bitmap;
     } //End Method makeNullBitmap.
 
-    Bitmap getImageBitmap1() {
+    public Bitmap getImageBitmap1() {
         return imageBitmap1;
     } //End method getImageBitmap1.
 
-    Bitmap getImageBitmap2() {
+    public Bitmap getImageBitmap2() {
         return imageBitmap2;
     } //End Method getImageBitmap2.
 
-    Bitmap getImageBitmap3() {
+    public Bitmap getImageBitmap3() {
         return imageBitmap3;
     } //End Method getImageBitmap3.
 
-    Bitmap getImageBitmap4() {
+    public Bitmap getImageBitmap4() {
         return imageBitmap4;
     } //End Method getImageBitmap4.
 

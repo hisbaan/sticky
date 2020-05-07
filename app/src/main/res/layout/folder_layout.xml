@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?><!--TODO undo the hardcoding here and figure out a way to make the height = width while still displaying the notes. I've made a custom cardview so it should work-->
-<com.hisbaan.sticky.SquareCardView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.hisbaan.sticky.models.SquareCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/folder_layout"
     android:layout_width="wrap_content"
-    android:layout_height="188dp"
+    android:layout_height="208dp"
     android:layout_margin="4dp"
     android:background="@color/colorSubText"
     app:cardCornerRadius="4dp"
@@ -67,5 +67,17 @@
                 android:layout_margin="4dp"
                 android:layout_weight="1" />
         </LinearLayout>
+
+        <TextView
+            android:id="@+id/folder_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:singleLine="true"
+            android:maxLines="1"
+            android:maxLength="20"
+            android:ellipsize="end"
+            android:text="PlaceHolder"
+            android:textColor="@color/colorText"
+            android:layout_gravity="center_horizontal"/>
     </LinearLayout>
-</com.hisbaan.sticky.SquareCardView>
+</com.hisbaan.sticky.models.SquareCardView>

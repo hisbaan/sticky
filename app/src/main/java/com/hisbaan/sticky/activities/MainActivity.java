@@ -1,4 +1,4 @@
-package com.hisbaan.sticky;
+package com.hisbaan.sticky.activities;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -26,6 +26,9 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
+import com.hisbaan.sticky.fragments.BoardFragment;
+import com.hisbaan.sticky.fragments.NoteOrganizerFragment;
+import com.hisbaan.sticky.R;
 
 import org.opencv.android.OpenCVLoader;
 
@@ -337,7 +340,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             startActivity(i);
         } else if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_CANCELED) { //If the request code came from the camera action and the action was cancelled, delete the file remnant.
             File file = new File(currentImagePath);
-            file.delete();
+            if (file.delete()) {
+                System.out.println("File deleted successfully.");
+            } else {
+                System.out.println("File deletion failed.");
+            }
         }
 
     } //End Method onActivityResult.

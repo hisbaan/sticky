@@ -1,4 +1,4 @@
-package com.hisbaan.sticky;
+package com.hisbaan.sticky.activities;
 
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -17,6 +17,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.NavUtils;
 
+import com.hisbaan.sticky.utils.NewGroupDialog;
+import com.hisbaan.sticky.R;
+
 import org.opencv.android.Utils;
 import org.opencv.core.CvException;
 import org.opencv.core.Mat;
@@ -26,6 +29,7 @@ import org.opencv.imgproc.Imgproc;
 import java.io.File;
 import java.io.FileFilter;
 import java.util.ArrayList;
+import java.util.Objects;
 
 /**
  * Allows the user to select the name and the group of the note that they've just captured.
@@ -71,10 +75,18 @@ public class NamingActivity extends AppCompatActivity implements View.OnClickLis
         }
 
         //Getting the image from the previous activity.
-        long addr = getIntent().getLongExtra("dst_image_addr", 0);
-        Mat tempImg = new Mat(addr);
-        System.out.println(tempImg);
-        dstImage = tempImg.clone();
+//        long addr = getIntent().getLongExtra("dst_image_addr", 0);
+//        Mat tempImg = new Mat(addr);
+//        System.out.println(tempImg);
+//        dstImage = tempImg.clone();
+
+        dstImage = CameraActivity.transferImage.clone();
+
+        if(dstImage.empty()) {
+            System.out.println("### EMPTY ###");
+        } else {
+            System.out.println(dstImage.cols() + " | " + dstImage.rows());
+        }
 
         imageView = findViewById(R.id.image_view);
         nameTextField = findViewById(R.id.name_edit_text);
@@ -86,7 +98,6 @@ public class NamingActivity extends AppCompatActivity implements View.OnClickLis
         continueButton.setOnClickListener(this);
 
         //Converting matrix to bitmap.
-        //TODO fix error occurring here.
         Bitmap bmp = null;
 
         try {
@@ -135,10 +146,7 @@ public class NamingActivity extends AppCompatActivity implements View.OnClickLis
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.cancel_button:
-                //Goes back to main activity.
-                Intent i = new Intent(this, MainActivity.class);
-                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(i);
+                endActivity();
             case R.id.recrop_button:
             case R.id.toolbar:
                 //Goes back to the crop screen.
@@ -165,10 +173,7 @@ public class NamingActivity extends AppCompatActivity implements View.OnClickLis
                     Imgproc.cvtColor(dstImage, dstImage, Imgproc.COLOR_RGB2BGR);
                     Imgcodecs.imwrite(storageDir + "/" + groupName + "/" + imageName + ".jpg", dstImage);
 
-                    //Go back to the main menu.
-                    Intent i2 = new Intent(this, MainActivity.class);
-                    i2.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    startActivity(i2);
+                    endActivity();
                 }
                 break;
         }
@@ -200,9 +205,19 @@ public class NamingActivity extends AppCompatActivity implements View.OnClickLis
         Imgproc.cvtColor(dstImage, dstImage, Imgproc.COLOR_RGB2BGR);
         Imgcodecs.imwrite(storageDir + "/" + groupName + "/" + imageName + ".jpg", dstImage);
 
-        //Go back to the main menu.
-        Intent i2 = new Intent(this, MainActivity.class);
-        i2.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(i2);
+        endActivity();
     } //End Method applyText.
+
+    private void endActivity() {
+        Intent i = new Intent(this, MainActivity.class);
+        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(i);
+
+        File file = new File(Objects.requireNonNull(getIntent().getStringExtra("filename")));
+        if (file.delete()) {
+            System.out.println("File deleted successfully.");
+        } else {
+            System.out.println("File deletion failed.");
+        }
+    }
 } //End Class NamingActivity.

@@ -1,4 +1,4 @@
-package com.hisbaan.sticky;
+package com.hisbaan.sticky.activities;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -18,6 +18,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.NavUtils;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.hisbaan.sticky.R;
 
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfPoint2f;
@@ -51,6 +52,8 @@ public class CameraActivity extends AppCompatActivity implements View.OnTouchLis
     private FloatingActionButton point3;
     private FloatingActionButton point4;
     private ImageView imageView;
+
+    static Mat transferImage;
 
     //Variables for corner detection (off right now)
 //    private Mat src = new Mat();
@@ -110,7 +113,7 @@ public class CameraActivity extends AppCompatActivity implements View.OnTouchLis
 //        src = Imgcodecs.imread(filename);
 //        Imgproc.cvtColor(src, src, Imgproc.COLOR_BGR2RGB);
 //        if (src.empty()) {
-//            //TODO send an error here and open feedback to contact the developer
+//            //send an error here and open feedback to contact the developer
 //        }
 //
 //        Imgproc.cvtColor(src, srcGray, Imgproc.COLOR_RGB2GRAY);
@@ -165,13 +168,6 @@ public class CameraActivity extends AppCompatActivity implements View.OnTouchLis
                 float y3 = (point3.getY() - yAdjustment + offCenterAdjustment) * (srcHeight / imageViewHeight);
                 float y4 = (point4.getY() - yAdjustment + offCenterAdjustment) * (srcHeight / imageViewHeight);
 
-                //TODO find a way to remove this block without breaking the obj address.
-                //Hiding the points that were used for corner selection.
-                setFAB(point1, false);
-                setFAB(point2, false);
-                setFAB(point3, false);
-                setFAB(point4, false);
-
                 //Creating matrices more matrices of the target and destination point values.
                 Mat src = new MatOfPoint2f(new Point(x1, y1), new Point(x2, y2), new Point(x3, y3), new Point(x4, y4));
                 Mat dst = new MatOfPoint2f(new Point(0, 0), new Point(dstImage.width() - 1, 0), new Point(0, dstImage.height() - 1), new Point(dstImage.width() - 1, dstImage.height() - 1));
@@ -180,26 +176,16 @@ public class CameraActivity extends AppCompatActivity implements View.OnTouchLis
                 Mat transform = Imgproc.getPerspectiveTransform(src, dst);
                 Imgproc.warpPerspective(srcImage, dstImage, transform, dstImage.size());
 
+                transferImage = dstImage.clone();
+
                 Intent intent = new Intent(getApplicationContext(), NamingActivity.class);
-                long addr = dstImage.getNativeObjAddr();
-                intent.putExtra("dst_image_addr", addr);
+//                long addr = dstImage.getNativeObjAddr();
+//                intent.putExtra("dst_image_addr", addr);
+                intent.putExtra("filename", filename);
                 startActivity(intent);
                 break;
         }
     } //End Method onClick.
-
-    /**
-     * Method that is in place because something else breaks without it (see above TO-DO).
-     */
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-        setFAB(point1, true);
-        setFAB(point2, true);
-        setFAB(point3, true);
-        setFAB(point4, true);
-    } //End Method onResume.
 
     /**
      * Touch listener to allow for dragging the points around.

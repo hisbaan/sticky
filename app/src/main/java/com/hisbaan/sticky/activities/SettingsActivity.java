@@ -1,4 +1,4 @@
-package com.hisbaan.sticky;
+package com.hisbaan.sticky.activities;
 
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
@@ -13,6 +13,8 @@ import androidx.core.app.NavUtils;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.SwitchPreference;
+
+import com.hisbaan.sticky.R;
 
 /**
  * Creates the settings activity of the program where the user can manipulate the preferences.

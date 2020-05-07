@@ -1,4 +1,4 @@
-package com.hisbaan.sticky;
+package com.hisbaan.sticky.models;
 
 import android.content.Context;
 import android.util.AttributeSet;
@@ -34,6 +34,6 @@ public class SquareCardView extends CardView {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
 
 //        int width = getMeasuredWidth();
-        setMeasuredDimension(widthMeasureSpec, widthMeasureSpec);
+//        setMeasuredDimension(width, width);
     } //End Method onMeasure.
 } //End Class SquareCardView.

@@ -1,4 +1,4 @@
-package com.hisbaan.sticky;
+package com.hisbaan.sticky.activities;
 
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -7,6 +7,8 @@ import android.view.View;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.NavUtils;
+
+import com.hisbaan.sticky.R;
 
 /**
  * Shows tips and tricks for using the app to the user.
