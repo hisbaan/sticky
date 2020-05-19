@@ -35,9 +35,6 @@ public class BoardFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-//        canvas = requireView().findViewById(R.id.canvas);
-//        canvas.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.colorPrimary));
-
         final ArrayList<BoardItem> boardItems = new ArrayList<>();
 
         final File directoryToSearch = new File(requireActivity().getFilesDir() + "/Boards");
