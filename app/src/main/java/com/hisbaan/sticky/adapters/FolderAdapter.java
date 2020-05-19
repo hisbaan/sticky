@@ -9,8 +9,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.hisbaan.sticky.models.FolderItem;
 import com.hisbaan.sticky.R;
+import com.hisbaan.sticky.models.FolderItem;
 
 import java.util.ArrayList;
 
@@ -48,7 +48,7 @@ public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.FolderView
     @NonNull
     @Override
     public FolderViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.folder_layout, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.folder_item, parent, false);
         return new FolderViewHolder(v, listener);
     } //End Method onCreateViewHolder.
 

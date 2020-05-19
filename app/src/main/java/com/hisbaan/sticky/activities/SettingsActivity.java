@@ -38,13 +38,14 @@ public class SettingsActivity extends AppCompatActivity {
         //Setting up toolbar, adding icons, title, etc.
         Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back);
+        setSupportActionBar(toolbar);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 NavUtils.navigateUpFromSameTask(SettingsActivity.this);
             }
         });
-        setSupportActionBar(toolbar);
+
 
         //Sets status bar colour based on current theme
         int currentNightMode = getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
@@ -97,19 +98,15 @@ public class SettingsActivity extends AppCompatActivity {
                     switch ((String) newValue) {
                         case "light": //If the light theme is selected, enable the light theme.
                             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-                            Toast.makeText(getActivity(), "Light mode is selected", Toast.LENGTH_SHORT).show();
                             break;
                         case "dark": //If the dark theme is selected, enable the dark theme.
                             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-                            Toast.makeText(getActivity(), "Dark mode is selected", Toast.LENGTH_SHORT).show();
                             break;
                         case "follow_system": //If the follow system theme is selected, allow the theme of the application to follow the system theme.
                             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
-                            Toast.makeText(getActivity(), "Follow system is selected", Toast.LENGTH_SHORT).show();
                             break;
                         case "follow_battery_saver": //If the follow battery saver theme is selected, allow the theme of the application to follow the battery saver state.
                             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY);
-                            Toast.makeText(getActivity(), "Follow battery saver is selected", Toast.LENGTH_SHORT).show();
                             break;
                     }
 

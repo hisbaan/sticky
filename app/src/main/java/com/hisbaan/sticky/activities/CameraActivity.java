@@ -76,8 +76,14 @@ public class CameraActivity extends AppCompatActivity implements View.OnTouchLis
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back);
-        toolbar.setNavigationOnClickListener(this);
         setSupportActionBar(toolbar);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                NavUtils.navigateUpFromSameTask(CameraActivity.this);
+            }
+        });
+
 
         //Sets status bar colour based on the current theme.
         int currentNightMode = getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
@@ -137,7 +143,6 @@ public class CameraActivity extends AppCompatActivity implements View.OnTouchLis
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.cancel_button:
-            case R.id.toolbar:
                 NavUtils.navigateUpFromSameTask(CameraActivity.this);
                 break;
             case R.id.select_button:
@@ -182,6 +187,7 @@ public class CameraActivity extends AppCompatActivity implements View.OnTouchLis
 //                long addr = dstImage.getNativeObjAddr();
 //                intent.putExtra("dst_image_addr", addr);
                 intent.putExtra("filename", filename);
+                intent.putExtra("is_file_internal", getIntent().getBooleanExtra("is_file_internal", true));
                 startActivity(intent);
                 break;
         }

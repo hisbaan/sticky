@@ -76,7 +76,7 @@
             android:maxLines="1"
             android:maxLength="20"
             android:ellipsize="end"
-            android:text="PlaceHolder"
+            android:text="Place Holder"
             android:textColor="@color/colorText"
             android:layout_gravity="center_horizontal"/>
     </LinearLayout>

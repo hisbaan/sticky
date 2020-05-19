@@ -17,8 +17,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.NavUtils;
 
-import com.hisbaan.sticky.utils.NewGroupDialog;
 import com.hisbaan.sticky.R;
+import com.hisbaan.sticky.utils.NewGroupDialog;
 
 import org.opencv.android.Utils;
 import org.opencv.core.CvException;
@@ -40,6 +40,7 @@ public class NamingActivity extends AppCompatActivity implements View.OnClickLis
     EditText nameTextField;
     Button cancelButton;
     Button continueButton;
+    Button recropButton;
     Spinner spinner;
     String groupName;
     String imageName;
@@ -59,7 +60,12 @@ public class NamingActivity extends AppCompatActivity implements View.OnClickLis
         //Initializing toolbar.
         Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back);
-        toolbar.setNavigationOnClickListener(this);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                NavUtils.navigateUpFromSameTask(NamingActivity.this);
+            }
+        });
         setSupportActionBar(toolbar);
 
         //Sets status bar colour based on the current theme.
@@ -82,7 +88,7 @@ public class NamingActivity extends AppCompatActivity implements View.OnClickLis
 
         dstImage = CameraActivity.transferImage.clone();
 
-        if(dstImage.empty()) {
+        if (dstImage.empty()) {
             System.out.println("### EMPTY ###");
         } else {
             System.out.println(dstImage.cols() + " | " + dstImage.rows());
@@ -94,8 +100,10 @@ public class NamingActivity extends AppCompatActivity implements View.OnClickLis
 
         cancelButton = findViewById(R.id.cancel_button);
         continueButton = findViewById(R.id.continue_button);
+        recropButton = findViewById(R.id.recrop_button);
         cancelButton.setOnClickListener(this);
         continueButton.setOnClickListener(this);
+        recropButton.setOnClickListener(this);
 
         //Converting matrix to bitmap.
         Bitmap bmp = null;
@@ -146,9 +154,10 @@ public class NamingActivity extends AppCompatActivity implements View.OnClickLis
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.cancel_button:
-                endActivity();
+                Intent i = new Intent(this, MainActivity.class);
+                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(i);
             case R.id.recrop_button:
-            case R.id.toolbar:
                 //Goes back to the crop screen.
                 NavUtils.navigateUpFromSameTask(NamingActivity.this);
                 break;
@@ -213,11 +222,13 @@ public class NamingActivity extends AppCompatActivity implements View.OnClickLis
         i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(i);
 
-        File file = new File(Objects.requireNonNull(getIntent().getStringExtra("filename")));
-        if (file.delete()) {
-            System.out.println("File deleted successfully.");
-        } else {
-            System.out.println("File deletion failed.");
+        if (getIntent().getBooleanExtra("is_file_internal", false)) {
+            File file = new File(Objects.requireNonNull(getIntent().getStringExtra("filename")));
+            if (file.delete()) {
+                System.out.println("File deleted successfully.");
+            } else {
+                System.out.println("File deletion failed.");
+            }
         }
     }
 } //End Class NamingActivity.

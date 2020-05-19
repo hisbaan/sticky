@@ -28,13 +28,13 @@ public class TipsActivity extends AppCompatActivity {
         //Setting up toolbar, adding icons, title, etc.
         Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back);
+        setSupportActionBar(toolbar);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 NavUtils.navigateUpFromSameTask(TipsActivity.this);
             }
         });
-        setSupportActionBar(toolbar);
 
         //Sets status bar colour based on current theme
         int currentNightMode = getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;

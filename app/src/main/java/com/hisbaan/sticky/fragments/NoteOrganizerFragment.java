@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.icu.text.CaseMap;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.DisplayMetrics;
@@ -199,7 +198,7 @@ public class NoteOrganizerFragment extends Fragment {
 
                 RecyclerView insideFolderRecyclerView = requireView().findViewById(R.id.inside_folder_recycler_view);
                 RecyclerView.Adapter insideFolderAdapter = new InsideFolderAdapter(insideFolderItems);
-                final RecyclerView.LayoutManager insideFolderGridLayoutManager = new GridLayoutManager(getActivity(), 2);
+                final RecyclerView.LayoutManager insideFolderGridLayoutManager = new GridLayoutManager(requireContext(), 2);
                 insideFolderRecyclerView.setLayoutManager(insideFolderGridLayoutManager);
                 insideFolderRecyclerView.setAdapter(insideFolderAdapter);
 

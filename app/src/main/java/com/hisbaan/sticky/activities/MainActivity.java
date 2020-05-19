@@ -1,8 +1,11 @@
 package com.hisbaan.sticky.activities;
 
+import android.Manifest;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -13,22 +16,22 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.FileProvider;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
+import com.hisbaan.sticky.R;
 import com.hisbaan.sticky.fragments.BoardFragment;
 import com.hisbaan.sticky.fragments.NoteOrganizerFragment;
-import com.hisbaan.sticky.R;
 
 import org.opencv.android.OpenCVLoader;
 
@@ -48,6 +51,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public static final String THEME = "theme";
     //Code for image capture request. This is used to ensure that an intent meant to trigger the camera.
     private static final int REQUEST_IMAGE_CAPTURE = 101;
+    public static final int REQUEST_EXTERNAL_IMAGE_SELECTION = 100;
+
+    private static final int PERMISSION_REQUEST = 0;
 
     //Initializing openCV.
     static {
@@ -69,7 +75,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private FloatingActionButton photoFAB;
     private FloatingActionButton drawNoteFAB;
     private FloatingActionButton uploadPhotoFAB;
-    private Button menuButton;
     private DrawerLayout drawerLayout;
 
     //Declaring animations.
@@ -87,15 +92,22 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_main);
 
-        //System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
-
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar.setNavigationIcon(R.drawable.ic_menu);
+        setSupportActionBar(toolbar);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (isFABOpen) {
+                    closeFABMenu();
+                }
+                drawerLayout.openDrawer(GravityCompat.START);
+            }
+        });
         //Finding button in XML and initializing matching java component.
         drawerLayout = findViewById(R.id.drawer_layout);
-        menuButton = findViewById(R.id.menu_button);
-        menuButton.setOnClickListener(this);
 
         //Initializing listener for the buttons on the nav drawer.
         NavigationView navigationView = findViewById(R.id.nav_view);
@@ -165,12 +177,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.menu_button:
-                if (isFABOpen) {
-                    closeFABMenu();
-                }
-                drawerLayout.openDrawer(GravityCompat.START);
-                break;
             case R.id.main_fab: //Opens and closes the FAB drawer.
                 if (isFABOpen) {
                     closeFABMenu();
@@ -202,8 +208,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
             case R.id.upload_fab:
                 //TODO trigger a file browser and return the path. Then pass that image onto the crop activity.
-                closeFABMenu();
-                Toast.makeText(this, "Feature to be added", Toast.LENGTH_SHORT).show();
+                if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+                    closeFABMenu();
+                    Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                    startActivityForResult(intent, REQUEST_EXTERNAL_IMAGE_SELECTION);
+                } else {
+                    if (shouldShowRequestPermissionRationale(Manifest.permission.READ_EXTERNAL_STORAGE)) {
+                        Toast.makeText(this, "External storage permission is needed to import notes.", Toast.LENGTH_SHORT).show();
+                    }
+
+                    requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, PERMISSION_REQUEST);
+                }
+
+
                 break;
         }
     } //End Method OnClickListener
@@ -345,9 +362,45 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             } else {
                 System.out.println("File deletion failed.");
             }
+        } else if (requestCode == REQUEST_EXTERNAL_IMAGE_SELECTION && resultCode == RESULT_OK) {
+            if (data == null) {
+                Toast.makeText(this, "There was an error importing the image. Please try again", Toast.LENGTH_SHORT).show();
+            } else {
+                Uri imageUri = data.getData();
+                String filePath = getPathFromURI(imageUri);
+
+                Intent intent = new Intent(getApplicationContext(), CameraActivity.class);
+                intent.putExtra("image_path", filePath);
+                intent.putExtra("is_file_internal", false);
+                startActivity(intent);
+            }
         }
 
     } //End Method onActivityResult.
+
+    /**
+     * Gets the filepath of the image chosen by the user in their galley app of choice.
+     *
+     * @param uri The uri of the image of which the filepath is being retrieved.
+     * @return The absolute filepath that leads to the image.
+     */
+    private String getPathFromURI(Uri uri) {
+        if (uri == null) {
+            return null;
+        } else {
+            String[] projection = {MediaStore.Images.Media.DATA};
+            Cursor cursor = getContentResolver().query(uri, projection, null, null, null);
+            if (cursor != null) {
+                int colIndex = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+                cursor.moveToFirst();
+
+                String imagePath = cursor.getString(colIndex);
+                cursor.close();
+                return imagePath;
+            }
+        }
+        return uri.getPath();
+    }
 
     /**
      * Shows the FAB drawer when the mainFAB is clicked on.
