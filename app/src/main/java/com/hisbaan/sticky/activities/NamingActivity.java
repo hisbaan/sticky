@@ -86,7 +86,7 @@ public class NamingActivity extends AppCompatActivity implements View.OnClickLis
 //        System.out.println(tempImg);
 //        dstImage = tempImg.clone();
 
-        dstImage = CameraActivity.transferImage.clone();
+        dstImage = CropActivity.transferImage.clone();
 
         if (dstImage.empty()) {
             System.out.println("### EMPTY ###");

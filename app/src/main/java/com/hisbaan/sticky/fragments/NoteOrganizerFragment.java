@@ -68,6 +68,8 @@ public class NoteOrganizerFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        requireActivity().setTitle("Note Organizer");
+
         //Creating an array list of items to be added into the recycler view and then adding items to that list.
         final ArrayList<FolderItem> folderItems = new ArrayList<>();
 

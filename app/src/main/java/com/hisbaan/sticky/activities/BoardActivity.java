@@ -1,6 +1,5 @@
 package com.hisbaan.sticky.activities;
 
-import android.graphics.Paint;
 import android.os.Bundle;
 import android.view.View;
 
@@ -12,12 +11,12 @@ import androidx.core.content.ContextCompat;
 import com.hisbaan.sticky.R;
 import com.hisbaan.sticky.models.Canvas;
 
+import java.io.FileOutputStream;
+import java.io.IOException;
+
 //import android.graphics.Canvas;
 
 public class BoardActivity extends AppCompatActivity {
-
-    Canvas canvas;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,11 +32,31 @@ public class BoardActivity extends AppCompatActivity {
             }
         });
 
+        String boardName = getIntent().getStringExtra("board_name") + ".txt";
+        setTitle(boardName.substring(0, boardName.length() - 4));
 
-        canvas = findViewById(R.id.canvas);
-        Paint textPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        canvas.setBoardName(getIntent().getStringExtra("board_name") + ".txt");
+        save();
+        Canvas canvas = findViewById(R.id.canvas);
+        canvas.setBoardName(boardName);
         canvas.setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimary));
+    }
 
+    public void save() {
+        String text = "BoardTest,Test.jpg,100,100";
+        FileOutputStream fos = null;
+        try {
+            fos = openFileOutput(getIntent().getStringExtra("board_name") + ".txt", MODE_PRIVATE);
+            fos.write(text.getBytes());
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (fos != null) {
+                try {
+                    fos.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 }

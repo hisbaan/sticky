@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorPrimary"
-    tools:context=".activities.CameraActivity">
+    tools:context=".activities.CropActivity">
 
     <include
         android:id="@+id/toolbar"

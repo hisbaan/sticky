@@ -24,11 +24,14 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".activities.BoardActivity"></activity>
+        <activity
+            android:name=".activities.BoardActivity"
+            android:label="Board"
+            android:parentActivityName=".activities.MainActivity" />
         <activity
             android:name=".activities.NamingActivity"
             android:label="Name"
-            android:parentActivityName=".activities.CameraActivity" />
+            android:parentActivityName=".activities.CropActivity" />
         <activity
             android:name=".activities.TipsActivity"
             android:label="@string/title_activity_tips"
@@ -36,13 +39,9 @@
         <activity
             android:name=".activities.SettingsActivity"
             android:label="@string/title_activity_settings"
-            android:parentActivityName=".activities.MainActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.hisbaan.sticky.activities.MainActivity" />
-        </activity>
+            android:parentActivityName=".activities.MainActivity" />
         <activity
-            android:name=".activities.CameraActivity"
+            android:name=".activities.CropActivity"
             android:label="@string/title_activity_camera"
             android:parentActivityName=".activities.MainActivity" />
         <activity

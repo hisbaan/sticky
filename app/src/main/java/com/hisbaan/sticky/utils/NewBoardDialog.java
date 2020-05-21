@@ -11,17 +11,16 @@ import android.widget.EditText;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.DialogFragment;
+import androidx.appcompat.app.AppCompatDialogFragment;
 
 import com.hisbaan.sticky.R;
 
-/**
- * Custom dialog that prompts the user for the name of the new group they want to create.
- */
-public class NewGroupDialog extends DialogFragment {
+import java.util.Objects;
+
+public class NewBoardDialog extends AppCompatDialogFragment {
     //Declaring variables.
-    private EditText newGroupEditText;
-    private NewGroupDialogListener listener;
+    private EditText newBoardEditText;
+    private NewBoardDialog.NewBoardDialogListener listener;
 
     /**
      * Similar to an onCreate method. Runs the code for building the dialog and displaying it.
@@ -37,10 +36,10 @@ public class NewGroupDialog extends DialogFragment {
         View view = inflater.inflate(R.layout.layout_new_board_dialog, null);
 
         //Declaring variables.
-        newGroupEditText = view.findViewById(R.id.new_group_edit_text);
+        newBoardEditText = view.findViewById(R.id.new_board_edit_text);
 
         //Creating the dialog with an okay and cancel button.
-        builder.setView(view).setTitle("New Group").setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+        builder.setView(view).setTitle("New Board").setNegativeButton("cancel", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
             }
@@ -48,8 +47,8 @@ public class NewGroupDialog extends DialogFragment {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 //Gets the text inside of the box and sends it to the parent activity.
-                String newGroupName = newGroupEditText.getText().toString();
-                listener.applyText(newGroupName);
+                String newBoardName = newBoardEditText.getText().toString();
+                listener.applyText(newBoardName);
             }
         });
         return builder.create();
@@ -66,16 +65,16 @@ public class NewGroupDialog extends DialogFragment {
 
         //If the class is not implemented correctly, throw an error.
         try {
-            listener = (NewGroupDialogListener) context;
+            listener = (NewBoardDialog.NewBoardDialogListener) context;
         } catch (ClassCastException e) {
-            throw new ClassCastException(context.toString() + "must implement NewGroupDialogListener");
+            throw new ClassCastException(context.toString() + "must implement NewBoardDialogListener");
         }
     } //End Method onAttach.
 
     /**
      * The method that needs to be implemented which returns the text in the edit text.
      */
-    public interface NewGroupDialogListener {
-        void applyText(String newGroupName);
+    public interface NewBoardDialogListener {
+        void applyText(String newBoardName);
     } //End Method NewGroupDialogListener.
 }

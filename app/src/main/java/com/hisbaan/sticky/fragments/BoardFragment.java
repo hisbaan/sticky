@@ -2,7 +2,6 @@ package com.hisbaan.sticky.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Environment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,13 +16,13 @@ import com.hisbaan.sticky.R;
 import com.hisbaan.sticky.activities.BoardActivity;
 import com.hisbaan.sticky.adapters.BoardAdapter;
 import com.hisbaan.sticky.models.BoardItem;
+import com.hisbaan.sticky.utils.NewBoardDialog;
 
 import java.io.File;
 import java.io.FilenameFilter;
 import java.util.ArrayList;
 
 public class BoardFragment extends Fragment {
-//    private Canvas canvas;
 
     @Nullable
     @Override
@@ -35,18 +34,11 @@ public class BoardFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        requireActivity().setTitle("Boards");
+
         final ArrayList<BoardItem> boardItems = new ArrayList<>();
 
-        final File directoryToSearch = new File(requireActivity().getFilesDir() + "/Boards");
-        System.out.println(directoryToSearch.toString());
-        System.out.println(requireActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES).toString());
-        if (!directoryToSearch.isDirectory()) {
-            if (directoryToSearch.mkdir()) {
-                System.out.println("Directory Created");
-            } else {
-                System.out.println("Directory Creation Failed");
-            }
-        }
+        final File directoryToSearch = requireActivity().getFilesDir();
 
         final File[] boardNames = directoryToSearch.listFiles(new FilenameFilter() {
             @Override
@@ -77,6 +69,9 @@ public class BoardFragment extends Fragment {
                 if (position == boardItems.size() - 1) {
                     //TODO add a board here.
                     //make a dialog asking for the name of the new board (reuse the old dialog?) then make a file with it and then open up the board
+                    NewBoardDialog newBoardDialog = new NewBoardDialog();
+                    newBoardDialog.show(requireActivity().getSupportFragmentManager(), "new board dialog");
+
                 } else {
                     Intent intent = new Intent(requireContext().getApplicationContext(), BoardActivity.class);
                     intent.putExtra("board_name", boardItems.get(position).getBoardName());

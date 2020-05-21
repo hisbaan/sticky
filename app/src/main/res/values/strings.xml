@@ -8,6 +8,11 @@
     <string name="cancel">cancel</string>
     <string name="recrop">recrop</string>
 
+    <string name="new_group_hint">New Group Name</string>
+    <string name="new_group">New Group</string>
+    <string name="new_board_hint">New Board Name</string>
+    <string name="new_board">New Board</string>
+
     <!-- Navigation Drawer Items -->
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -34,6 +39,4 @@
     <string name="tips_text_1">Use flash to improve the quality of the image.</string>
     <string name="tips_number_2">2)</string>
     <string name="tips_text_2">Hold the shutter button and let go of it when ready to capture the photo.</string>
-    <string name="new_group_hint">New Group Name</string>
-    <string name="new_group">New Group</string>
 </resources>

@@ -41,7 +41,7 @@ import org.opencv.imgproc.Imgproc;
 /**
  * Displays the image that was captured immediately before this activity is triggered.
  */
-public class CameraActivity extends AppCompatActivity implements View.OnTouchListener, View.OnClickListener {
+public class CropActivity extends AppCompatActivity implements View.OnTouchListener, View.OnClickListener {
 
     //Declaring variables.
     private String filename;
@@ -72,7 +72,7 @@ public class CameraActivity extends AppCompatActivity implements View.OnTouchLis
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_camera);
+        setContentView(R.layout.activity_crop);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back);
@@ -80,7 +80,7 @@ public class CameraActivity extends AppCompatActivity implements View.OnTouchLis
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                NavUtils.navigateUpFromSameTask(CameraActivity.this);
+                NavUtils.navigateUpFromSameTask(CropActivity.this);
             }
         });
 
@@ -143,7 +143,7 @@ public class CameraActivity extends AppCompatActivity implements View.OnTouchLis
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.cancel_button:
-                NavUtils.navigateUpFromSameTask(CameraActivity.this);
+                NavUtils.navigateUpFromSameTask(CropActivity.this);
                 break;
             case R.id.select_button:
                 //Initializing image matrices.
@@ -279,4 +279,4 @@ public class CameraActivity extends AppCompatActivity implements View.OnTouchLis
 //        imageView = findViewById(R.id.image_view);
 //        imageView.setImageBitmap(bmp);
 //    }
-} //End Class CameraActivity.
+} //End Class CropActivity.

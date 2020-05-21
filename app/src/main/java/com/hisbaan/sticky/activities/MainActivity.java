@@ -32,6 +32,7 @@ import com.google.android.material.navigation.NavigationView;
 import com.hisbaan.sticky.R;
 import com.hisbaan.sticky.fragments.BoardFragment;
 import com.hisbaan.sticky.fragments.NoteOrganizerFragment;
+import com.hisbaan.sticky.utils.NewBoardDialog;
 
 import org.opencv.android.OpenCVLoader;
 
@@ -44,7 +45,7 @@ import java.util.Locale;
 /**
  * Creates the main activity for the program, launches other activities, and allows for user image capture.
  */
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener, NewBoardDialog.NewBoardDialogListener {
 
     //Final variables that are used for SharedPreferences.
     public static final String SHARED_PREFS = "sharedPrefs";
@@ -350,9 +351,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        //If the request came from the camera action and the action was not cancelled, run the CameraActivity which will display the saved image.
+        //If the request came from the camera action and the action was not cancelled, run the CropActivity which will display the saved image.
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-            Intent i = new Intent(getApplicationContext(), CameraActivity.class);
+            Intent i = new Intent(getApplicationContext(), CropActivity.class);
             i.putExtra("image_path", currentImagePath);
             startActivity(i);
         } else if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_CANCELED) { //If the request code came from the camera action and the action was cancelled, delete the file remnant.
@@ -369,7 +370,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 Uri imageUri = data.getData();
                 String filePath = getPathFromURI(imageUri);
 
-                Intent intent = new Intent(getApplicationContext(), CameraActivity.class);
+                Intent intent = new Intent(getApplicationContext(), CropActivity.class);
                 intent.putExtra("image_path", filePath);
                 intent.putExtra("is_file_internal", false);
                 startActivity(intent);
@@ -453,4 +454,24 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         fab.setClickable(state);
         fab.setFocusable(state);
     } //End Method setFAB.
+
+    /**
+     * Creates a new board file that is displayed in the recycler view.
+     *
+     * @param newBoardName The name of a board the user creates.
+     */
+    @Override
+    public void applyText(String newBoardName) {
+        File newBoardFile = new File(getFilesDir().getPath() + "/" + newBoardName + ".txt");
+        try {
+            if (newBoardFile.createNewFile()) {
+                System.out.println("New board created successfully");
+            } else {
+                System.out.println("Error creating new board");
+                Toast.makeText(this, "A board with that name already exists", Toast.LENGTH_SHORT).show();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 } //End Class MainActivity.

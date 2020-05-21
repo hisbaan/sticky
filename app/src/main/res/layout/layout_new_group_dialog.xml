@@ -9,6 +9,8 @@
         android:id="@+id/new_group_edit_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
         android:autofillHints="no"
         android:hint="@string/new_group_hint"
         android:inputType="textCapSentences|textAutoCorrect"
