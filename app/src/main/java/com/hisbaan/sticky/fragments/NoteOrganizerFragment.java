@@ -41,7 +41,6 @@ import java.util.ArrayList;
 public class NoteOrganizerFragment extends Fragment {
     private PopupWindow popupWindow;
     private LayoutInflater popupLayoutInflater;
-    View view;
 
     /**
      * Inflates the fragment when it is created.
@@ -54,8 +53,7 @@ public class NoteOrganizerFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_note_organizer, container, false);
-        return view;
+        return inflater.inflate(R.layout.fragment_note_organizer, container, false);
     }
 
     /**
@@ -68,6 +66,7 @@ public class NoteOrganizerFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        //Setting the title of the toolbar.
         requireActivity().setTitle("Note Organizer");
 
         //Creating an array list of items to be added into the recycler view and then adding items to that list.
@@ -239,7 +238,7 @@ public class NoteOrganizerFragment extends Fragment {
 
 
 
-        RecyclerView insideFolderRecyclerView = view.findViewById(R.id.inside_folder_recycler_view);
+        RecyclerView insideFolderRecyclerView = requireView().findViewById(R.id.inside_folder_recycler_view);
         RecyclerView.Adapter insideFolderAdapter = new InsideFolderAdapter(insideFolderItems);
         RecyclerView.LayoutManager insideFolderGridLayoutManager = new GridLayoutManager(getActivity(), 2);
         insideFolderRecyclerView.setLayoutManager(insideFolderGridLayoutManager);

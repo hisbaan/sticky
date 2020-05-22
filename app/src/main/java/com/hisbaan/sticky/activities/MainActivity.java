@@ -47,13 +47,11 @@ import java.util.Locale;
  */
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener, NewBoardDialog.NewBoardDialogListener {
 
-    //Final variables that are used for SharedPreferences.
+    //Final variables that are used to retrieve information.
     public static final String SHARED_PREFS = "sharedPrefs";
     public static final String THEME = "theme";
-    //Code for image capture request. This is used to ensure that an intent meant to trigger the camera.
     private static final int REQUEST_IMAGE_CAPTURE = 101;
     public static final int REQUEST_EXTERNAL_IMAGE_SELECTION = 100;
-
     private static final int PERMISSION_REQUEST = 0;
 
     //Initializing openCV.
@@ -95,6 +93,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //Initializing toolbar with a menu button that opens the drawer.
         Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setNavigationIcon(R.drawable.ic_menu);
         setSupportActionBar(toolbar);
@@ -394,14 +393,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             if (cursor != null) {
                 int colIndex = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
                 cursor.moveToFirst();
-
                 String imagePath = cursor.getString(colIndex);
                 cursor.close();
                 return imagePath;
             }
         }
         return uri.getPath();
-    }
+    } //End Method getPathFromUri.
 
     /**
      * Shows the FAB drawer when the mainFAB is clicked on.
@@ -473,5 +471,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
+
+        Intent intent = new Intent(getApplicationContext(), BoardActivity.class);
+        intent.putExtra("board_name", newBoardName);
+        startActivity(intent);
+    } //End Method applyText.
 } //End Class MainActivity.
