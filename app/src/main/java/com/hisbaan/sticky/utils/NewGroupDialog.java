@@ -34,7 +34,7 @@ public class NewGroupDialog extends DialogFragment {
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = requireActivity().getLayoutInflater();
-        View view = inflater.inflate(R.layout.layout_new_board_dialog, null);
+        View view = inflater.inflate(R.layout.layout_new_group_dialog, null);
 
         //Declaring variables.
         newGroupEditText = view.findViewById(R.id.new_group_edit_text);
@@ -48,6 +48,7 @@ public class NewGroupDialog extends DialogFragment {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 //Gets the text inside of the box and sends it to the parent activity.
+                //TODO breaks when adding a new note. I didn't change anythinggggg
                 String newGroupName = newGroupEditText.getText().toString();
                 listener.applyText(newGroupName);
             }
@@ -78,4 +79,4 @@ public class NewGroupDialog extends DialogFragment {
     public interface NewGroupDialogListener {
         void applyText(String newGroupName);
     } //End Method NewGroupDialogListener.
-}
+} //End Class NewGroupDialog.

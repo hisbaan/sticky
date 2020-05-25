@@ -11,11 +11,10 @@
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
         android:autofillHints="no"
-        android:hint="@string/new_board"
+        android:hint="@string/new_board_hint"
         android:inputType="textCapSentences|textAutoCorrect"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
 </androidx.constraintlayout.widget.ConstraintLayout>

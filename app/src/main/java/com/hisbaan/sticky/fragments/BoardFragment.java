@@ -70,8 +70,8 @@ public class BoardFragment extends Fragment {
         assert boardNames != null;
         for (File boardName : boardNames) {
             String[] tempName = boardName.toString().split("/");
-            String nameWithTXT = tempName[tempName.length - 1];
-            boardItems.add(new BoardItem(nameWithTXT.substring(0, nameWithTXT.length() - 4)));
+            String nameWithTxt = tempName[tempName.length - 1];
+            boardItems.add(new BoardItem(nameWithTxt.substring(0, nameWithTxt.length() - 4)));
         }
         boardItems.add(new BoardItem("Add"));
 
