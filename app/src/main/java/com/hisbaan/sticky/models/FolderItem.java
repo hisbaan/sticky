@@ -64,7 +64,7 @@ public class FolderItem {
         paint.setColor(nullColor);
         canvas.drawRect(0F, 0F, 1000, 1000, paint);
         return bitmap;
-    } //End Method makeNullBitmap.
+    } //End method makeNullBitmap.
 
     public Bitmap getImageBitmap1() {
         return imageBitmap1;
@@ -72,17 +72,17 @@ public class FolderItem {
 
     public Bitmap getImageBitmap2() {
         return imageBitmap2;
-    } //End Method getImageBitmap2.
+    } //End method getImageBitmap2.
 
     public Bitmap getImageBitmap3() {
         return imageBitmap3;
-    } //End Method getImageBitmap3.
+    } //End method getImageBitmap3.
 
     public Bitmap getImageBitmap4() {
         return imageBitmap4;
-    } //End Method getImageBitmap4.
+    } //End method getImageBitmap4.
 
     public String getName() {
         return name;
-    } //End Method getName.
-} //End Class FolderItem.
+    } //End method getName.
+} //End class FolderItem.

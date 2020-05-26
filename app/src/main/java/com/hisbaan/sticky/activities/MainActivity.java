@@ -167,7 +167,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         photoFAB.setOnClickListener(this);
         drawNoteFAB.setOnClickListener(this);
         uploadPhotoFAB.setOnClickListener(this);
-    } //End Method onCreate.
+    } //End method onCreate.
 
     /**
      * Handles the presses of buttons that have had the OnClickListener added on to it.
@@ -223,7 +223,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                 break;
         }
-    } //End Method OnClickListener
+    } //End method OnClickListener
 
     /**
      * Handles the clicks of buttons in the navigation drawer.
@@ -264,7 +264,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
-    } //End Method onNavigationItemsSelected.
+    } //End method onNavigationItemsSelected.
 
     /**
      * Handles the pressing of the back button.
@@ -279,7 +279,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         } else {
             super.onBackPressed();
         }
-    } //End Method onBackPressed.
+    } //End method onBackPressed.
 
     /**
      * Gets a unique name for an image file based on the current date and time.
@@ -303,7 +303,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
 
         return imageFile;
-    } //End Method getImageFile.
+    } //End method getImageFile.
 
     /**
      * Initialize the contents of the Activity's standard options menu.
@@ -316,7 +316,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
-    } //End Method onCreateOptionsMenu.
+    } //End method onCreateOptionsMenu.
 
     /**
      * This hook is called whenever an item in your options menu is selected.
@@ -337,7 +337,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
 
         return super.onOptionsItemSelected(item);
-    } //End Method onOptionsItemSelected.
+    } //End method onOptionsItemSelected.
 
     /**
      * Saves the file if a picture was successfully taken and deletes it if the action was cancelled.
@@ -375,8 +375,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 startActivity(intent);
             }
         }
-
-    } //End Method onActivityResult.
+    } //End method onActivityResult.
 
     /**
      * Gets the filepath of the image chosen by the user in their galley app of choice.
@@ -399,7 +398,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         }
         return uri.getPath();
-    } //End Method getPathFromUri.
+    } //End method getPathFromUri.
 
     /**
      * Shows the FAB drawer when the mainFAB is clicked on.
@@ -419,7 +418,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setFAB(photoFAB, true);
         setFAB(drawNoteFAB, true);
         setFAB(uploadPhotoFAB, true);
-    } //End Method showFABMenu.
+    } //End method showFABMenu.
 
     /**
      * Hides the FAB drawer when the mainFAB is clicked on.
@@ -439,7 +438,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setFAB(photoFAB, false);
         setFAB(drawNoteFAB, false);
         setFAB(uploadPhotoFAB, false);
-    } //End Method closeFABMenu.
+    } //End method closeFABMenu.
 
     /**
      * Sets the state of the FAB passed to it to be clickable or un-clickable.
@@ -451,7 +450,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         fab.setEnabled(state);
         fab.setClickable(state);
         fab.setFocusable(state);
-    } //End Method setFAB.
+    } //End method setFAB.
 
     /**
      * Creates a new board file that is displayed in the recycler view.
@@ -475,5 +474,5 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Intent intent = new Intent(getApplicationContext(), BoardActivity.class);
         intent.putExtra("board_name", newBoardName);
         startActivity(intent);
-    } //End Method applyText.
-} //End Class MainActivity.
+    } //End method applyText.
+} //End class MainActivity.

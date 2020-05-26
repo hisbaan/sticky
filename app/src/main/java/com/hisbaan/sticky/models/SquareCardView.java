@@ -13,15 +13,15 @@ import androidx.cardview.widget.CardView;
 public class SquareCardView extends CardView {
     public SquareCardView(@NonNull Context context) {
         super(context);
-    } //End Constructor SquareCardView.
+    } //End constructor SquareCardView.
 
     public SquareCardView(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
-    } //End Constructor SquareCardView.
+    } //End constructor SquareCardView.
 
     public SquareCardView(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-    } //End Constructor SquareCardView.
+    } //End constructor SquareCardView.
 
     /**
      * Makes the height equal to the width.
@@ -35,5 +35,5 @@ public class SquareCardView extends CardView {
 
 //        int width = getMeasuredWidth();
 //        setMeasuredDimension(width, width);
-    } //End Method onMeasure.
-} //End Class SquareCardView.
+    } //End method onMeasure.
+} //End class SquareCardView.

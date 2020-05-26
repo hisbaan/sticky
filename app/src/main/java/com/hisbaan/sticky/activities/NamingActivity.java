@@ -143,7 +143,7 @@ public class NamingActivity extends AppCompatActivity implements View.OnClickLis
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, dirsInPictures);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
-    } //End Method onCreate.
+    } //End method onCreate.
 
     /**
      * Runs every time a component is clicked that has an onClickListener to perform an action.
@@ -186,7 +186,7 @@ public class NamingActivity extends AppCompatActivity implements View.OnClickLis
                 }
                 break;
         }
-    } //End Method onClick.
+    } //End method onClick.
 
     /**
      * Runs once the user presses 'OKAY' on the dialog to apply the new group name and create a directory for it.
@@ -215,7 +215,7 @@ public class NamingActivity extends AppCompatActivity implements View.OnClickLis
         Imgcodecs.imwrite(storageDir + "/" + groupName + "/" + imageName + ".jpg", dstImage);
 
         endActivity();
-    } //End Method applyText.
+    } //End method applyText.
 
     private void endActivity() {
         Intent i = new Intent(this, MainActivity.class);
@@ -231,4 +231,4 @@ public class NamingActivity extends AppCompatActivity implements View.OnClickLis
             }
         }
     }
-} //End Class NamingActivity.
+} //End class NamingActivity.

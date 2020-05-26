@@ -21,13 +21,21 @@ public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.FolderView
     private ArrayList<FolderItem> folderItems;
     private OnItemClickListener listener;
 
+    /**
+     * Interface to make the OnItemClickListener work.
+     */
     public interface OnItemClickListener {
         void onItemClick(int position);
-    }
+    } //End Interface OnItemClickListener.
 
+    /**
+     * Setter method that sets the listener.
+     *
+     * @param listener OnItemClickListener passed to the method.
+     */
     public void setOnItemClickListener(OnItemClickListener listener) {
         this.listener = listener;
-    }
+    } //End method setOnItemClickListener.
 
     /**
      * Constructor that passes the array list of items to this adapter to be added to the recycler view.
@@ -36,7 +44,7 @@ public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.FolderView
      */
     public FolderAdapter(ArrayList<FolderItem> folderItems) {
         this.folderItems = folderItems;
-    }
+    } //End constructor FolderAdapter.
 
     /**
      * Inflates and returns the recycler view.
@@ -50,7 +58,7 @@ public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.FolderView
     public FolderViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.folder_item, parent, false);
         return new FolderViewHolder(v, listener);
-    } //End Method onCreateViewHolder.
+    } //End method onCreateViewHolder.
 
     /**
      * Puts items in the appropriate positions of the recycler view.
@@ -68,7 +76,7 @@ public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.FolderView
         holder.imageView4.setImageBitmap(currentItem.getImageBitmap4());
         holder.folderName.setText(currentItem.getName());
         //TODO maybe add a string to the preview image
-    } //End Method onBindViewHolder.
+    } //End method onBindViewHolder.
 
     /**
      * Returns the size of the recycler view.
@@ -78,7 +86,7 @@ public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.FolderView
     @Override
     public int getItemCount() {
         return folderItems.size();
-    } //End Method getItemCount.
+    } //End method getItemCount.
 
     /**
      * Adds the items to the recycler view.
@@ -117,6 +125,6 @@ public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.FolderView
                     }
                 }
             });
-        } //End Constructor FolderViewHolder.
-    } //End Class FolderViewHolder.
-} //End Class FolderAdapter.
+        } //End constructor FolderViewHolder.
+    } //End class FolderViewHolder.
+} //End class FolderAdapter.

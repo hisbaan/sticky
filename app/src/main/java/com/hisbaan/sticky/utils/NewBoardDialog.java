@@ -52,7 +52,7 @@ public class NewBoardDialog extends AppCompatDialogFragment {
             }
         });
         return builder.create();
-    } //End Method onCreateDialog.
+    } //End method onCreateDialog.
 
     /**
      * Adding the listener when the dialog opens.
@@ -69,12 +69,12 @@ public class NewBoardDialog extends AppCompatDialogFragment {
         } catch (ClassCastException e) {
             throw new ClassCastException(context.toString() + "must implement NewBoardDialogListener");
         }
-    } //End Method onAttach.
+    } //End method onAttach.
 
     /**
      * The method that needs to be implemented which returns the text in the edit text.
      */
     public interface NewBoardDialogListener {
         void applyText(String newBoardName);
-    } //End Method NewGroupDialogListener.
+    } //End method NewGroupDialogListener.
 }

@@ -47,5 +47,5 @@ public class TipsActivity extends AppCompatActivity {
                 decorView.setSystemUiVisibility(decorView.getSystemUiVisibility() & ~View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
                 break;
         }
-    } //End Method onCreate.
-} //End Class TipsActivity.
+    } //End method onCreate.
+} //End class TipsActivity.

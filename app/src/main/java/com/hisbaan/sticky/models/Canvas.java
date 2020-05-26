@@ -31,19 +31,19 @@ public class Canvas extends View {
 
     public Canvas(Context context) {
         super(context);
-    } //End Constructor Canvas.
+    } //End constructor Canvas.
 
     public Canvas(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
-    } //End Constructor Canvas.
+    } //End constructor Canvas.
 
     public Canvas(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-    } //End Constructor Canvas.
+    } //End constructor Canvas.
 
     public Canvas(Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
-    } //End Constructor Canvas.
+    } //End constructor Canvas.
 
     /**
      * Draw method that paints the notes based on information it is given.
@@ -93,9 +93,9 @@ public class Canvas extends View {
                 canvas.drawBitmap(bmp, Integer.parseInt(info[2]), Integer.parseInt(info[3]), imagePaint);
             }
         }
-    } //End Method onDraw.
+    } //End method onDraw.
 
     public void setBoardName(String boardName) {
         this.boardName = boardName;
-    } //End Method setBoardName.
-} //End Class Canvas.
+    } //End method setBoardName.
+} //End class Canvas.

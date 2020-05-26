@@ -54,7 +54,7 @@ public class NewGroupDialog extends DialogFragment {
             }
         });
         return builder.create();
-    } //End Method onCreateDialog.
+    } //End method onCreateDialog.
 
     /**
      * Adding the listener when the dialog opens.
@@ -71,12 +71,12 @@ public class NewGroupDialog extends DialogFragment {
         } catch (ClassCastException e) {
             throw new ClassCastException(context.toString() + "must implement NewGroupDialogListener");
         }
-    } //End Method onAttach.
+    } //End method onAttach.
 
     /**
      * The method that needs to be implemented which returns the text in the edit text.
      */
     public interface NewGroupDialogListener {
         void applyText(String newGroupName);
-    } //End Method NewGroupDialogListener.
-} //End Class NewGroupDialog.
+    } //End method NewGroupDialogListener.
+} //End class NewGroupDialog.

@@ -81,14 +81,17 @@ public class BoardActivity extends AppCompatActivity implements View.OnClickList
                 break;
         }
 
+        //Getting screen height and width.
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         screenWidth = displayMetrics.widthPixels;
         screenHeight = displayMetrics.heightPixels;
 
+        //Initializing button to add new notes.
         Button addButton = findViewById(R.id.add_button);
         addButton.setOnClickListener(this);
 
+        //Initializing the 'canvas' layout that notes are placed on.
         relativeLayout = findViewById(R.id.board_layout);
 
         //Getting the board name from the intent that was passed to it from the previous activity.
@@ -126,19 +129,20 @@ public class BoardActivity extends AppCompatActivity implements View.OnClickList
 
             while (sc.hasNextLine()) {
                 String[] info = sc.nextLine().split(",");
-
                 addNote(info[0], info[1], Integer.parseInt(info[2]), Integer.parseInt(info[3]));
             }
         }
-    } //End Method onCreate.
+    } //End method onCreate.
 
-
+    /**
+     * Saves the board when the board is exited, the app is closed, etc. Basically an auto-save function.
+     */
     @Override
     protected void onPause() {
         super.onPause();
 
+        //Put info from the board into the text variable.
         String text = "";
-
         for (int i = 0; i < imageViews.size(); i++) {
             if (i != 0) {
                 text += "\n";
@@ -146,7 +150,7 @@ public class BoardActivity extends AppCompatActivity implements View.OnClickList
             text += drawnImageViews.get(i).getGroupName() + "," + drawnImageViews.get(i).getNoteName() + "," + (int) (imageViews.get(i).getX()) + "," + (int) (imageViews.get(i).getY());
         }
 
-        //TODO get list of sticky notes and their positions here (maybe from canvas?) and make it the variable text. One note per line.
+        //Save this text variable to a local file.
         FileOutputStream fos = null;
         try {
             fos = openFileOutput(getIntent().getStringExtra("board_name") + ".txt", MODE_PRIVATE);
@@ -162,16 +166,24 @@ public class BoardActivity extends AppCompatActivity implements View.OnClickList
                 }
             }
         }
-    }
+    } //End method onPause.
 
+    /**
+     * Method that adds a note to the board at the coordinates given.
+     *
+     * @param boardName The name of the board where the image is located.
+     * @param noteName  The name of the file that the note is.
+     * @param x         The desired x value of the note.
+     * @param y         The desired y value of the note.
+     */
     @SuppressLint("ClickableViewAccessibility")
     private void addNote(String boardName, String noteName, int x, int y) {
+        //TODO make an error if the x and y would cause the note to go out of bounds.
         ImageView imageView = new ImageView(this);
         Bitmap bmp = BitmapFactory.decodeFile(Objects.requireNonNull(getExternalFilesDir(Environment.DIRECTORY_PICTURES)).toString() + "/" + boardName + "/" + noteName);
         imageView.setImageBitmap(bmp);
         imageView.setOnTouchListener(this);
 
-        //TODO replace 100, 100 with the size of the imageview once editing size is allowed.
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(250, 250);
         params.leftMargin = x;
         params.topMargin = y;
@@ -180,7 +192,7 @@ public class BoardActivity extends AppCompatActivity implements View.OnClickList
 
         imageViews.add(imageView);
         drawnImageViews.add(new DrawnImageView(boardName, noteName));
-    }
+    } //End method addNote.
 
     /**
      * Touch listener to allow for dragging the points around.
@@ -217,30 +229,46 @@ public class BoardActivity extends AppCompatActivity implements View.OnClickList
             }
             return true;
         }
-    } //End Method onTouch.
+    } //End method onTouch.
 
+    /**
+     * onClick method that runs code when a view is clicked.
+     *
+     * @param v The view that is clicked.
+     */
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.add_button:
-                //TODO open drawer to get info here. Recycler view with images loaded in it (how to do multiple images???) and then click on individual items
+                //When the add button is clicked, get the note name form the picker activities.
                 Intent intent = new Intent(this, FolderPickerActivity.class);
                 startActivityForResult(intent, REQUEST_NEW_NOTE);
-//                startActivity(intent);
                 break;
         }
-    } //End Method onClick.
+    } //End method onClick.
 
+    /**
+     * Boolean that decides if an object is movable (in bounds).
+     *
+     * @param v The view being checked.
+     * @return Whether or not the view should be moved.
+     */
     private boolean movable(View v) {
-
         float x = v.getX();
         float y = v.getY();
         int width = v.getWidth();
         int height = v.getHeight();
 
         return ((x > 0) && (y > 0) && ((x + width) < screenWidth) && ((y + height) < screenHeight));
-    }
+    } //End method movable.
 
+    /**
+     * Runs when an activity started for a result returns.
+     *
+     * @param requestCode The code of the request made.
+     * @param resultCode  The result of the code. Either okay or cancelled.
+     * @param data        The data returned.
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -249,7 +277,7 @@ public class BoardActivity extends AppCompatActivity implements View.OnClickList
             assert data != null;
             String[] result = Objects.requireNonNull(data.getStringExtra("result")).split(",");
 
-            addNote(result[0], result[1] + ".jpg", 100, 100);
+            addNote(result[0], result[1] + ".jpg", (int) (screenWidth / 2), (int) (screenHeight / 2));
         }
-    }
-} //End Class BoardActivity.
+    } //End method onActivityResult.
+} //End class BoardActivity.

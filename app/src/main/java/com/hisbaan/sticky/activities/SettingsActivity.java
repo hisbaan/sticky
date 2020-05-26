@@ -65,7 +65,7 @@ public class SettingsActivity extends AppCompatActivity {
                 .replace(R.id.settings, new SettingsFragment())
                 .commit();
 
-    } //End Method onCreate.
+    } //End method onCreate.
 
     /**
      * Saves the theme in the sharedPreference when the activity is paused.
@@ -79,7 +79,7 @@ public class SettingsActivity extends AppCompatActivity {
         editor.apply();
 
         super.onPause();
-    } //End Method onPause.
+    } //End method onPause.
 
     /**
      * Holds the fragment where the preferences reside.
@@ -127,6 +127,6 @@ public class SettingsActivity extends AppCompatActivity {
                     return true;
                 }
             });
-        } //End Method onCreatePreferences.
-    } //End Class SettingsFragment.
-} //End Class SettingsActivity.
+        } //End method onCreatePreferences.
+    } //End class SettingsFragment.
+} //End class SettingsActivity.

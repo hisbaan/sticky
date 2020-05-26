@@ -39,7 +39,7 @@ public class BoardFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_board, container, false);
-    } //End Method onCreateView.
+    } //End method onCreateView.
 
     /**
      * Similar to an onCreateMethod that runs code when the fragment is created.
@@ -99,5 +99,5 @@ public class BoardFragment extends Fragment {
                 }
             }
         });
-    } //End Method onViewCreated.
-} //End Class BoardFragment.
+    } //End method onViewCreated.
+} //End class BoardFragment.

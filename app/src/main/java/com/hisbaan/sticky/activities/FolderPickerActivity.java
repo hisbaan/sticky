@@ -26,11 +26,18 @@ import java.io.FileFilter;
 import java.io.FilenameFilter;
 import java.util.ArrayList;
 
+/**
+ * Activity that displays the folder and returns the clicked on folder to the parent.
+ */
 public class FolderPickerActivity extends AppCompatActivity implements FolderAdapter.OnItemClickListener {
     ArrayList<FolderItem> folderItems;
 
     private static final int REQUEST_NEW_NOTE = 1;
 
+    /**
+     * onCreate method that initializes things and displays the recycler view.
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -131,6 +138,7 @@ public class FolderPickerActivity extends AppCompatActivity implements FolderAda
             folderItems.add(new FolderItem(imageBitmap1, imageBitmap2, imageBitmap3, imageBitmap4, name, nullColor));
         }
 
+        //Initializing recycler view.
         RecyclerView folderRecyclerView = findViewById(R.id.folder_picker_recycler_view);
         final RecyclerView.LayoutManager folderGridLayoutManager = new GridLayoutManager(FolderPickerActivity.this, 2);
         FolderAdapter folderAdapter = new FolderAdapter(folderItems);
@@ -138,15 +146,26 @@ public class FolderPickerActivity extends AppCompatActivity implements FolderAda
         folderRecyclerView.setLayoutManager(folderGridLayoutManager);
         folderRecyclerView.setAdapter(folderAdapter);
         folderAdapter.setOnItemClickListener(this);
-    }
+    } //End method onClick.
 
+    /**
+     * onItemClick method that runs when a folder is clicked.
+     * @param position The position in the array that the clicked folder is located at.
+     */
     @Override
     public void onItemClick(int position) {
         Intent intent = new Intent(this, NotePickerActivity.class);
         intent.putExtra("folder_name", folderItems.get(position).getName());
         startActivityForResult(intent, REQUEST_NEW_NOTE);
-    }
+    } //End method onItemClick.
 
+    /**
+     * Runs when an activity started for a result returns.
+     *
+     * @param requestCode The code of the request made.
+     * @param resultCode  The result of the code. Either okay or cancelled.
+     * @param data        The data returned.
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -161,5 +180,5 @@ public class FolderPickerActivity extends AppCompatActivity implements FolderAda
             setResult(RESULT_OK, resultIntent);
             finish();
         }
-    }
-}
+    } //End method onActivityResult.
+} //End class FolderPickerActivity.

@@ -206,7 +206,7 @@ public class NoteOrganizerFragment extends Fragment {
 //                openPopupWindow(folderItems.get(position).getName());
             }
         });
-    } //End Method onViewCreated.
+    } //End method onViewCreated.
 
     public void openPopupWindow(String folderName) {
         ArrayList<InsideFolderItem> insideFolderItems = new ArrayList<>();
@@ -243,4 +243,4 @@ public class NoteOrganizerFragment extends Fragment {
         insideFolderRecyclerView.setLayoutManager(insideFolderGridLayoutManager);
         insideFolderRecyclerView.setAdapter(insideFolderAdapter);
     }
-} //End Class NoteOrganizerFragment.
+} //End class NoteOrganizerFragment.

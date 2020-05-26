@@ -6,7 +6,6 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Environment;
 import android.view.View;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -22,9 +21,17 @@ import java.io.File;
 import java.io.FilenameFilter;
 import java.util.ArrayList;
 
+/**
+ * Activity that displays the notes in a given folder and returns the clicked on note to the parent activity.
+ */
 public class NotePickerActivity extends AppCompatActivity implements InsideFolderAdapter.OnItemClickListener {
     ArrayList<InsideFolderItem> insideFolderItems;
 
+    /**
+     * onCreate method that initializes things and displays the note recycler view.
+     *
+     * @param savedInstanceState Bundle where information from previous runs can be recovered from.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,6 +60,7 @@ public class NotePickerActivity extends AppCompatActivity implements InsideFolde
                 break;
         }
 
+        //Getting a list of the notes that need to be displayed.
         insideFolderItems = new ArrayList<>();
 
         File directoryToSearch = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES) + "/" + getIntent().getStringExtra("folder_name"));
@@ -71,22 +79,27 @@ public class NotePickerActivity extends AppCompatActivity implements InsideFolde
             insideFolderItems.add(new InsideFolderItem(BitmapFactory.decodeFile(image.toString()), name));
         }
 
+        //Initializing the recycler view.
         RecyclerView insideFolderRecyclerView = findViewById(R.id.note_picker_recycler_view);
         InsideFolderAdapter insideFolderAdapter = new InsideFolderAdapter(insideFolderItems);
         RecyclerView.LayoutManager insideFolderGridLayoutManager = new GridLayoutManager(this, 2);
         insideFolderRecyclerView.setLayoutManager(insideFolderGridLayoutManager);
         insideFolderRecyclerView.setAdapter(insideFolderAdapter);
         insideFolderAdapter.setOnItemClickListener(this);
-    }
+    } //End method onCreate.
 
+    /**
+     * onItemClick method that runs when an item from the recycler view is clicked.
+     * @param position The position in the array where the clicked item is.
+     */
     @Override
     public void onItemClick(int position) {
-        String result =  getIntent().getStringExtra("folder_name") + "," + insideFolderItems.get(position).getName();
+        String result = getIntent().getStringExtra("folder_name") + "," + insideFolderItems.get(position).getName();
 
         Intent resultIntent = new Intent();
         resultIntent.putExtra("result", result);
 
         setResult(RESULT_OK, resultIntent);
         finish();
-    }
-}
+    } //End method onItemClick.
+} //End class NotePickerActivity.

@@ -132,7 +132,7 @@ public class CropActivity extends AppCompatActivity implements View.OnTouchListe
         //Setting imageView to display the bitmap.
         imageView.setImageBitmap(bitmap);
 //        update();
-    } //End Method onCreate.
+    } //End method onCreate.
 
     /**
      * Listener that triggers an action based on what button was pressed.
@@ -191,7 +191,7 @@ public class CropActivity extends AppCompatActivity implements View.OnTouchListe
                 startActivity(intent);
                 break;
         }
-    } //End Method onClick.
+    } //End method onClick.
 
     /**
      * Touch listener to allow for dragging the points around.
@@ -215,7 +215,7 @@ public class CropActivity extends AppCompatActivity implements View.OnTouchListe
                 return false;
         }
         return true;
-    } //End Method onTouch.
+    } //End method onTouch.
 
     /**
      * Sets the state of the FAB passed to it to be clickable or un-clickable.
@@ -232,7 +232,7 @@ public class CropActivity extends AppCompatActivity implements View.OnTouchListe
         } else {
             fab.hide();
         }
-    } //End Method setFAB.
+    } //End method setFAB.
 
 //    private void update() {
 //        maxCorners = Math.max(maxCorners, 1);
@@ -279,4 +279,4 @@ public class CropActivity extends AppCompatActivity implements View.OnTouchListe
 //        imageView = findViewById(R.id.image_view);
 //        imageView.setImageBitmap(bmp);
 //    }
-} //End Class CropActivity.
+} //End class CropActivity.
