@@ -13,8 +13,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.NavUtils;
@@ -44,6 +44,8 @@ public class BoardActivity extends AppCompatActivity implements View.OnClickList
 
     float screenWidth;
     float screenHeight;
+
+    private static final int REQUEST_NEW_NOTE = 1;
 
     /**
      * Runs on activity create initializing the canvas and the toolbar.
@@ -125,29 +127,9 @@ public class BoardActivity extends AppCompatActivity implements View.OnClickList
             while (sc.hasNextLine()) {
                 String[] info = sc.nextLine().split(",");
 
-                ImageView imageView = new ImageView(this);
-                Bitmap bmp = BitmapFactory.decodeFile(Objects.requireNonNull(getExternalFilesDir(Environment.DIRECTORY_PICTURES)).toString() + "/" + info[0] + "/" + info[1]);
-                imageView.setImageBitmap(bmp);
-                imageView.setOnTouchListener(this);
-
-                //TODO replace 100, 100 with the size of the imageview once editing size is allowed.
-                RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(250, 250);
-//                params.leftMargin = Integer.parseInt(info[2]);
-                params.leftMargin = Integer.parseInt("100");
-//                params.topMargin = Integer.parseInt(info[3]);
-                params.topMargin = Integer.parseInt("100");
-
-                relativeLayout.addView(imageView, params);
-
-                imageViews.add(imageView);
-                drawnImageViews.add(new DrawnImageView(info[0], info[1]));
+                addNote(info[0], info[1], Integer.parseInt(info[2]), Integer.parseInt(info[3]));
             }
         }
-
-        //Initializing the canvas and sending information about the name of the related file so information can be loaded.
-//        Canvas canvas = findViewById(R.id.canvas);
-//        canvas.setBoardName(boardName);
-//        canvas.setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimary));
     } //End Method onCreate.
 
 
@@ -158,7 +140,10 @@ public class BoardActivity extends AppCompatActivity implements View.OnClickList
         String text = "";
 
         for (int i = 0; i < imageViews.size(); i++) {
-            text += drawnImageViews.get(i).getGroupName() + "," + drawnImageViews.get(i).getNoteName() + "," + (int) (imageViews.get(i).getX()) + "," + (int) (imageViews.get(i).getY()) + "\n";
+            if (i != 0) {
+                text += "\n";
+            }
+            text += drawnImageViews.get(i).getGroupName() + "," + drawnImageViews.get(i).getNoteName() + "," + (int) (imageViews.get(i).getX()) + "," + (int) (imageViews.get(i).getY());
         }
 
         //TODO get list of sticky notes and their positions here (maybe from canvas?) and make it the variable text. One note per line.
@@ -177,6 +162,24 @@ public class BoardActivity extends AppCompatActivity implements View.OnClickList
                 }
             }
         }
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    private void addNote(String boardName, String noteName, int x, int y) {
+        ImageView imageView = new ImageView(this);
+        Bitmap bmp = BitmapFactory.decodeFile(Objects.requireNonNull(getExternalFilesDir(Environment.DIRECTORY_PICTURES)).toString() + "/" + boardName + "/" + noteName);
+        imageView.setImageBitmap(bmp);
+        imageView.setOnTouchListener(this);
+
+        //TODO replace 100, 100 with the size of the imageview once editing size is allowed.
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(250, 250);
+        params.leftMargin = x;
+        params.topMargin = y;
+
+        relativeLayout.addView(imageView, params);
+
+        imageViews.add(imageView);
+        drawnImageViews.add(new DrawnImageView(boardName, noteName));
     }
 
     /**
@@ -212,7 +215,7 @@ public class BoardActivity extends AppCompatActivity implements View.OnClickList
             } else if ((v.getY() + v.getHeight()) >= screenHeight) {
                 v.setY(screenHeight - v.getHeight() - 1);
             }
-                return true;
+            return true;
         }
     } //End Method onTouch.
 
@@ -221,8 +224,9 @@ public class BoardActivity extends AppCompatActivity implements View.OnClickList
         switch (v.getId()) {
             case R.id.add_button:
                 //TODO open drawer to get info here. Recycler view with images loaded in it (how to do multiple images???) and then click on individual items
-                Intent intent = new Intent(this, NotePickerActivity.class);
-                startActivity(intent);
+                Intent intent = new Intent(this, FolderPickerActivity.class);
+                startActivityForResult(intent, REQUEST_NEW_NOTE);
+//                startActivity(intent);
                 break;
         }
     } //End Method onClick.
@@ -235,5 +239,17 @@ public class BoardActivity extends AppCompatActivity implements View.OnClickList
         int height = v.getHeight();
 
         return ((x > 0) && (y > 0) && ((x + width) < screenWidth) && ((y + height) < screenHeight));
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == REQUEST_NEW_NOTE && resultCode == RESULT_OK) {
+            assert data != null;
+            String[] result = Objects.requireNonNull(data.getStringExtra("result")).split(",");
+
+            addNote(result[0], result[1] + ".jpg", 100, 100);
+        }
     }
 } //End Class BoardActivity.

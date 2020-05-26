@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public static final String SHARED_PREFS = "sharedPrefs";
     public static final String THEME = "theme";
     private static final int REQUEST_IMAGE_CAPTURE = 101;
-    public static final int REQUEST_EXTERNAL_IMAGE_SELECTION = 100;
+    private static final int REQUEST_EXTERNAL_IMAGE_SELECTION = 100;
     private static final int PERMISSION_REQUEST = 0;
 
     //Initializing openCV.

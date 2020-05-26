@@ -237,7 +237,6 @@ public class NoteOrganizerFragment extends Fragment {
         }
 
 
-
         RecyclerView insideFolderRecyclerView = requireView().findViewById(R.id.inside_folder_recycler_view);
         RecyclerView.Adapter insideFolderAdapter = new InsideFolderAdapter(insideFolderItems);
         RecyclerView.LayoutManager insideFolderGridLayoutManager = new GridLayoutManager(getActivity(), 2);

@@ -15,8 +15,16 @@ import com.hisbaan.sticky.models.InsideFolderItem;
 import java.util.ArrayList;
 
 public class InsideFolderAdapter extends RecyclerView.Adapter<InsideFolderAdapter.InsideFolderViewHolder> {
-
     private ArrayList<InsideFolderItem> insideFolderItems;
+    private OnItemClickListener listener;
+
+    public interface OnItemClickListener {
+        void onItemClick(int position);
+    }
+
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.listener = listener;
+    }
 
     public InsideFolderAdapter(ArrayList<InsideFolderItem> insideFolderItems) {
         this.insideFolderItems = insideFolderItems;
@@ -26,12 +34,13 @@ public class InsideFolderAdapter extends RecyclerView.Adapter<InsideFolderAdapte
     @Override
     public InsideFolderViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.inside_folder_item, parent, false);
-        return new InsideFolderViewHolder(view);
+        return new InsideFolderViewHolder(view, listener);
     }
 
     @Override
     public void onBindViewHolder(@NonNull InsideFolderViewHolder holder, int position) {
         InsideFolderItem currentItem = insideFolderItems.get(position);
+
         holder.imageView.setImageBitmap(currentItem.getImage());
         holder.textView.setText(currentItem.getName());
     }
@@ -46,11 +55,23 @@ public class InsideFolderAdapter extends RecyclerView.Adapter<InsideFolderAdapte
         ImageView imageView;
         TextView textView;
 
-        InsideFolderViewHolder(@NonNull View itemView) {
+        InsideFolderViewHolder(@NonNull View itemView, final OnItemClickListener listener) {
             super(itemView);
 
             imageView = itemView.findViewById(R.id.note_image);
             textView = itemView.findViewById(R.id.note_name);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (listener != null) {
+                        int position = getAdapterPosition();
+                        if (position != RecyclerView.NO_POSITION) {
+                            listener.onItemClick(position);
+                        }
+                    }
+                }
+            });
         }
     }
 }
