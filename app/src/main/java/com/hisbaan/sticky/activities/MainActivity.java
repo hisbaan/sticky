@@ -33,6 +33,8 @@ import com.hisbaan.sticky.R;
 import com.hisbaan.sticky.fragments.BoardFragment;
 import com.hisbaan.sticky.fragments.NoteOrganizerFragment;
 import com.hisbaan.sticky.utils.NewBoardDialog;
+import com.hisbaan.sticky.utils.Refactor;
+import com.hisbaan.sticky.utils.RenameDialog;
 
 import org.opencv.android.OpenCVLoader;
 
@@ -45,7 +47,7 @@ import java.util.Locale;
 /**
  * Creates the main activity for the program, launches other activities, and allows for user image capture.
  */
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener, NewBoardDialog.NewBoardDialogListener {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener, NewBoardDialog.NewBoardDialogListener, RenameDialog.RenameDialogListener {
 
     //Final variables that are used to retrieve information.
     public static final String SHARED_PREFS = "sharedPrefs";
@@ -53,6 +55,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private static final int REQUEST_IMAGE_CAPTURE = 101;
     private static final int REQUEST_EXTERNAL_IMAGE_SELECTION = 100;
     private static final int PERMISSION_REQUEST = 0;
+
+    public static final int BOARD_ACTIVITY = 1;
+    public static final int BOARD_ACTIVITY_RENAME = 2;
+    public static final int NOTE_ORGANIZER_ACTIVITY = 3;
+    public static int applyTextState = 0;
 
     //Initializing openCV.
     static {
@@ -207,7 +214,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 Toast.makeText(this, "Feature to be added", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.upload_fab:
-                //TODO trigger a file browser and return the path. Then pass that image onto the crop activity.
                 if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
                     closeFABMenu();
                     Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
@@ -455,24 +461,61 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     /**
      * Creates a new board file that is displayed in the recycler view.
      *
-     * @param newBoardName The name of a board the user creates.
+     * @param newName The name of a board the user creates or the new name of the folder based on where the user triggered the dialog from.
      */
     @Override
-    public void applyText(String newBoardName) {
-        File newBoardFile = new File(getFilesDir().getPath() + "/" + newBoardName + ".txt");
-        try {
-            if (newBoardFile.createNewFile()) {
-                System.out.println("New board created successfully");
-            } else {
-                System.out.println("Error creating new board");
-                Toast.makeText(this, "A board with that name already exists", Toast.LENGTH_SHORT).show();
+    public void applyText(String newName) {
+        if (applyTextState == BOARD_ACTIVITY) {
+            File newBoardFile = new File(getFilesDir().getPath() + "/" + newName + ".txt");
+            try {
+                if (newBoardFile.createNewFile()) {
+                    System.out.println("New board created successfully");
+                } else {
+                    System.out.println("Error creating new board");
+                    Toast.makeText(this, "A board with that name already exists", Toast.LENGTH_SHORT).show();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
 
-        Intent intent = new Intent(getApplicationContext(), BoardActivity.class);
-        intent.putExtra("board_name", newBoardName);
-        startActivity(intent);
+            Intent intent = new Intent(getApplicationContext(), BoardActivity.class);
+            intent.putExtra("board_name", newName);
+            startActivity(intent);
+        } else if (applyTextState == NOTE_ORGANIZER_ACTIVITY) {
+            File currentFile = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES) + "/" + NoteOrganizerFragment.folderItems.get(NoteOrganizerFragment.renameIndex).getName());
+            File newFile = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES) + "/" + newName);
+
+            if (newFile.exists()) {
+                Toast.makeText(this, "Folder already exists", Toast.LENGTH_SHORT).show();
+            } else {
+                if (currentFile.renameTo(newFile)) {
+                    System.out.println("Folder renamed successfully.");
+                } else {
+                    System.out.println("Folder renaming failed.");
+                }
+
+                Refactor refactor = new Refactor();
+                refactor.renameFolder(this, NoteOrganizerFragment.folderItems.get(NoteOrganizerFragment.renameIndex).getName(), newName);
+
+                NoteOrganizerFragment.folderItems.get(NoteOrganizerFragment.renameIndex).setName(newName);
+                NoteOrganizerFragment.folderAdapter.notifyItemChanged(NoteOrganizerFragment.renameIndex);
+            }
+        } else if (applyTextState == BOARD_ACTIVITY_RENAME) {
+            File currentFile = new File(getFilesDir() + "/" + BoardFragment.boardItems.get(BoardFragment.renameIndex).getBoardName() + ".txt");
+            File newFile = new File(getFilesDir() + "/" + newName + ".txt");
+
+            if (newFile.exists()) {
+                Toast.makeText(this, "Board already exists", Toast.LENGTH_SHORT).show();
+            } else {
+                if (currentFile.renameTo(newFile)) {
+                    System.out.println("Board renamed successfully");
+                } else {
+                    System.out.println("Board renaming failed");
+                }
+
+                BoardFragment.boardItems.get(BoardFragment.renameIndex).setBoardName(newName);
+                BoardFragment.boardAdapter.notifyItemChanged(BoardFragment.renameIndex);
+            }
+        }
     } //End method applyText.
 } //End class MainActivity.

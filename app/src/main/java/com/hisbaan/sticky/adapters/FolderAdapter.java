@@ -1,5 +1,6 @@
 package com.hisbaan.sticky.adapters;
 
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.hisbaan.sticky.R;
 import com.hisbaan.sticky.models.FolderItem;
+import com.hisbaan.sticky.models.SquareCardView;
 
 import java.util.ArrayList;
 
@@ -75,7 +77,6 @@ public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.FolderView
         holder.imageView3.setImageBitmap(currentItem.getImageBitmap3());
         holder.imageView4.setImageBitmap(currentItem.getImageBitmap4());
         holder.folderName.setText(currentItem.getName());
-        //TODO maybe add a string to the preview image
     } //End method onBindViewHolder.
 
     /**
@@ -91,7 +92,7 @@ public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.FolderView
     /**
      * Adds the items to the recycler view.
      */
-    static class FolderViewHolder extends RecyclerView.ViewHolder {
+    static class FolderViewHolder extends RecyclerView.ViewHolder implements View.OnCreateContextMenuListener {
 
         //Declaring variables that will be initialized via the array list that was created earlier.
         ImageView imageView1;
@@ -99,6 +100,7 @@ public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.FolderView
         ImageView imageView3;
         ImageView imageView4;
         TextView folderName;
+        SquareCardView squareCardView;
 
         /**
          * Constructor that sets local variables based on array list.
@@ -113,6 +115,9 @@ public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.FolderView
             imageView3 = itemView.findViewById(R.id.image_view_3);
             imageView4 = itemView.findViewById(R.id.image_view_4);
             folderName = itemView.findViewById(R.id.folder_name);
+            squareCardView = itemView.findViewById(R.id.folder_layout);
+
+            squareCardView.setOnCreateContextMenuListener(this);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -126,5 +131,12 @@ public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.FolderView
                 }
             });
         } //End constructor FolderViewHolder.
+
+        @Override
+        public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+            menu.add(this.getAdapterPosition(), 121, 0, "Delete");
+            menu.add(this.getAdapterPosition(), 122, 1, "Rename");
+            menu.add(this.getAdapterPosition(), 123, 2, "Clear Folder");
+        }
     } //End class FolderViewHolder.
 } //End class FolderAdapter.

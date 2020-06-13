@@ -26,8 +26,8 @@ public class NewGroupDialog extends DialogFragment {
     /**
      * Similar to an onCreate method. Runs the code for building the dialog and displaying it.
      *
-     * @param savedInstanceState
-     * @return
+     * @param savedInstanceState Saved instance state which can be used to gather information from previous runs.
+     * @return An inflated dialog.
      */
     @NonNull
     @Override
@@ -48,7 +48,6 @@ public class NewGroupDialog extends DialogFragment {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 //Gets the text inside of the box and sends it to the parent activity.
-                //TODO breaks when adding a new note. I didn't change anythinggggg
                 String newGroupName = newGroupEditText.getText().toString();
                 listener.applyText(newGroupName);
             }

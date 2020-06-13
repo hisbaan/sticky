@@ -80,12 +80,6 @@ public class NamingActivity extends AppCompatActivity implements View.OnClickLis
                 break;
         }
 
-        //Getting the image from the previous activity.
-//        long addr = getIntent().getLongExtra("dst_image_addr", 0);
-//        Mat tempImg = new Mat(addr);
-//        System.out.println(tempImg);
-//        dstImage = tempImg.clone();
-
         dstImage = CropActivity.transferImage.clone();
 
         if (dstImage.empty()) {
@@ -217,6 +211,9 @@ public class NamingActivity extends AppCompatActivity implements View.OnClickLis
         endActivity();
     } //End method applyText.
 
+    /**
+     * Method that ends the activity. This is required due to the asynchronous nature of android.
+     */
     private void endActivity() {
         Intent i = new Intent(this, MainActivity.class);
         i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -230,5 +227,5 @@ public class NamingActivity extends AppCompatActivity implements View.OnClickLis
                 System.out.println("File deletion failed.");
             }
         }
-    }
+    } //End method endActivity.
 } //End class NamingActivity.

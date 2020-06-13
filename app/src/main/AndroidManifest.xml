@@ -24,6 +24,13 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
+        <activity android:name=".activities.MoveActivity"
+            android:label="Move to"
+            android:parentActivityName=".activities.InsideFolderActivity"/>
+        <activity
+            android:name=".activities.InsideFolderActivity"
+            android:label="Folder"
+            android:parentActivityName=".activities.MainActivity" />
         <activity
             android:name=".activities.NotePickerActivity"
             android:label="Pick a Note"

@@ -1,5 +1,13 @@
 package com.hisbaan.sticky.activities;
 
+import android.content.Intent;
+import android.content.res.Configuration;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.Bundle;
+import android.os.Environment;
+import android.view.View;
+
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -8,17 +16,9 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.Intent;
-import android.content.res.Configuration;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.os.Bundle;
-import android.os.Environment;
-import android.view.View;
-import android.widget.Toast;
-
 import com.hisbaan.sticky.R;
 import com.hisbaan.sticky.adapters.FolderAdapter;
+import com.hisbaan.sticky.adapters.FolderPickerAdapter;
 import com.hisbaan.sticky.models.FolderItem;
 
 import java.io.File;
@@ -29,14 +29,14 @@ import java.util.ArrayList;
 /**
  * Activity that displays the folder and returns the clicked on folder to the parent.
  */
-public class FolderPickerActivity extends AppCompatActivity implements FolderAdapter.OnItemClickListener {
+public class FolderPickerActivity extends AppCompatActivity implements FolderPickerAdapter.OnItemClickListener {
     ArrayList<FolderItem> folderItems;
-
     private static final int REQUEST_NEW_NOTE = 1;
 
     /**
      * onCreate method that initializes things and displays the recycler view.
-     * @param savedInstanceState
+     *
+     * @param savedInstanceState Saved instance state that can be used to gather information from previous runs.
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -141,7 +141,7 @@ public class FolderPickerActivity extends AppCompatActivity implements FolderAda
         //Initializing recycler view.
         RecyclerView folderRecyclerView = findViewById(R.id.folder_picker_recycler_view);
         final RecyclerView.LayoutManager folderGridLayoutManager = new GridLayoutManager(FolderPickerActivity.this, 2);
-        FolderAdapter folderAdapter = new FolderAdapter(folderItems);
+        FolderPickerAdapter folderAdapter = new FolderPickerAdapter(folderItems);
         folderRecyclerView.setHasFixedSize(true);
         folderRecyclerView.setLayoutManager(folderGridLayoutManager);
         folderRecyclerView.setAdapter(folderAdapter);
@@ -150,6 +150,7 @@ public class FolderPickerActivity extends AppCompatActivity implements FolderAda
 
     /**
      * onItemClick method that runs when a folder is clicked.
+     *
      * @param position The position in the array that the clicked folder is located at.
      */
     @Override
@@ -170,12 +171,13 @@ public class FolderPickerActivity extends AppCompatActivity implements FolderAda
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == REQUEST_NEW_NOTE && resultCode == RESULT_OK) {
-            assert data != null;
-            String result =  data.getStringExtra("result");
+        if (requestCode == REQUEST_NEW_NOTE && resultCode == RESULT_OK && data != null) {
+            String result = data.getStringExtra("result");
 
             Intent resultIntent = new Intent();
             resultIntent.putExtra("result", result);
+
+            System.out.println("THIS IS A THING " + result);
 
             setResult(RESULT_OK, resultIntent);
             finish();

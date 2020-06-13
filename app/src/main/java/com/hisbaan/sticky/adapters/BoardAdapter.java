@@ -1,5 +1,6 @@
 package com.hisbaan.sticky.adapters;
 
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.hisbaan.sticky.R;
 import com.hisbaan.sticky.models.BoardItem;
+import com.hisbaan.sticky.models.SquareCardView;
 
 import java.util.ArrayList;
 
@@ -17,7 +19,7 @@ import java.util.ArrayList;
  * Controls the order of items added into the recycler view
  */
 public class BoardAdapter extends RecyclerView.Adapter<BoardAdapter.BoardViewHolder> {
-    private ArrayList<BoardItem> boardItems;
+    private static ArrayList<BoardItem> boardItems;
     private OnItemClickListener listener;
 
     /**
@@ -85,10 +87,11 @@ public class BoardAdapter extends RecyclerView.Adapter<BoardAdapter.BoardViewHol
     /**
      * Adds the items to the recycler view.
      */
-    static class BoardViewHolder extends RecyclerView.ViewHolder {
+    static class BoardViewHolder extends RecyclerView.ViewHolder implements View.OnCreateContextMenuListener {
 
         //Declaring variables that will be initialized via the array list that was created earlier.
-        public TextView name;
+        TextView name;
+        SquareCardView squareCardView;
 
         /**
          * Constructor that sets local variables based on array list.
@@ -99,6 +102,9 @@ public class BoardAdapter extends RecyclerView.Adapter<BoardAdapter.BoardViewHol
             super(itemView);
 
             name = itemView.findViewById(R.id.name);
+            squareCardView = itemView.findViewById(R.id.board_layout_card_view);
+
+            squareCardView.setOnCreateContextMenuListener(this);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -112,5 +118,21 @@ public class BoardAdapter extends RecyclerView.Adapter<BoardAdapter.BoardViewHol
                 }
             });
         } //End constructor BoardViewHolder.
+
+        /**
+         * Creates the context menu on long press.
+         *
+         * @param menu The menu that is built.
+         * @param v The view that the context menu is called on.
+         * @param menuInfo Information about the menu.
+         */
+        @Override
+        public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+            if (getAdapterPosition() != boardItems.size() - 1) {
+                menu.add(this.getAdapterPosition(), 121, 0, "Delete");
+                menu.add(this.getAdapterPosition(), 122, 1, "Rename");
+                menu.add(this.getAdapterPosition(), 123, 2, "Clear Board");
+            }
+        } //End method onCreateContextMenu.
     } //End class BoardViewHolder
 } //End class BoardAdapter.

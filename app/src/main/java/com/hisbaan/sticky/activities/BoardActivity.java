@@ -5,16 +5,22 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.DisplayMetrics;
+import android.view.ContextMenu;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.NavUtils;
@@ -28,6 +34,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Objects;
 import java.util.Scanner;
 
@@ -89,7 +96,14 @@ public class BoardActivity extends AppCompatActivity implements View.OnClickList
 
         //Initializing button to add new notes.
         Button addButton = findViewById(R.id.add_button);
-        addButton.setOnClickListener(this);
+        addButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //When the add button is clicked, get the note name form the picker activities.
+                Intent intent = new Intent(BoardActivity.this, FolderPickerActivity.class);
+                startActivityForResult(intent, REQUEST_NEW_NOTE);
+            }
+        });
 
         //Initializing the 'canvas' layout that notes are placed on.
         relativeLayout = findViewById(R.id.board_layout);
@@ -168,6 +182,7 @@ public class BoardActivity extends AppCompatActivity implements View.OnClickList
         }
     } //End method onPause.
 
+
     /**
      * Method that adds a note to the board at the coordinates given.
      *
@@ -182,7 +197,10 @@ public class BoardActivity extends AppCompatActivity implements View.OnClickList
         ImageView imageView = new ImageView(this);
         Bitmap bmp = BitmapFactory.decodeFile(Objects.requireNonNull(getExternalFilesDir(Environment.DIRECTORY_PICTURES)).toString() + "/" + boardName + "/" + noteName);
         imageView.setImageBitmap(bmp);
+        imageView.setOnClickListener(this);
         imageView.setOnTouchListener(this);
+
+        registerForContextMenu(imageView);
 
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(250, 250);
         params.leftMargin = x;
@@ -195,23 +213,58 @@ public class BoardActivity extends AppCompatActivity implements View.OnClickList
     } //End method addNote.
 
     /**
-     * Touch listener to allow for dragging the points around.
+     * onClick method that runs code when a view is clicked.
+     *
+     * @param v The view that is clicked.
+     */
+    @Override
+    public void onClick(View v) {
+        openContextMenu(v);
+    } //End method onClick.
+
+    private long startClickTime;
+    private ImageView contextInteractionView;
+
+    /**
+     * Touch listener to allow for dragging the points around and when the user clicks on a view quickly, open a context menu.
      *
      * @param v     View of the item being interacted with.
      * @param event What is happening to the item.
      * @return Whether or not to perform an action on the item.
      */
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @SuppressLint("ClickableViewAccessibility")
     @Override
     public boolean onTouch(View v, MotionEvent event) {
         if (movable(v)) {
             switch (event.getAction()) {
+                case MotionEvent.ACTION_UP:
+                    long clickDuration = Calendar.getInstance().getTimeInMillis() - startClickTime;
+                    if (clickDuration < 100) {
+                        contextInteractionView = (ImageView) v;
+                        openContextMenu(v);
+                    }
+                    break;
                 case MotionEvent.ACTION_DOWN:
+                    startClickTime = Calendar.getInstance().getTimeInMillis();
                     dX = v.getX() - event.getRawX();
                     dY = v.getY() - event.getRawY();
                     break;
                 case MotionEvent.ACTION_MOVE:
                     v.animate().x(event.getRawX() + dX).y(event.getRawY() + dY).setDuration(0).start();
+                    v.bringToFront();
+
+                    System.out.println(imageViews.toString());
+
+                    ImageView tempView = (ImageView) v;
+                    int shiftIndex = imageViews.indexOf(tempView);
+                    DrawnImageView tempDrawnImageView = drawnImageViews.get(shiftIndex);
+
+                    imageViews.remove(shiftIndex);
+                    drawnImageViews.remove(shiftIndex);
+
+                    imageViews.add(tempView);
+                    drawnImageViews.add(tempDrawnImageView);
                     break;
                 default:
                     return false;
@@ -230,22 +283,6 @@ public class BoardActivity extends AppCompatActivity implements View.OnClickList
             return true;
         }
     } //End method onTouch.
-
-    /**
-     * onClick method that runs code when a view is clicked.
-     *
-     * @param v The view that is clicked.
-     */
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.add_button:
-                //When the add button is clicked, get the note name form the picker activities.
-                Intent intent = new Intent(this, FolderPickerActivity.class);
-                startActivityForResult(intent, REQUEST_NEW_NOTE);
-                break;
-        }
-    } //End method onClick.
 
     /**
      * Boolean that decides if an object is movable (in bounds).
@@ -273,11 +310,54 @@ public class BoardActivity extends AppCompatActivity implements View.OnClickList
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == REQUEST_NEW_NOTE && resultCode == RESULT_OK) {
-            assert data != null;
+        if (requestCode == REQUEST_NEW_NOTE && resultCode == RESULT_OK && data != null) {
             String[] result = Objects.requireNonNull(data.getStringExtra("result")).split(",");
 
-            addNote(result[0], result[1] + ".jpg", (int) (screenWidth / 2), (int) (screenHeight / 2));
+            System.out.println(result[0] + " ,,,, " + result[1]);
+
+            if (!result[0].equals("") || !result[1].equals("")) {
+                addNote(result[0], result[1] + ".jpg", (int) (screenWidth / 2), (int) (screenHeight / 2));
+            } else {
+                Toast.makeText(this, "null avoided", Toast.LENGTH_SHORT).show();
+            }
         }
     } //End method onActivityResult.
+
+    /**
+     * Inflates a context menu.
+     *
+     * @param menu     The menu that is to be inflated.
+     * @param v        The view that the menu is opened on.
+     * @param menuInfo Information saved in the menu.
+     */
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+
+        getMenuInflater().inflate(R.menu.delete_note_context_menu, menu);
+    } //End method onCreateContextMenu.
+
+    /**
+     * Performs actions on a given context menu.
+     *
+     * @param item Information about the menu.
+     * @return Whether an action should be performed or not.
+     */
+    @Override
+    public boolean onContextItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.delete:
+                relativeLayout.removeView(contextInteractionView);
+                int index = imageViews.indexOf(contextInteractionView);
+                imageViews.remove(index);
+                drawnImageViews.remove(index);
+                return true;
+            case R.id.send_to_back:
+                //TODO send the note to the back of the stack so others appear on top of it.
+                Toast.makeText(this, "Feature to be added", Toast.LENGTH_SHORT).show();
+                return true;
+            default:
+                return super.onContextItemSelected(item);
+        }
+    } //End method onContextItemSelected.
 } //End class BoardActivity.

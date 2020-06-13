@@ -20,6 +20,10 @@
       "cmakeExecutable": "/home/hisbaan/Android/Sdk/cmake/3.10.2.4988404/bin/cmake",
       "variables": [
         {
+          "name": "CMAKE_FIND_ROOT_PATH",
+          "value": "/home/hisbaan/AndroidStudioProjects/sticky/opencv/.cxx/cmake/debug/prefab/x86/prefab"
+        },
+        {
           "name": "CMAKE_BUILD_TYPE",
           "value": "Debug"
         },
@@ -167,16 +171,17 @@
         "X86",
         "X86_64"
       ],
+      "ndkDefaultStl": "LIBCXX_STATIC",
       "ndkVersion": "21.0.6113669",
       "project": {
         "compilerSettingsCacheFolder": "/home/hisbaan/AndroidStudioProjects/sticky/.cxx",
         "cxxFolder": "/home/hisbaan/AndroidStudioProjects/sticky/.cxx",
-        "ideBuildTargetAbi": "x86",
         "isBuildOnlyTargetAbiEnabled": true,
         "isCmakeBuildCohabitationEnabled": false,
         "isNativeCompilerSettingsCacheEnabled": false,
         "rootBuildGradleFolder": "/home/hisbaan/AndroidStudioProjects/sticky",
-        "sdkFolder": "/home/hisbaan/Android/Sdk"
+        "sdkFolder": "/home/hisbaan/Android/Sdk",
+        "isPrefabEnabled": false
       },
       "splitsAbiFilterSet": [],
       "stlSharedObjectMap": {
@@ -194,7 +199,13 @@
     "objFolder": "/home/hisbaan/AndroidStudioProjects/sticky/opencv/build/intermediates/cmake/debug/obj",
     "variantName": "debug",
     "validAbiList": [
-      "X86"
-    ]
-  }
+      "ARMEABI_V7A",
+      "ARM64_V8A",
+      "X86",
+      "X86_64"
+    ],
+    "prefabDirectory": "/home/hisbaan/AndroidStudioProjects/sticky/opencv/.cxx/cmake/debug/prefab",
+    "prefabPackageDirectoryList": []
+  },
+  "prefabFolder": "/home/hisbaan/AndroidStudioProjects/sticky/opencv/.cxx/cmake/debug/prefab/x86"
 }

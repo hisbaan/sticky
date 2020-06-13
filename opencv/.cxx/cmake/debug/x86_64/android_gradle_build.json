@@ -27,7 +27,8 @@
         }
       ],
       "headers": [],
-      "output": "/home/hisbaan/AndroidStudioProjects/sticky/opencv/.cxx/cmake/debug/x86_64/libopencv_jni_shared.a"
+      "output": "/home/hisbaan/AndroidStudioProjects/sticky/opencv/.cxx/cmake/debug/x86_64/libopencv_jni_shared.a",
+      "runtimeFiles": []
     }
   },
   "toolchains": {

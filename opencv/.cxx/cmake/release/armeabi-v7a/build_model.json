@@ -20,6 +20,10 @@
       "cmakeExecutable": "/home/hisbaan/Android/Sdk/cmake/3.10.2.4988404/bin/cmake",
       "variables": [
         {
+          "name": "CMAKE_FIND_ROOT_PATH",
+          "value": "/home/hisbaan/AndroidStudioProjects/sticky/opencv/.cxx/cmake/release/prefab/armeabi-v7a/prefab"
+        },
+        {
           "name": "CMAKE_BUILD_TYPE",
           "value": "Release"
         },
@@ -167,6 +171,7 @@
         "X86",
         "X86_64"
       ],
+      "ndkDefaultStl": "LIBCXX_STATIC",
       "ndkVersion": "21.0.6113669",
       "project": {
         "compilerSettingsCacheFolder": "/home/hisbaan/AndroidStudioProjects/sticky/.cxx",
@@ -175,7 +180,8 @@
         "isCmakeBuildCohabitationEnabled": false,
         "isNativeCompilerSettingsCacheEnabled": false,
         "rootBuildGradleFolder": "/home/hisbaan/AndroidStudioProjects/sticky",
-        "sdkFolder": "/home/hisbaan/Android/Sdk"
+        "sdkFolder": "/home/hisbaan/Android/Sdk",
+        "isPrefabEnabled": false
       },
       "splitsAbiFilterSet": [],
       "stlSharedObjectMap": {
@@ -197,6 +203,9 @@
       "ARM64_V8A",
       "X86",
       "X86_64"
-    ]
-  }
+    ],
+    "prefabDirectory": "/home/hisbaan/AndroidStudioProjects/sticky/opencv/.cxx/cmake/release/prefab",
+    "prefabPackageDirectoryList": []
+  },
+  "prefabFolder": "/home/hisbaan/AndroidStudioProjects/sticky/opencv/.cxx/cmake/release/prefab/armeabi-v7a"
 }

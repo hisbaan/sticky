@@ -15,8 +15,9 @@ import androidx.appcompat.app.AppCompatDialogFragment;
 
 import com.hisbaan.sticky.R;
 
-import java.util.Objects;
-
+/**
+ * Dialog that gets the name of a new board the user wants to create.
+ */
 public class NewBoardDialog extends AppCompatDialogFragment {
     //Declaring variables.
     private EditText newBoardEditText;
@@ -25,8 +26,8 @@ public class NewBoardDialog extends AppCompatDialogFragment {
     /**
      * Similar to an onCreate method. Runs the code for building the dialog and displaying it.
      *
-     * @param savedInstanceState
-     * @return
+     * @param savedInstanceState Saved instance state that can be used to gather information from previous runs.
+     * @return Returns a built dialog.
      */
     @NonNull
     @Override
@@ -77,4 +78,4 @@ public class NewBoardDialog extends AppCompatDialogFragment {
     public interface NewBoardDialogListener {
         void applyText(String newBoardName);
     } //End method NewGroupDialogListener.
-}
+} //End class NewBoardDialog.

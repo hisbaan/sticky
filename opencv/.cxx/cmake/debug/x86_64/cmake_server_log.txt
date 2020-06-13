@@ -37,6 +37,7 @@ CMAKE SERVER: {
   "type": "configure",
   "cacheArguments": [
     "",
+    "-DCMAKE_FIND_ROOT_PATH\u003d/home/hisbaan/AndroidStudioProjects/sticky/opencv/.cxx/cmake/debug/prefab/x86_64/prefab",
     "-DCMAKE_BUILD_TYPE\u003dDebug",
     "-DCMAKE_TOOLCHAIN_FILE\u003d/home/hisbaan/Android/Sdk/ndk/21.0.6113669/build/cmake/android.toolchain.cmake",
     "-DANDROID_ABI\u003dx86_64",

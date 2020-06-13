@@ -1,31 +1,43 @@
 package com.hisbaan.sticky.fragments;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.hisbaan.sticky.R;
 import com.hisbaan.sticky.activities.BoardActivity;
+import com.hisbaan.sticky.activities.MainActivity;
 import com.hisbaan.sticky.adapters.BoardAdapter;
 import com.hisbaan.sticky.models.BoardItem;
 import com.hisbaan.sticky.utils.NewBoardDialog;
+import com.hisbaan.sticky.utils.RenameDialog;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.FilenameFilter;
+import java.io.IOException;
 import java.util.ArrayList;
+
+import static android.content.Context.MODE_PRIVATE;
 
 /**
  * Displays the boards in a grid that the user can click on and interact with.
  */
 public class BoardFragment extends Fragment {
+    public static ArrayList<BoardItem> boardItems;
+    public static BoardAdapter boardAdapter;
+    public static int renameIndex;
 
     /**
      * Inflates the fragment when it is created.
@@ -55,7 +67,7 @@ public class BoardFragment extends Fragment {
         requireActivity().setTitle("Boards");
 
         //Creating an array list of items for the recycler view.
-        final ArrayList<BoardItem> boardItems = new ArrayList<>();
+        boardItems = new ArrayList<>();
 
         //Finding the text files in /data/data/com.hisbaan.sticky/files/ which store data about the boards.
         final File directoryToSearch = requireActivity().getFilesDir();
@@ -78,7 +90,7 @@ public class BoardFragment extends Fragment {
         //Setting up the recycler view.
         RecyclerView boardRecyclerView = requireView().findViewById(R.id.board_recycler_view);
         RecyclerView.LayoutManager boardGridLayoutManager = new GridLayoutManager(getActivity(), 2);
-        final BoardAdapter boardAdapter = new BoardAdapter(boardItems);
+        boardAdapter = new BoardAdapter(boardItems);
 
         boardRecyclerView.setLayoutManager(boardGridLayoutManager);
         boardRecyclerView.setAdapter(boardAdapter);
@@ -90,6 +102,7 @@ public class BoardFragment extends Fragment {
             public void onItemClick(int position) {
                 //If the add tile is clicked, open a dialog to make a new board. If not, open the board.
                 if (position == boardItems.size() - 1) {
+                    MainActivity.applyTextState = MainActivity.BOARD_ACTIVITY;
                     NewBoardDialog newBoardDialog = new NewBoardDialog();
                     newBoardDialog.show(requireActivity().getSupportFragmentManager(), "new board dialog");
                 } else {
@@ -100,4 +113,80 @@ public class BoardFragment extends Fragment {
             }
         });
     } //End method onViewCreated.
+
+    /**
+     * Method that runs when a context menu item is selected.
+     *
+     * @param item Item on which the context menu was triggered on.
+     * @return Whether or not an action was taken.
+     */
+    @Override
+    public boolean onContextItemSelected(@NonNull final MenuItem item) {
+        switch (item.getItemId()) {
+            case 121: //Ask for confirmation then delete the note.
+                if (item.getGroupId() == boardItems.size() - 1) {
+                    return false;
+                } else {
+                    AlertDialog.Builder alert = new AlertDialog.Builder(requireContext());
+                    alert.setTitle("Confirm Delete");
+                    alert.setMessage("Are you sure you want to delete?\nThis action cannot be undone");
+                    alert.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            removeItem(item.getGroupId());
+                        }
+                    });
+                    alert.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.cancel();
+                        }
+                    });
+
+                    alert.show();
+                }
+                return true;
+            case 122: //Ask for the new board name then rename it.
+                MainActivity.applyTextState = MainActivity.BOARD_ACTIVITY_RENAME;
+                renameIndex = item.getGroupId();
+                RenameDialog renameDialog = new RenameDialog();
+                renameDialog.show(requireActivity().getSupportFragmentManager(), "rename dialog");
+                return true;
+            case 123: //Clear the board after asking for confirmation.
+                //TODO add confirmation message like the delete one.
+                FileOutputStream fos = null;
+                try {
+                    fos = requireContext().openFileOutput(boardItems.get(item.getGroupId()).getBoardName() + ".txt", MODE_PRIVATE);
+                    fos.write("".getBytes());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } finally {
+                    if (fos != null) {
+                        try {
+                            fos.close();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+                return true;
+            default:
+                return super.onContextItemSelected(item);
+        }
+    } //End method onContextItemSelected.
+
+    /**
+     * Method that removes an item from the array and the recycler view with an animation.
+     *
+     * @param position The position of the item that is to be removed.
+     */
+    private void removeItem(int position) {
+        if (new File(requireContext().getFilesDir() + "/" + boardItems.get(position).getBoardName() + ".txt").delete()) {
+            System.out.println("File deleted successfully.");
+        } else {
+            System.out.println("File deletion failed.");
+        }
+
+        boardItems.remove(position);
+        boardAdapter.notifyItemRemoved(position);
+    } //End method removeItem.
 } //End class BoardFragment.

@@ -1,5 +1,6 @@
 package com.hisbaan.sticky.adapters;
 
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.hisbaan.sticky.R;
 import com.hisbaan.sticky.models.InsideFolderItem;
+import com.hisbaan.sticky.models.SquareCardView;
 
 import java.util.ArrayList;
 
@@ -87,11 +89,12 @@ public class InsideFolderAdapter extends RecyclerView.Adapter<InsideFolderAdapte
     /**
      * Adds the items to the recycler view.
      */
-    static class InsideFolderViewHolder extends RecyclerView.ViewHolder {
+    static class InsideFolderViewHolder extends RecyclerView.ViewHolder implements View.OnCreateContextMenuListener {
 
         //Declaring variables that will be initialized via the array list that was created earlier.
         ImageView imageView;
         TextView textView;
+        SquareCardView insideFolderLayout;
 
         /**
          * Constructor that sets local variables based on array list.
@@ -103,6 +106,8 @@ public class InsideFolderAdapter extends RecyclerView.Adapter<InsideFolderAdapte
 
             imageView = itemView.findViewById(R.id.note_image);
             textView = itemView.findViewById(R.id.note_name);
+            insideFolderLayout = itemView.findViewById(R.id.inside_folder_layout);
+            insideFolderLayout.setOnCreateContextMenuListener(this);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -116,5 +121,12 @@ public class InsideFolderAdapter extends RecyclerView.Adapter<InsideFolderAdapte
                 }
             });
         } //End constructor InsideFolderViewHolder.
+
+        @Override
+        public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+            menu.add(this.getAdapterPosition(), 121, 0, "Delete");
+            menu.add(this.getAdapterPosition(), 122, 1, "Rename");
+            menu.add(this.getAdapterPosition(), 123, 2, "Move");
+        }
     } //End class InsideFolderViewHolder.
 } //End class InsideFolderAdapter.

@@ -13,7 +13,8 @@
       "artifactName": "opencv_jni_shared",
       "buildCommand": "/home/hisbaan/Android/Sdk/cmake/3.10.2.4988404/bin/ninja -C \"/home/hisbaan/AndroidStudioProjects/sticky/opencv/.cxx/cmake/debug/arm64-v8a\" opencv_jni_shared",
       "abi": "arm64-v8a",
-      "output": "/home/hisbaan/AndroidStudioProjects/sticky/opencv/.cxx/cmake/debug/arm64-v8a/libopencv_jni_shared.a"
+      "output": "/home/hisbaan/AndroidStudioProjects/sticky/opencv/.cxx/cmake/debug/arm64-v8a/libopencv_jni_shared.a",
+      "runtimeFiles": []
     }
   }
 }

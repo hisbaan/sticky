@@ -1,39 +1,40 @@
 package com.hisbaan.sticky.fragments;
 
-import android.annotation.SuppressLint;
-import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Environment;
-import android.util.DisplayMetrics;
-import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.PopupWindow;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.hisbaan.sticky.R;
+import com.hisbaan.sticky.activities.InsideFolderActivity;
+import com.hisbaan.sticky.activities.MainActivity;
 import com.hisbaan.sticky.adapters.FolderAdapter;
-import com.hisbaan.sticky.adapters.InsideFolderAdapter;
 import com.hisbaan.sticky.models.FolderItem;
-import com.hisbaan.sticky.models.InsideFolderItem;
+import com.hisbaan.sticky.utils.RenameDialog;
+
+import org.apache.commons.io.FileUtils;
 
 import java.io.File;
 import java.io.FileFilter;
 import java.io.FilenameFilter;
+import java.io.IOException;
 import java.util.ArrayList;
 
-//TODO make toolbar here and in the other fragment that has a menu button
 
 /**
  * Fragment that sits inside of the main activity to display different things.
@@ -41,6 +42,9 @@ import java.util.ArrayList;
 public class NoteOrganizerFragment extends Fragment {
     private PopupWindow popupWindow;
     private LayoutInflater popupLayoutInflater;
+    public static FolderAdapter folderAdapter;
+    public static ArrayList<FolderItem> folderItems;
+    public static int renameIndex;
 
     /**
      * Inflates the fragment when it is created.
@@ -54,7 +58,7 @@ public class NoteOrganizerFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_note_organizer, container, false);
-    }
+    } //End method onCreateView.
 
     /**
      * Similar to an onCreateMethod that runs code when the fragment is created.
@@ -70,7 +74,7 @@ public class NoteOrganizerFragment extends Fragment {
         requireActivity().setTitle("Note Organizer");
 
         //Creating an array list of items to be added into the recycler view and then adding items to that list.
-        final ArrayList<FolderItem> folderItems = new ArrayList<>();
+        folderItems = new ArrayList<>();
 
         //Getting the location of the Pictures directory.
         File directoryToSearch = requireActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
@@ -144,7 +148,7 @@ public class NoteOrganizerFragment extends Fragment {
         //Creating the recycler view and adding it to the current fragment.
         RecyclerView folderRecyclerView = requireView().findViewById(R.id.folder_recycler_view);
         final RecyclerView.LayoutManager folderGridLayoutManager = new GridLayoutManager(getActivity(), 2);
-        FolderAdapter folderAdapter = new FolderAdapter(folderItems);
+        folderAdapter = new FolderAdapter(folderItems);
         folderRecyclerView.setHasFixedSize(true);
         folderRecyclerView.setLayoutManager(folderGridLayoutManager);
         folderRecyclerView.setAdapter(folderAdapter);
@@ -152,95 +156,73 @@ public class NoteOrganizerFragment extends Fragment {
         folderAdapter.setOnItemClickListener(new FolderAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int position) {
-                popupLayoutInflater = (LayoutInflater) requireContext().getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                assert popupLayoutInflater != null;
-                ViewGroup container = (ViewGroup) popupLayoutInflater.inflate(R.layout.popup_layout, null);
-                ConstraintLayout layout = requireView().findViewById(R.id.popup_layout);
-                DisplayMetrics displayMetrics = new DisplayMetrics();
-                requireActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-                int x = displayMetrics.widthPixels;
-                int y = displayMetrics.heightPixels;
-
-                popupWindow = new PopupWindow(container, (int) (x * 0.8), (int) (y * 0.8), true);
-                popupWindow.setAnimationStyle(R.style.popup_window_animation);
-                popupWindow.showAtLocation(getView(), Gravity.NO_GRAVITY, (int) (x * 0.1), (int) (y * 0.1));
-                popupWindow.setOutsideTouchable(true);
-                popupWindow.setFocusable(true);
-
-                container.setOnTouchListener(new View.OnTouchListener() {
-                    @SuppressLint("ClickableViewAccessibility")
-                    @Override
-                    public boolean onTouch(View v, MotionEvent event) {
-                        popupWindow.dismiss();
-                        return true;
-                    }
-                });
-
-                //Inside Folder Recycler View
-                //TODO make second recyclerView here
-                //TODO get the array of file directories from above and create a new item (add to the array list) with the bitmap and the name.
-
-                ArrayList<InsideFolderItem> insideFolderItems = new ArrayList<>();
-
-                File directoryToSearch = new File(requireActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES) + "/" + folderItems.get(position).getName());
-                File[] images = directoryToSearch.listFiles(new FilenameFilter() {
-                    @Override
-                    public boolean accept(File dir, String name) {
-                        return name.substring(name.length() - 4).equals(".jpg");
-                    }
-                });
-
-                assert images != null;
-                for (int i = 0; i < images.length; i++) {
-                    String[] nameArray = images[i].toString().split("/");
-
-                    insideFolderItems.add(new InsideFolderItem(BitmapFactory.decodeFile(images[i].toString()), nameArray[nameArray.length - 1]));
-                }
-
-                RecyclerView insideFolderRecyclerView = requireView().findViewById(R.id.inside_folder_recycler_view);
-                RecyclerView.Adapter insideFolderAdapter = new InsideFolderAdapter(insideFolderItems);
-                final RecyclerView.LayoutManager insideFolderGridLayoutManager = new GridLayoutManager(requireContext(), 2);
-                insideFolderRecyclerView.setLayoutManager(insideFolderGridLayoutManager);
-                insideFolderRecyclerView.setAdapter(insideFolderAdapter);
-
-//                openPopupWindow(folderItems.get(position).getName());
+                Intent intent = new Intent(requireContext(), InsideFolderActivity.class);
+                intent.putExtra("folder_name", folderItems.get(position).getName());
+                startActivity(intent);
             }
         });
     } //End method onViewCreated.
 
-    public void openPopupWindow(String folderName) {
-        ArrayList<InsideFolderItem> insideFolderItems = new ArrayList<>();
+    /**
+     * Method that runs when a context menu is selected.
+     * @param item The item on which the context menu was triggered on.
+     * @return Whether or not the action was completed.
+     */
+    @Override
+    public boolean onContextItemSelected(@NonNull final MenuItem item) {
+        switch (item.getItemId()) {
+            case 121: //Ask for confirmation then delete the folder.
+                AlertDialog.Builder alert = new AlertDialog.Builder(requireContext());
+                alert.setTitle("Confirm Delete");
+                alert.setMessage("Are you sure you want to delete?\nThis action cannot be undone");
+                alert.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        try {
+                            FileUtils.deleteDirectory(new File(requireContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES) + "/" + folderItems.get(item.getGroupId()).getName()));
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
 
-        File directoryToSearch = new File(requireActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES) + "/" + folderName);
-        File[] images = directoryToSearch.listFiles(new FilenameFilter() {
-            @Override
-            public boolean accept(File dir, String name) {
-                return name.substring(name.length() - 4).equals(".jpg");
-            }
-        });
+                        folderItems.remove(item.getGroupId());
+                        folderAdapter.notifyItemRemoved(item.getGroupId());
+                    }
+                });
+                alert.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
 
-        System.out.println(directoryToSearch);
+                alert.show();
 
-        assert images != null;
-        for (int i = 0; i < images.length; i++) {
-            String[] nameArray = images[i].toString().split("/");
-            System.out.println(images[i]);
-            insideFolderItems.add(new InsideFolderItem(BitmapFactory.decodeFile(images[i].toString()), nameArray[nameArray.length - 1]));
+                return true;
+            case 122: //Get the new name for the board then rename it.
+                MainActivity.applyTextState = MainActivity.NOTE_ORGANIZER_ACTIVITY;
+                renameIndex = item.getGroupId();
+                RenameDialog renameDialog = new RenameDialog();
+                renameDialog.show(requireActivity().getSupportFragmentManager(), "rename dialog");
+                return true;
+            case 123: //Clear the inside of a folder.
+                //TODO delete items inside of the folder
+                return true;
+            default:
+                return super.onContextItemSelected(item);
+        }
+    } //End method onContextItemSelected.
+
+    /**
+     * Method that removes a given item from the recycler view with an animation.
+     * @param position The position in the array of the item to be removed.
+     */
+    private void removeItem(int position) {
+        try {
+            FileUtils.deleteDirectory(new File(requireContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES) + "/" + folderItems.get(position).getName()));
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
-        if (getView().findViewById(R.id.inside_folder_recycler_view) != null) {
-            System.out.println("#### VIEW NOT NULL ####");
-            System.out.println(getView());
-        } else {
-            System.out.println("#### VIEW NULL ####");
-            System.out.println(getView());
-        }
-
-
-        RecyclerView insideFolderRecyclerView = requireView().findViewById(R.id.inside_folder_recycler_view);
-        RecyclerView.Adapter insideFolderAdapter = new InsideFolderAdapter(insideFolderItems);
-        RecyclerView.LayoutManager insideFolderGridLayoutManager = new GridLayoutManager(getActivity(), 2);
-        insideFolderRecyclerView.setLayoutManager(insideFolderGridLayoutManager);
-        insideFolderRecyclerView.setAdapter(insideFolderAdapter);
-    }
+        folderItems.remove(position);
+        folderAdapter.notifyItemRemoved(position);
+    } //End method removeItem.
 } //End class NoteOrganizerFragment.

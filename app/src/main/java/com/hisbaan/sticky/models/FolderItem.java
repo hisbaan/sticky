@@ -6,7 +6,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 
 /**
- * Item class that contains information about what is displayed as a folder preview (the four images).
+ * FolderItem model class that contains information about what is displayed as a folder preview.
  */
 public class FolderItem {
     private Bitmap imageBitmap1;
@@ -66,23 +66,57 @@ public class FolderItem {
         return bitmap;
     } //End method makeNullBitmap.
 
+    /**
+     * Getter method for the first image.
+     *
+     * @return The first image.
+     */
     public Bitmap getImageBitmap1() {
         return imageBitmap1;
     } //End method getImageBitmap1.
 
+    /**
+     * Getter method for the second image.
+     *
+     * @return The second image.
+     */
     public Bitmap getImageBitmap2() {
         return imageBitmap2;
     } //End method getImageBitmap2.
 
+    /**
+     * Getter method for the third image.
+     *
+     * @return The third image.
+     */
     public Bitmap getImageBitmap3() {
         return imageBitmap3;
     } //End method getImageBitmap3.
 
+    /**
+     * Getter method for the fourth image.
+     *
+     * @return The fourth image.
+     */
     public Bitmap getImageBitmap4() {
         return imageBitmap4;
     } //End method getImageBitmap4.
 
+    /**
+     * Getter method for the folder name.
+     *
+     * @return The name of the folder.
+     */
     public String getName() {
         return name;
     } //End method getName.
+
+    /**
+     * Setter method for the folder name.
+     *
+     * @param name The new name of the folder.
+     */
+    public void setName(String name) {
+        this.name = name;
+    } //End method setName.
 } //End class FolderItem.

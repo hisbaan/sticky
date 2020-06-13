@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.hisbaan.sticky.R;
-import com.hisbaan.sticky.adapters.InsideFolderAdapter;
+import com.hisbaan.sticky.adapters.NotePickerAdapter;
 import com.hisbaan.sticky.models.InsideFolderItem;
 
 import java.io.File;
@@ -24,7 +24,7 @@ import java.util.ArrayList;
 /**
  * Activity that displays the notes in a given folder and returns the clicked on note to the parent activity.
  */
-public class NotePickerActivity extends AppCompatActivity implements InsideFolderAdapter.OnItemClickListener {
+public class NotePickerActivity extends AppCompatActivity implements NotePickerAdapter.OnItemClickListener {
     ArrayList<InsideFolderItem> insideFolderItems;
 
     /**
@@ -81,7 +81,7 @@ public class NotePickerActivity extends AppCompatActivity implements InsideFolde
 
         //Initializing the recycler view.
         RecyclerView insideFolderRecyclerView = findViewById(R.id.note_picker_recycler_view);
-        InsideFolderAdapter insideFolderAdapter = new InsideFolderAdapter(insideFolderItems);
+        NotePickerAdapter insideFolderAdapter = new NotePickerAdapter(insideFolderItems);
         RecyclerView.LayoutManager insideFolderGridLayoutManager = new GridLayoutManager(this, 2);
         insideFolderRecyclerView.setLayoutManager(insideFolderGridLayoutManager);
         insideFolderRecyclerView.setAdapter(insideFolderAdapter);
@@ -90,6 +90,7 @@ public class NotePickerActivity extends AppCompatActivity implements InsideFolde
 
     /**
      * onItemClick method that runs when an item from the recycler view is clicked.
+     *
      * @param position The position in the array where the clicked item is.
      */
     @Override
@@ -98,6 +99,9 @@ public class NotePickerActivity extends AppCompatActivity implements InsideFolde
 
         Intent resultIntent = new Intent();
         resultIntent.putExtra("result", result);
+
+        //TODO find bug where null is created if you exit out of the folder/note select with the back arrow
+        System.out.println("THIS IS A THING " + result);
 
         setResult(RESULT_OK, resultIntent);
         finish();
