@@ -79,7 +79,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     //Declaring Buttons.
     private FloatingActionButton mainFAB;
     private FloatingActionButton photoFAB;
-    private FloatingActionButton drawNoteFAB;
     private FloatingActionButton uploadPhotoFAB;
     private DrawerLayout drawerLayout;
 
@@ -140,7 +139,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         //Initializing FloatingActionButtons.
         mainFAB = findViewById(R.id.main_fab);
         photoFAB = findViewById(R.id.new_photo_fab);
-        drawNoteFAB = findViewById(R.id.new_note_fab);
         uploadPhotoFAB = findViewById(R.id.upload_fab);
 
         //Initializing animations from XML files located in src/res/anim/.
@@ -152,12 +150,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         //Setting the initial scale of the buttons in the FAB to 0 so that they don't show up on start.
         photoFAB.startAnimation(setScaleAnimation);
-        drawNoteFAB.startAnimation(setScaleAnimation);
         uploadPhotoFAB.startAnimation(setScaleAnimation);
 
         //Setting the state of the button to unresponsive so that they are not interacted with when invisible.
         setFAB(photoFAB, false);
-        setFAB(drawNoteFAB, false);
         setFAB(uploadPhotoFAB, false);
 
         //Opens the Board fragment so that the app does not start with a blank activity, only on the first run.
@@ -172,7 +168,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         //Setting OnClickListeners to the FABs.
         mainFAB.setOnClickListener(this);
         photoFAB.setOnClickListener(this);
-        drawNoteFAB.setOnClickListener(this);
         uploadPhotoFAB.setOnClickListener(this);
     } //End method onCreate.
 
@@ -208,10 +203,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         startActivityForResult(imageTakeIntent, REQUEST_IMAGE_CAPTURE);
                     }
                 }
-                break;
-            case R.id.new_note_fab:
-                closeFABMenu();
-                Toast.makeText(this, "Feature to be added", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.upload_fab:
                 if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
@@ -417,12 +408,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         //Scale the photoFAB and drawNoteFAB from 0 to 1.2 to 1.
         photoFAB.startAnimation(scaleAnimation);
-        drawNoteFAB.startAnimation(scaleAnimation);
         uploadPhotoFAB.startAnimation(scaleAnimation);
 
         //Setting the photoFAB and the drawNoteFAB to be clickable so they can be clicked on.
         setFAB(photoFAB, true);
-        setFAB(drawNoteFAB, true);
+
         setFAB(uploadPhotoFAB, true);
     } //End method showFABMenu.
 
@@ -437,12 +427,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         //Scale the photoFAB and the drawNoteFAB back to 0 so they are invisible.
         photoFAB.startAnimation(scaleBackAnimation);
-        drawNoteFAB.startAnimation(scaleBackAnimation);
         uploadPhotoFAB.startAnimation(scaleBackAnimation);
 
         //Setting the photoFAB and drawNoteFAB to be un-clickable because they will be invisible.
         setFAB(photoFAB, false);
-        setFAB(drawNoteFAB, false);
         setFAB(uploadPhotoFAB, false);
     } //End method closeFABMenu.
 
