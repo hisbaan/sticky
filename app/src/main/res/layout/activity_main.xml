@@ -3,7 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/drawer_layout"
-    android:name=".MyActivity"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:configChanges="uiMode"
@@ -11,8 +10,6 @@
     tools:context=".activities.MainActivity">
     <!--        tools:openDrawer="start"-->
 
-
-    <!-- Parent Layout -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -25,7 +22,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <!-- Fragment Container -->
         <FrameLayout
             android:id="@+id/fragment_container"
             android:layout_width="match_parent"
@@ -35,19 +31,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/toolbar" />
 
-        <!-- Menu Button -->
-        <!--        <Button-->
-        <!--            android:id="@+id/menu_button"-->
-        <!--            android:layout_width="25dp"-->
-        <!--            android:layout_height="25dp"-->
-
-        <!--            android:layout_marginStart="15dp"-->
-        <!--            android:layout_marginTop="10dp"-->
-        <!--            android:background="@drawable/ic_menu"-->
-        <!--            app:layout_constraintStart_toStartOf="parent"-->
-        <!--            app:layout_constraintTop_toTopOf="parent" />-->
-
-        <!-- Floating Action Button -->
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/upload_fab"
             android:layout_width="wrap_content"
@@ -110,4 +93,12 @@
         app:itemIconTint="@color/drawer_item"
         app:itemTextColor="@color/drawer_item"
         app:menu="@menu/drawer_menu" />
+
+<!--    app:itemBackground="@color/colorText"-->
+<!--    app:itemIconTint="@color/colorPrimary"-->
+<!--    app:itemTextColor="@color/colorPrimary"-->
+
+
+
+
 </androidx.drawerlayout.widget.DrawerLayout>
