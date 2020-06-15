@@ -8,13 +8,11 @@ import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.app.NavUtils;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.hisbaan.sticky.R;
 import com.hisbaan.sticky.adapters.MoveAdapter;
-import com.hisbaan.sticky.models.MoveItem;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -24,7 +22,7 @@ import java.util.ArrayList;
  * Activity that lets the user select which folder to move a note to.
  */
 public class MoveActivity extends AppCompatActivity implements MoveAdapter.OnItemClickListener {
-    ArrayList<MoveItem> moveItems = new ArrayList<>();
+    ArrayList<String> moveItems = new ArrayList<>();
 
     /**
      * onCreate method that initializes the recycler view.
@@ -45,7 +43,9 @@ public class MoveActivity extends AppCompatActivity implements MoveAdapter.OnIte
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                NavUtils.navigateUpFromSameTask(MoveActivity.this);
+                Intent intent = new Intent(getApplicationContext(), InsideFolderActivity.class);
+                intent.putExtra("folder_name", getIntent().getStringExtra("folder_name"));
+                startActivity(intent);
             }
         });
 
@@ -76,8 +76,11 @@ public class MoveActivity extends AppCompatActivity implements MoveAdapter.OnIte
         assert boardNames != null;
         for (File boardName : boardNames) {
             String[] boardNamesSplit = boardName.toString().split("/");
-            moveItems.add(new MoveItem(boardNamesSplit[boardNamesSplit.length - 1]));
+            moveItems.add(boardNamesSplit[boardNamesSplit.length - 1]);
         }
+
+        System.out.println(getIntent().getStringArrayExtra("folder_name"));
+        moveItems.remove(getIntent().getStringExtra("folder_name"));
 
         //Initializing the recycler view.
         RecyclerView moveRecyclerView = findViewById(R.id.move_recycler_view);
@@ -95,7 +98,7 @@ public class MoveActivity extends AppCompatActivity implements MoveAdapter.OnIte
      */
     @Override
     public void onItemClick(int position) {
-        String result = moveItems.get(position).getBoardName();
+        String result = moveItems.get(position);
 
         Intent resultIntent = new Intent();
         resultIntent.putExtra("result", result);

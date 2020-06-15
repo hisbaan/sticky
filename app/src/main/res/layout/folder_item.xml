@@ -5,7 +5,7 @@
     android:layout_width="wrap_content"
     android:layout_height="208dp"
     android:layout_margin="4dp"
-    android:background="@color/colorSubText"
+    app:cardBackgroundColor="@color/cardview_background"
     app:cardCornerRadius="4dp">
 
     <LinearLayout
@@ -71,12 +71,12 @@
             android:id="@+id/folder_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:singleLine="true"
-            android:maxLines="1"
-            android:maxLength="20"
+            android:layout_gravity="center_horizontal"
             android:ellipsize="end"
+            android:maxLength="20"
+            android:maxLines="1"
+            android:singleLine="true"
             android:text="Place Holder"
-            android:textColor="@color/colorText"
-            android:layout_gravity="center_horizontal"/>
+            android:textColor="@color/colorText" />
     </LinearLayout>
 </com.hisbaan.sticky.models.SquareCardView>

@@ -127,6 +127,7 @@ public class InsideFolderAdapter extends RecyclerView.Adapter<InsideFolderAdapte
             menu.add(this.getAdapterPosition(), 121, 0, "Delete");
             menu.add(this.getAdapterPosition(), 122, 1, "Rename");
             menu.add(this.getAdapterPosition(), 123, 2, "Move");
+            menu.add(this.getAdapterPosition(), 124, 3, "Share");
         }
     } //End class InsideFolderViewHolder.
 } //End class InsideFolderAdapter.

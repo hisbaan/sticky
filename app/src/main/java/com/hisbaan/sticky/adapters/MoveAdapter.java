@@ -17,7 +17,7 @@ import java.util.ArrayList;
  * Controls the order of the items added into the recycler view.
  */
 public class MoveAdapter extends RecyclerView.Adapter<MoveAdapter.MoveViewHolder> {
-    private ArrayList<MoveItem> MoveItems;
+    private ArrayList<String> MoveItems;
     private OnItemClickListener listener;
 
     /**
@@ -41,7 +41,7 @@ public class MoveAdapter extends RecyclerView.Adapter<MoveAdapter.MoveViewHolder
      *
      * @param MoveItems List of items to be added to the recycler view.
      */
-    public MoveAdapter(ArrayList<MoveItem> MoveItems) {
+    public MoveAdapter(ArrayList<String> MoveItems) {
         this.MoveItems = MoveItems;
     } //End constructor MoveAdapter.
 
@@ -67,9 +67,9 @@ public class MoveAdapter extends RecyclerView.Adapter<MoveAdapter.MoveViewHolder
      */
     @Override
     public void onBindViewHolder(@NonNull MoveViewHolder holder, int position) {
-        MoveItem currentItem = MoveItems.get(position);
+        String currentItem = MoveItems.get(position);
 
-        holder.boardName.setText(currentItem.getBoardName());
+        holder.boardName.setText(currentItem);
     } //End method onBindViewHolder.
 
     /**

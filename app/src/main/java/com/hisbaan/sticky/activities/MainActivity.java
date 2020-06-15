@@ -61,6 +61,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public static final int NOTE_ORGANIZER_ACTIVITY = 3;
     public static int applyTextState = 0;
 
+    public static boolean resumeBoardFragment;
+
     //Initializing openCV.
     static {
         if (!OpenCVLoader.initDebug()) {
@@ -157,7 +159,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setFAB(uploadPhotoFAB, false);
 
         //Opens the Board fragment so that the app does not start with a blank activity, only on the first run.
-        if (savedInstanceState == null) {
+        if (savedInstanceState == null && !resumeBoardFragment) {
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fragment_container, new NoteOrganizerFragment())
+                    .commit();
+            navigationView.setCheckedItem(R.id.nav_organizer);
+        } else if (savedInstanceState == null) {
             getSupportFragmentManager()
                     .beginTransaction()
                     .replace(R.id.fragment_container, new BoardFragment())
@@ -197,7 +205,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                     //If the image path is found, save the image to the filepath once the image has been taken.
                     if (imageFile != null) {
-                        Uri imageUri = FileProvider.getUriForFile(MainActivity.this, "com.hisbaan.android.fileprovider", imageFile);
+                        Uri imageUri = FileProvider.getUriForFile(MainActivity.this, "com.hisbaan.sticky.fileprovider", imageFile);
                         imageTakeIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
 
                         startActivityForResult(imageTakeIntent, REQUEST_IMAGE_CAPTURE);
@@ -237,6 +245,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         .beginTransaction()
                         .replace(R.id.fragment_container, new BoardFragment())
                         .commit();
+                resumeBoardFragment = true;
                 break;
             case R.id.nav_organizer:
                 //Opens the note organizer fragment.
@@ -244,6 +253,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         .beginTransaction()
                         .replace(R.id.fragment_container, new NoteOrganizerFragment())
                         .commit();
+                resumeBoardFragment = false;
                 break;
             case R.id.nav_tips:
                 //Opens the tips menu. This will show some tips and tricks.
@@ -454,21 +464,31 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public void applyText(String newName) {
         if (applyTextState == BOARD_ACTIVITY) {
-            File newBoardFile = new File(getFilesDir().getPath() + "/" + newName + ".txt");
-            try {
-                if (newBoardFile.createNewFile()) {
-                    System.out.println("New board created successfully");
-                } else {
-                    System.out.println("Error creating new board");
-                    Toast.makeText(this, "A board with that name already exists", Toast.LENGTH_SHORT).show();
+            if (newName.trim().equals("")) {
+                Toast.makeText(this, "Please enter a name for the note.", Toast.LENGTH_SHORT).show();
+            } else if (newName.contains(",")) {
+                Toast.makeText(this, "Please enter a name that does not include a comma (,).", Toast.LENGTH_SHORT).show();
+            } else if (newName.contains("/")) {
+                Toast.makeText(this, "Please enter a name that does not include a forward slash (/).", Toast.LENGTH_SHORT).show();
+            } else if (newName.contains("\\")) {
+                Toast.makeText(this, "Please enter a name that does not include a back slash (\\).", Toast.LENGTH_SHORT).show();
+            } else {
+                File newBoardFile = new File(getFilesDir().getPath() + "/" + newName + ".txt");
+                try {
+                    if (newBoardFile.createNewFile()) {
+                        System.out.println("New board created successfully");
+                    } else {
+                        System.out.println("Error creating new board");
+                        Toast.makeText(this, "A board with that name already exists", Toast.LENGTH_SHORT).show();
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
 
-            Intent intent = new Intent(getApplicationContext(), BoardActivity.class);
-            intent.putExtra("board_name", newName);
-            startActivity(intent);
+                Intent intent = new Intent(getApplicationContext(), BoardActivity.class);
+                intent.putExtra("board_name", newName);
+                startActivity(intent);
+            }
         } else if (applyTextState == NOTE_ORGANIZER_ACTIVITY) {
             File currentFile = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES) + "/" + NoteOrganizerFragment.folderItems.get(NoteOrganizerFragment.renameIndex).getName());
             File newFile = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES) + "/" + newName);

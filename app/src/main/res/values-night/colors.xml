@@ -7,6 +7,7 @@
 
     <color name="drawer_background">#443C26</color>
     <color name="drawer_icon">#FFAB00</color>
+    <color name="cardview_background">#404040</color>
 
     <color name="colorText">#FFFFFF</color>
     <color name="colorSubText">#808080</color>

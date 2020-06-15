@@ -25,6 +25,7 @@ import com.hisbaan.sticky.activities.InsideFolderActivity;
 import com.hisbaan.sticky.activities.MainActivity;
 import com.hisbaan.sticky.adapters.FolderAdapter;
 import com.hisbaan.sticky.models.FolderItem;
+import com.hisbaan.sticky.utils.Refactor;
 import com.hisbaan.sticky.utils.RenameDialog;
 
 import org.apache.commons.io.FileUtils;
@@ -186,6 +187,9 @@ public class NoteOrganizerFragment extends Fragment {
 
                         folderItems.remove(item.getGroupId());
                         folderAdapter.notifyItemRemoved(item.getGroupId());
+
+                        Refactor refactor = new Refactor();
+                        refactor.deleteFolder(requireContext(), folderItems.get(item.getGroupId()).getName());
                     }
                 });
                 alert.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {

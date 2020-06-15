@@ -4,6 +4,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.view.MenuItem;
@@ -16,6 +17,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.NavUtils;
+import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -80,6 +82,7 @@ public class InsideFolderActivity extends AppCompatActivity implements InsideFol
         insideFolderItems = new ArrayList<>();
 
         File directoryToSearch = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES) + "/" + getIntent().getStringExtra("folder_name"));
+        System.out.println(directoryToSearch.toString());
         File[] images = directoryToSearch.listFiles(new FilenameFilter() {
             @Override
             public boolean accept(File dir, String name) {
@@ -127,6 +130,9 @@ public class InsideFolderActivity extends AppCompatActivity implements InsideFol
                         }
                         insideFolderItems.remove(item.getGroupId());
                         insideFolderAdapter.notifyItemRemoved(item.getGroupId());
+
+                        Refactor refactor = new Refactor();
+                        refactor.deleteNote(getApplicationContext(), getIntent().getStringExtra("folder_name"), insideFolderItems.get(item.getGroupId()).getName());
                     }
                 });
                 alert.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
@@ -146,7 +152,14 @@ public class InsideFolderActivity extends AppCompatActivity implements InsideFol
             case 123: //If the move button is pressed, get where the user wants to move it then move it.
                 renameIndex = item.getGroupId();
                 Intent intent = new Intent(this, MoveActivity.class);
+                intent.putExtra("folder_name", getIntent().getStringExtra("folder_name"));
                 startActivityForResult(intent, REQUEST_NEW_BOARD);
+                return true;
+            case 124:
+                Intent share = new Intent(Intent.ACTION_SEND);
+                share.setType("image/jpg");
+                share.putExtra(Intent.EXTRA_STREAM, FileProvider.getUriForFile(this, "com.hisbaan.sticky.fileprovider", new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES) + File.separator + getIntent().getStringExtra("folder_name") + File.separator + insideFolderItems.get(item.getGroupId()).getName() + ".jpg")));
+                startActivity(Intent.createChooser(share, "Share Image"));
                 return true;
             default:
                 return super.onContextItemSelected(item);

@@ -5,8 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="188dp"
     android:layout_margin="4dp"
-    android:background="@color/colorSubText"
     android:gravity="center"
+    app:cardBackgroundColor="@color/cardview_background"
     app:cardCornerRadius="4dp"
     app:layout_constraintDimensionRatio="1:1">
 
@@ -35,5 +35,4 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="1.0" />
     </LinearLayout>
-
 </com.hisbaan.sticky.models.SquareCardView>

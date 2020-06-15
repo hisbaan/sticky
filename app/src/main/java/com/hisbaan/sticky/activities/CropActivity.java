@@ -44,7 +44,7 @@ import org.opencv.imgproc.Imgproc;
 public class CropActivity extends AppCompatActivity implements View.OnTouchListener, View.OnClickListener {
 
     //Declaring variables.
-    private String filename;
+    private String filePath;
     private float dX;
     private float dY;
     private FloatingActionButton point1;
@@ -113,7 +113,7 @@ public class CropActivity extends AppCompatActivity implements View.OnTouchListe
         Button cancelButton = findViewById(R.id.cancel_button);
         cancelButton.setOnClickListener(this);
 
-        filename = getIntent().getStringExtra("image_path");
+        filePath = getIntent().getStringExtra("image_path");
 
         //Corner detection
 //        src = Imgcodecs.imread(filename);
@@ -128,7 +128,7 @@ public class CropActivity extends AppCompatActivity implements View.OnTouchListe
         //Displaying image for manual cropping
         imageView = findViewById(R.id.image_view);
         //Declaring and initialising bitmap that is used to display the captured image in the activity.
-        Bitmap bitmap = BitmapFactory.decodeFile(filename);
+        Bitmap bitmap = BitmapFactory.decodeFile(filePath);
         //Setting imageView to display the bitmap.
         imageView.setImageBitmap(bitmap);
 //        update();
@@ -147,7 +147,7 @@ public class CropActivity extends AppCompatActivity implements View.OnTouchListe
                 break;
             case R.id.select_button:
                 //Initializing image matrices.
-                Mat srcImage = Imgcodecs.imread(filename);
+                Mat srcImage = Imgcodecs.imread(filePath);
                 Imgproc.cvtColor(srcImage, srcImage, Imgproc.COLOR_RGB2BGR);
                 Mat dstImage = new Mat(1000, 1000, srcImage.type());
 
@@ -184,9 +184,7 @@ public class CropActivity extends AppCompatActivity implements View.OnTouchListe
                 transferImage = dstImage.clone();
 
                 Intent intent = new Intent(getApplicationContext(), NamingActivity.class);
-//                long addr = dstImage.getNativeObjAddr();
-//                intent.putExtra("dst_image_addr", addr);
-                intent.putExtra("filename", filename);
+                intent.putExtra("file_path", filePath);
                 intent.putExtra("is_file_internal", getIntent().getBooleanExtra("is_file_internal", true));
                 startActivity(intent);
                 break;
@@ -217,24 +215,7 @@ public class CropActivity extends AppCompatActivity implements View.OnTouchListe
         return true;
     } //End method onTouch.
 
-    /**
-     * Sets the state of the FAB passed to it to be clickable or un-clickable.
-     *
-     * @param fab   FloatingActionButton that is to have its intractability modified.
-     * @param state Decides whether the passed FloatingActionButton will be clickable or not.
-     */
-    private void setFAB(FloatingActionButton fab, Boolean state) {
-        fab.setEnabled(state);
-        fab.setClickable(state);
-        fab.setFocusable(state);
-        if (state) {
-            fab.show();
-        } else {
-            fab.hide();
-        }
-    } //End method setFAB.
-
-//    private void update() {
+    //    private void update() {
 //        maxCorners = Math.max(maxCorners, 1);
 //        MatOfPoint corners = new MatOfPoint();
 //        double qualityLevel = 0.1;
