@@ -1,7 +1,0 @@
-Executable : /home/hisbaan/Android/Sdk/cmake/3.10.2.4988404/bin/ninja
-arguments : 
--C
-/home/hisbaan/AndroidStudioProjects/sticky/opencv/.cxx/cmake/release/x86_64
-opencv_jni_shared
-jvmArgs : 
-
