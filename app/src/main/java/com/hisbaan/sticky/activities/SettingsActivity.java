@@ -1,11 +1,16 @@
 package com.hisbaan.sticky.activities;
 
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.View;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
@@ -15,6 +20,10 @@ import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.SwitchPreference;
 
 import com.hisbaan.sticky.R;
+import com.hisbaan.sticky.utils.Refactor;
+
+import java.io.File;
+import java.util.Objects;
 
 /**
  * Creates the settings activity of the program where the user can manipulate the preferences.
@@ -24,6 +33,8 @@ public class SettingsActivity extends AppCompatActivity {
     //Final variables that are used for SharedPreferences.
     public static final String SHARED_PREFS = "sharedPrefs";
     public static final String THEME = "theme";
+    
+    
 
     /**
      * Sets up variables and places the settings fragment inside of the activity.
@@ -45,7 +56,6 @@ public class SettingsActivity extends AppCompatActivity {
                 NavUtils.navigateUpFromSameTask(SettingsActivity.this);
             }
         });
-
 
         //Sets status bar colour based on current theme
         int currentNightMode = getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
@@ -84,7 +94,7 @@ public class SettingsActivity extends AppCompatActivity {
     /**
      * Holds the fragment where the preferences reside.
      */
-    public static class SettingsFragment extends PreferenceFragmentCompat {
+    public static class SettingsFragment extends PreferenceFragmentCompat implements Preference.OnPreferenceClickListener {
         @Override
         public void onCreatePreferences(final Bundle savedInstanceState, String rootKey) {
             setPreferencesFromResource(R.xml.root_preferences, rootKey);
@@ -112,21 +122,75 @@ public class SettingsActivity extends AppCompatActivity {
 
                     return true;
                 }
+
+                Preference.OnPreferenceClickListener onPreferenceClickListener = new Preference.OnPreferenceClickListener() {
+                    @Override
+                    public boolean onPreferenceClick(Preference preference) {
+                        String key = preference.getKey();
+                        Toast.makeText(getContext(), key, Toast.LENGTH_SHORT).show();
+                        return false;
+                    }
+                };
             });
 
-            final SwitchPreference keepScreenOn = findPreference("screen_on");
-            assert keepScreenOn != null;
-            keepScreenOn.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-                @Override
-                public boolean onPreferenceChange(Preference preference, Object newValue) {
-                    if (keepScreenOn.isChecked()) {
-                        //TODO Keep screen on.
-                    } else {
-                        //TODO turn off keep screen on.
-                    }
-                    return true;
-                }
-            });
+            Preference contact = findPreference("contact");
+            Preference feedback = findPreference("feedback");
+            Preference tips = findPreference("tips");
+            Preference github = findPreference("github");
+            Preference credits = findPreference("credits");
+
+            assert contact != null;
+            assert feedback != null;
+            assert tips != null;
+            assert github != null;
+            assert credits != null;
+            contact.setOnPreferenceClickListener(this);
+            feedback.setOnPreferenceClickListener(this);
+            tips.setOnPreferenceClickListener(this);
+            github.setOnPreferenceClickListener(this);
+            credits.setOnPreferenceClickListener(this);
         } //End method onCreatePreferences.
+
+        /**
+         * Method that runs when a preference is clicked on.
+         * @param preference The preference that was clicked on.
+         * @return Whether or not an action was taken.
+         */
+        @Override
+        public boolean onPreferenceClick(Preference preference) {
+            switch (preference.getKey()) {
+                case "contact": //Opens an email send intent with the send to and subject lines filled.
+                    Intent email = new Intent(Intent.ACTION_SEND);
+                    email.putExtra(Intent.EXTRA_EMAIL, new String[]{"hisbaan@gmail.com"});
+                    email.putExtra(Intent.EXTRA_SUBJECT, "Sticky feedback/help");
+                    email.setType("message/rfc822");
+                    startActivity(Intent.createChooser(email, "Choose an email client"));
+                    return true;
+                case "feedback": //Opens a feedback google form.
+                    Uri feedback = Uri.parse("https://docs.google.com/forms/d/e/1FAIpQLScqm8FnLu_HyxQM1pKXTxy-C05B9tu9s3l3_F7HUeuGrEGFDA/viewform?usp=sf_link");
+                    startActivity(new Intent(Intent.ACTION_VIEW, feedback));
+                    return true;
+                case "tips": //Opens the tips activity.
+                    Intent tips = new Intent(requireContext(), TipsActivity.class);
+                    startActivity(tips);
+                    return true;
+                case "github": //Opens the github page for the app.
+                    Uri github = Uri.parse("https://github.com/hisbaan/sticky");
+                    startActivity(new Intent(Intent.ACTION_VIEW, github));
+                    return true;
+                case "credits": //Opens the credits dialog.
+                    AlertDialog.Builder alert = new AlertDialog.Builder(requireContext());
+                    alert.setTitle("Credits");
+                    alert.setMessage("• Image processing - OpenCV Android Library (v4.3.0)\n\n• Material Design Guidelines - Material.io");
+                    alert.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.cancel();
+                        }
+                    }).show();
+                    return true;
+            }
+            return false;
+        } //End method onPreferenceClick.
     } //End class SettingsFragment.
 } //End class SettingsActivity.

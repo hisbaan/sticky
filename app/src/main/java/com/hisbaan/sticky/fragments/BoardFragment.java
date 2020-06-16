@@ -152,22 +152,35 @@ public class BoardFragment extends Fragment {
                 renameDialog.show(requireActivity().getSupportFragmentManager(), "rename dialog");
                 return true;
             case 123: //Clear the board after asking for confirmation.
-                //TODO add confirmation message like the delete one.
-                FileOutputStream fos = null;
-                try {
-                    fos = requireContext().openFileOutput(boardItems.get(item.getGroupId()).getBoardName() + ".txt", MODE_PRIVATE);
-                    fos.write("".getBytes());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } finally {
-                    if (fos != null) {
+                AlertDialog.Builder alert = new AlertDialog.Builder(requireContext());
+                alert.setTitle("Confirm Delete");
+                alert.setMessage("Are you sure you want to delete?\nThis action cannot be undone");
+                alert.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        FileOutputStream fos = null;
                         try {
-                            fos.close();
+                            fos = requireContext().openFileOutput(boardItems.get(item.getGroupId()).getBoardName() + ".txt", MODE_PRIVATE);
+                            fos.write("".getBytes());
                         } catch (IOException e) {
                             e.printStackTrace();
+                        } finally {
+                            if (fos != null) {
+                                try {
+                                    fos.close();
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                            }
                         }
                     }
-                }
+                });
+                alert.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                }).show();
+
                 return true;
             default:
                 return super.onContextItemSelected(item);

@@ -49,6 +49,9 @@ public class BoardActivity extends AppCompatActivity implements View.OnClickList
     private float dX;
     private float dY;
 
+    private long startClickTime;
+    private ImageView contextInteractionView;
+
     float screenWidth;
     float screenHeight;
 
@@ -222,8 +225,6 @@ public class BoardActivity extends AppCompatActivity implements View.OnClickList
         openContextMenu(v);
     } //End method onClick.
 
-    private long startClickTime;
-    private ImageView contextInteractionView;
 
     /**
      * Touch listener to allow for dragging the points around and when the user clicks on a view quickly, open a context menu.

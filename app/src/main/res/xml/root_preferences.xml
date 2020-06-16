@@ -28,20 +28,47 @@
             app:key="theme"
             app:title="@string/theme_title"
             app:useSimpleSummaryProvider="true" />
-
-        <SwitchPreferenceCompat
-            app:iconSpaceReserved="false"
-            app:key="amoled"
-            app:title="AMOLED Dark Theme" />
     </PreferenceCategory>
 
     <PreferenceCategory
         app:iconSpaceReserved="false"
-        app:title="Miscellaneous">
-        <SwitchPreference
+        app:title="Support">
+
+        <Preference
             app:iconSpaceReserved="false"
-            app:key="screen_on"
-            app:title="Keep Screen On" />
+            app:summary="hisbaan@gmail.com"
+            app:title="Contact"
+            app:key="contact" />
+
+        <Preference
+            app:iconSpaceReserved="false"
+            app:title="Send feedback"
+            app:key="feedback"/>
+
+        <Preference
+            app:iconSpaceReserved="false"
+            app:title="Tips and tricks"
+            app:key="tips"/>
     </PreferenceCategory>
 
+    <PreferenceCategory
+        app:iconSpaceReserved="false"
+        app:title="About">
+
+        <Preference
+            app:iconSpaceReserved="false"
+            app:summary="github.com/hisbaan/sticky"
+            app:title="GitHub"
+            app:key="github"/>
+
+        <Preference
+            app:iconSpaceReserved="false"
+            app:summary="1.0"
+            app:title="Version" />
+
+        <Preference
+            app:iconSpaceReserved="false"
+            app:title="Credits"
+            app:key="credits"/>
+    </PreferenceCategory>
 </PreferenceScreen>

@@ -36,7 +36,6 @@ import java.util.Objects;
  * Allows the user to select the name and the group of the note that they've just captured.
  */
 public class NamingActivity extends AppCompatActivity implements View.OnClickListener, NewGroupDialog.NewGroupDialogListener {
-    //Declaring variables for layout.
     ImageView imageView;
     EditText nameTextField;
     Button cancelButton;

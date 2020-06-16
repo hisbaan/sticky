@@ -79,7 +79,6 @@ public class MoveActivity extends AppCompatActivity implements MoveAdapter.OnIte
             moveItems.add(boardNamesSplit[boardNamesSplit.length - 1]);
         }
 
-        System.out.println(getIntent().getStringArrayExtra("folder_name"));
         moveItems.remove(getIntent().getStringExtra("folder_name"));
 
         //Initializing the recycler view.

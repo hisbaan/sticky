@@ -6,7 +6,10 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
+import androidx.exifinterface.media.ExifInterface;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
@@ -19,6 +22,7 @@ import androidx.core.app.NavUtils;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.hisbaan.sticky.R;
+import com.hisbaan.sticky.models.Canvas;
 
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfPoint2f;
@@ -26,17 +30,8 @@ import org.opencv.core.Point;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 
-// (for corner detection that is off right now)
-//import org.opencv.android.Utils;
-//import org.opencv.core.Core;
-//import org.opencv.core.CvException;
-//import org.opencv.core.CvType;
-//import org.opencv.core.Mat;
-//import org.opencv.core.Point;
-//import org.opencv.core.Scalar;
-//import org.opencv.imgcodecs.Imgcodecs;
-//import org.opencv.imgproc.Imgproc;
-//Java imports
+import java.io.IOException;
+import java.util.Objects;
 
 /**
  * Displays the image that was captured immediately before this activity is triggered.
@@ -44,24 +39,27 @@ import org.opencv.imgproc.Imgproc;
 public class CropActivity extends AppCompatActivity implements View.OnTouchListener, View.OnClickListener {
 
     //Declaring variables.
-    private String filePath;
     private float dX;
     private float dY;
+    private Canvas canvas;
     private FloatingActionButton point1;
     private FloatingActionButton point2;
     private FloatingActionButton point3;
     private FloatingActionButton point4;
     private ImageView imageView;
 
-    static Mat transferImage;
+    public static float savedX1;
+    public static float savedY1;
+    public static float savedX2;
+    public static float savedY2;
+    public static float savedX3;
+    public static float savedY3;
+    public static float savedX4;
+    public static float savedY4;
 
-    //Variables for corner detection (off right now)
-//    private Mat src = new Mat();
-//    private Mat srcGray = new Mat();
-//    private int maxCorners = 12;
-//    private static final int MAX_THRESHOLD = 100;
-//    private int threshold = 175;
-//    private Random rng = new Random(12345);
+    public static float offCenterAdjustment;
+
+    static Mat transferImage;
 
     /**
      * Initializes variables, creates a bitmap of the image that was captured and pushes the bitmap to an imageView in the program when the program.
@@ -74,6 +72,7 @@ public class CropActivity extends AppCompatActivity implements View.OnTouchListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_crop);
 
+        //Setting up toolbar.
         Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back);
         setSupportActionBar(toolbar);
@@ -113,26 +112,53 @@ public class CropActivity extends AppCompatActivity implements View.OnTouchListe
         Button cancelButton = findViewById(R.id.cancel_button);
         cancelButton.setOnClickListener(this);
 
-        filePath = getIntent().getStringExtra("image_path");
-
-        //Corner detection
-//        src = Imgcodecs.imread(filename);
-//        Imgproc.cvtColor(src, src, Imgproc.COLOR_BGR2RGB);
-//        if (src.empty()) {
-//            //send an error here and open feedback to contact the developer
-//        }
-//
-//        Imgproc.cvtColor(src, srcGray, Imgproc.COLOR_RGB2GRAY);
-//        update();
-
         //Displaying image for manual cropping
         imageView = findViewById(R.id.image_view);
-        //Declaring and initialising bitmap that is used to display the captured image in the activity.
-        Bitmap bitmap = BitmapFactory.decodeFile(filePath);
-        //Setting imageView to display the bitmap.
+
+        //On Samsung devices, the imageView will display the image sideways so this is a fix for that.
+        int angle = 0;
+        try {
+            ExifInterface exifInterface = new ExifInterface(Objects.requireNonNull(getIntent().getStringExtra("image_path")));
+            angle = Integer.parseInt(Objects.requireNonNull(exifInterface.getAttribute(ExifInterface.TAG_ORIENTATION)));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        System.out.println(angle + " ###############");
+        if (angle == 6) {
+            angle = 90;
+        }
+
+        //Rotating and setting the bitmap.
+        Bitmap bitmap = rotateBitmap(BitmapFactory.decodeFile(getIntent().getStringExtra("image_path")), angle);
         imageView.setImageBitmap(bitmap);
-//        update();
+
+        Resources r = getResources();
+        offCenterAdjustment = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10, r.getDisplayMetrics());
+
+        //Setting up the canvas initially.
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        float screenWidth = displayMetrics.widthPixels;
+        float screenHeight = displayMetrics.heightPixels;
+
+        canvas = findViewById(R.id.canvas);
+        canvas.initialSetup(screenWidth, screenHeight);
+        canvas.invalidate();
     } //End method onCreate.
+
+    /**
+     * Rotates the bitmap based on the current angle.
+     *
+     * @param source The source bitmap.
+     * @param angle The angle that the bitmap needs to be rotated.
+     * @return The rotated bitmap.
+     */
+    private Bitmap rotateBitmap(Bitmap source, int angle) {
+        Matrix matrix = new Matrix();
+        matrix.postRotate(angle);
+        return Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(), matrix, true);
+    } //End method rotateBitmap.
 
     /**
      * Listener that triggers an action based on what button was pressed.
@@ -147,7 +173,7 @@ public class CropActivity extends AppCompatActivity implements View.OnTouchListe
                 break;
             case R.id.select_button:
                 //Initializing image matrices.
-                Mat srcImage = Imgcodecs.imread(filePath);
+                Mat srcImage = Imgcodecs.imread(getIntent().getStringExtra("image_path"));
                 Imgproc.cvtColor(srcImage, srcImage, Imgproc.COLOR_RGB2BGR);
                 Mat dstImage = new Mat(1000, 1000, srcImage.type());
 
@@ -159,10 +185,6 @@ public class CropActivity extends AppCompatActivity implements View.OnTouchListe
                 float srcWidth = srcImage.cols();
                 float srcHeight = srcImage.rows();
 
-                //Converting density independent pixels to regular pixels.
-                Resources r = getResources();
-                float offCenterAdjustment = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10, r.getDisplayMetrics());
-
                 //Calculating all the points.
                 float x1 = (point1.getX() - xAdjustment + offCenterAdjustment) * (srcWidth / imageViewWidth);
                 float x2 = (point2.getX() - xAdjustment + offCenterAdjustment) * (srcWidth / imageViewWidth);
@@ -172,6 +194,15 @@ public class CropActivity extends AppCompatActivity implements View.OnTouchListe
                 float y2 = (point2.getY() - yAdjustment + offCenterAdjustment) * (srcHeight / imageViewHeight);
                 float y3 = (point3.getY() - yAdjustment + offCenterAdjustment) * (srcHeight / imageViewHeight);
                 float y4 = (point4.getY() - yAdjustment + offCenterAdjustment) * (srcHeight / imageViewHeight);
+
+                savedX1 = point1.getX();
+                savedY1 = point1.getY();
+                savedX2 = point2.getX();
+                savedY2 = point2.getY();
+                savedX3 = point3.getX();
+                savedY3 = point3.getY();
+                savedX4 = point4.getX();
+                savedY4 = point4.getY();
 
                 //Creating matrices more matrices of the target and destination point values.
                 Mat src = new MatOfPoint2f(new Point(x1, y1), new Point(x2, y2), new Point(x3, y3), new Point(x4, y4));
@@ -184,7 +215,7 @@ public class CropActivity extends AppCompatActivity implements View.OnTouchListe
                 transferImage = dstImage.clone();
 
                 Intent intent = new Intent(getApplicationContext(), NamingActivity.class);
-                intent.putExtra("file_path", filePath);
+                intent.putExtra("file_path", getIntent().getStringExtra("image_path"));
                 intent.putExtra("is_file_internal", getIntent().getBooleanExtra("is_file_internal", true));
                 startActivity(intent);
                 break;
@@ -205,59 +236,17 @@ public class CropActivity extends AppCompatActivity implements View.OnTouchListe
             case MotionEvent.ACTION_DOWN:
                 dX = v.getX() - event.getRawX();
                 dY = v.getY() - event.getRawY();
+                canvas.updatePoints(point1.getX(), point1.getY(), point2.getX(), point2.getY(), point3.getX(), point3.getY(), point4.getX(), point4.getY());
+                canvas.invalidate();
                 break;
             case MotionEvent.ACTION_MOVE:
                 v.animate().x(event.getRawX() + dX).y(event.getRawY() + dY).setDuration(0).start();
+                canvas.updatePoints(point1.getX(), point1.getY(), point2.getX(), point2.getY(), point3.getX(), point3.getY(), point4.getX(), point4.getY());
+                canvas.invalidate();
                 break;
             default:
                 return false;
         }
         return true;
     } //End method onTouch.
-
-    //    private void update() {
-//        maxCorners = Math.max(maxCorners, 1);
-//        MatOfPoint corners = new MatOfPoint();
-//        double qualityLevel = 0.1;
-//        double minDistance = 500;
-//        int blockSize = 3;
-//        int gradientSize = 3;
-//        boolean useHarrisDetector = false;
-//        double k = 0.04;
-//
-//        Mat copy = new Mat();
-//
-//        for (int i = 1; i < 31; i += 2) {
-//            Imgproc.GaussianBlur(src, copy, new Size(i, i), 0, 0);
-//        }
-//
-//        Imgproc.goodFeaturesToTrack(srcGray, corners, maxCorners, qualityLevel, minDistance, new Mat(), blockSize, gradientSize, useHarrisDetector, k);
-//        System.out.println("Number of corners detected: " + corners.rows());
-//        int[] cornersData = new int[(int) (corners.total() * corners.channels())];
-//        corners.get(0, 0, cornersData);
-//        int radius = 40;
-//
-//        for (int i = 0; i < corners.rows(); i++) {
-//            Imgproc.circle(copy, new Point(cornersData[i * 2], cornersData[i * 2 + 1]), radius, new Scalar(255, 0, 0), Core.FILLED);
-//        }
-//
-//        String filename = getIntent().getStringExtra("image_path");
-//        assert filename != null;
-//        File file = new File(getFilesDir(), filename);
-//
-//        Imgcodecs.imwrite(filename + "-corners.jpg", copy);
-//
-////        Displaying the matrix with the dots on it.
-//        Bitmap bmp = null;
-//
-//        try {
-//            bmp = Bitmap.createBitmap(copy.cols(), copy.rows(), Bitmap.Config.ARGB_8888);
-//            Utils.matToBitmap(copy, bmp);
-//        } catch (CvException e) {
-//            System.out.println(e.getMessage());
-//        }
-//
-//        imageView = findViewById(R.id.image_view);
-//        imageView.setImageBitmap(bmp);
-//    }
 } //End class CropActivity.

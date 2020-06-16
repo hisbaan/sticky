@@ -185,11 +185,11 @@ public class NoteOrganizerFragment extends Fragment {
                             e.printStackTrace();
                         }
 
-                        folderItems.remove(item.getGroupId());
-                        folderAdapter.notifyItemRemoved(item.getGroupId());
-
                         Refactor refactor = new Refactor();
                         refactor.deleteFolder(requireContext(), folderItems.get(item.getGroupId()).getName());
+
+                        folderItems.remove(item.getGroupId());
+                        folderAdapter.notifyItemRemoved(item.getGroupId());
                     }
                 });
                 alert.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
@@ -206,9 +206,6 @@ public class NoteOrganizerFragment extends Fragment {
                 renameIndex = item.getGroupId();
                 RenameDialog renameDialog = new RenameDialog();
                 renameDialog.show(requireActivity().getSupportFragmentManager(), "rename dialog");
-                return true;
-            case 123: //Clear the inside of a folder.
-                //TODO delete items inside of the folder
                 return true;
             default:
                 return super.onContextItemSelected(item);

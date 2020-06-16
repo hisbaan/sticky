@@ -128,11 +128,12 @@ public class InsideFolderActivity extends AppCompatActivity implements InsideFol
                         } else {
                             System.out.println("File deletion failed.");
                         }
-                        insideFolderItems.remove(item.getGroupId());
-                        insideFolderAdapter.notifyItemRemoved(item.getGroupId());
 
                         Refactor refactor = new Refactor();
                         refactor.deleteNote(getApplicationContext(), getIntent().getStringExtra("folder_name"), insideFolderItems.get(item.getGroupId()).getName());
+
+                        insideFolderItems.remove(item.getGroupId());
+                        insideFolderAdapter.notifyItemRemoved(item.getGroupId());
                     }
                 });
                 alert.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {

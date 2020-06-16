@@ -48,10 +48,9 @@ import java.util.Locale;
  * Creates the main activity for the program, launches other activities, and allows for user image capture.
  */
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener, NewBoardDialog.NewBoardDialogListener, RenameDialog.RenameDialogListener {
-
-    //Final variables that are used to retrieve information.
     public static final String SHARED_PREFS = "sharedPrefs";
     public static final String THEME = "theme";
+
     private static final int REQUEST_IMAGE_CAPTURE = 101;
     private static final int REQUEST_EXTERNAL_IMAGE_SELECTION = 100;
     private static final int PERMISSION_REQUEST = 0;
@@ -60,7 +59,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public static final int BOARD_ACTIVITY_RENAME = 2;
     public static final int NOTE_ORGANIZER_ACTIVITY = 3;
     public static int applyTextState = 0;
-
     public static boolean resumeBoardFragment;
 
     //Initializing openCV.
@@ -101,9 +99,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        setTheme(R.style.AppTheme);
+
         //Initializing toolbar with a menu button that opens the drawer.
         Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setNavigationIcon(R.drawable.ic_menu);
+        toolbar.getMenu().clear();
         setSupportActionBar(toolbar);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -123,7 +124,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         //Restores shared preference of the app theme when the activity is restored.
         SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
-        int mode = sharedPreferences.getInt(THEME, AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
+        int mode = sharedPreferences.getInt(THEME, AppCompatDelegate.MODE_NIGHT_YES);
         AppCompatDelegate.setDefaultNightMode(mode);
 
         //Sets status bar colour based on current theme
@@ -165,12 +166,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     .replace(R.id.fragment_container, new NoteOrganizerFragment())
                     .commit();
             navigationView.setCheckedItem(R.id.nav_organizer);
+            setFAB(mainFAB, true);
+            mainFAB.startAnimation(scaleAnimation);
         } else if (savedInstanceState == null) {
             getSupportFragmentManager()
                     .beginTransaction()
                     .replace(R.id.fragment_container, new BoardFragment())
                     .commit();
             navigationView.setCheckedItem(R.id.nav_board);
+            setFAB(mainFAB, false);
+            mainFAB.setAnimation(scaleBackAnimation);
         }
 
         //Setting OnClickListeners to the FABs.
@@ -178,6 +183,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         photoFAB.setOnClickListener(this);
         uploadPhotoFAB.setOnClickListener(this);
     } //End method onCreate.
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        return false;
+    }
 
     /**
      * Handles the presses of buttons that have had the OnClickListener added on to it.
@@ -239,28 +249,28 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.nav_board:
-                //Opens the board fragment.
+            case R.id.nav_board: //Opens the board fragment.
                 getSupportFragmentManager()
                         .beginTransaction()
                         .replace(R.id.fragment_container, new BoardFragment())
                         .commit();
                 resumeBoardFragment = true;
+                setFAB(mainFAB, false);
+                mainFAB.startAnimation(scaleBackAnimation);
                 break;
-            case R.id.nav_organizer:
-                //Opens the note organizer fragment.
+            case R.id.nav_organizer: //Opens the note organizer fragment.
                 getSupportFragmentManager()
                         .beginTransaction()
                         .replace(R.id.fragment_container, new NoteOrganizerFragment())
                         .commit();
                 resumeBoardFragment = false;
+                setFAB(mainFAB, true);
+                mainFAB.startAnimation(scaleAnimation);
                 break;
-            case R.id.nav_tips:
-                //Opens the tips menu. This will show some tips and tricks.
+            case R.id.nav_tips: //Opens the tips menu. This will show some tips and tricks.
                 startActivity(new Intent(getApplicationContext(), TipsActivity.class));
                 break;
-            case R.id.nav_feedback:
-                //Links to a google form where the user can provide feedback. This could be a bug, personal issue or suggested feature.
+            case R.id.nav_feedback: //Links to a google form where the user can provide feedback. This could be a bug, personal issue or suggested feature.
                 Uri uri = Uri.parse("https://docs.google.com/forms/d/e/1FAIpQLScqm8FnLu_HyxQM1pKXTxy-C05B9tu9s3l3_F7HUeuGrEGFDA/viewform?usp=sf_link");
                 startActivity(new Intent(Intent.ACTION_VIEW, uri));
                 break;
@@ -457,13 +467,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     } //End method setFAB.
 
     /**
-     * Creates a new board file that is displayed in the recycler view.
+     * Runs from three sets of code based on the apply text state variable.
      *
      * @param newName The name of a board the user creates or the new name of the folder based on where the user triggered the dialog from.
      */
     @Override
     public void applyText(String newName) {
-        if (applyTextState == BOARD_ACTIVITY) {
+        if (applyTextState == BOARD_ACTIVITY) { //Creates a new board from the name the user provides.
+            //Filter for characters that would break the app.
             if (newName.trim().equals("")) {
                 Toast.makeText(this, "Please enter a name for the note.", Toast.LENGTH_SHORT).show();
             } else if (newName.contains(",")) {
@@ -489,7 +500,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 intent.putExtra("board_name", newName);
                 startActivity(intent);
             }
-        } else if (applyTextState == NOTE_ORGANIZER_ACTIVITY) {
+        } else if (applyTextState == NOTE_ORGANIZER_ACTIVITY) { //Renames a folder from the name the user provides.
             File currentFile = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES) + "/" + NoteOrganizerFragment.folderItems.get(NoteOrganizerFragment.renameIndex).getName());
             File newFile = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES) + "/" + newName);
 
@@ -508,7 +519,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 NoteOrganizerFragment.folderItems.get(NoteOrganizerFragment.renameIndex).setName(newName);
                 NoteOrganizerFragment.folderAdapter.notifyItemChanged(NoteOrganizerFragment.renameIndex);
             }
-        } else if (applyTextState == BOARD_ACTIVITY_RENAME) {
+        } else if (applyTextState == BOARD_ACTIVITY_RENAME) { //Renames a board based on the inputted name.
             File currentFile = new File(getFilesDir() + "/" + BoardFragment.boardItems.get(BoardFragment.renameIndex).getBoardName() + ".txt");
             File newFile = new File(getFilesDir() + "/" + newName + ".txt");
 

@@ -24,45 +24,66 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".activities.MoveActivity"
+        <activity
+            android:name=".activities.MoveActivity"
+            android:configChanges="orientation"
             android:label="Move to"
-            android:parentActivityName=".activities.InsideFolderActivity"/>
+            android:parentActivityName=".activities.InsideFolderActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activities.InsideFolderActivity"
+            android:configChanges="orientation"
             android:label="Folder"
-            android:parentActivityName=".activities.MainActivity" />
+            android:parentActivityName=".activities.MainActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activities.NotePickerActivity"
+            android:configChanges="orientation"
             android:label="Pick a Note"
-            android:parentActivityName=".activities.FolderPickerActivity" />
+            android:parentActivityName=".activities.FolderPickerActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activities.FolderPickerActivity"
+            android:configChanges="orientation"
             android:label="Pick a Folder"
-            android:parentActivityName=".activities.BoardActivity" />
+            android:parentActivityName=".activities.BoardActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activities.BoardActivity"
+            android:configChanges="orientation"
             android:label="Board"
-            android:parentActivityName=".activities.MainActivity" />
+            android:parentActivityName=".activities.MainActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activities.NamingActivity"
+            android:configChanges="orientation"
             android:label="Name"
-            android:parentActivityName=".activities.CropActivity" />
+            android:parentActivityName=".activities.CropActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activities.TipsActivity"
+            android:configChanges="orientation"
             android:label="@string/title_activity_tips"
-            android:parentActivityName=".activities.MainActivity" />
+            android:parentActivityName=".activities.MainActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activities.SettingsActivity"
+            android:configChanges="orientation"
             android:label="@string/title_activity_settings"
-            android:parentActivityName=".activities.MainActivity" />
+            android:parentActivityName=".activities.MainActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activities.CropActivity"
+            android:configChanges="orientation"
             android:label="@string/title_activity_camera"
-            android:parentActivityName=".activities.MainActivity" />
+            android:parentActivityName=".activities.MainActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activities.MainActivity"
+            android:configChanges="orientation"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme">
+            android:screenOrientation="portrait"
+            android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

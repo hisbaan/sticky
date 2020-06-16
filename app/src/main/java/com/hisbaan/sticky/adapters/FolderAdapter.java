@@ -136,7 +136,6 @@ public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.FolderView
         public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
             menu.add(this.getAdapterPosition(), 121, 0, "Delete");
             menu.add(this.getAdapterPosition(), 122, 1, "Rename");
-            menu.add(this.getAdapterPosition(), 123, 2, "Clear Folder");
         }
     } //End class FolderViewHolder.
 } //End class FolderAdapter.
