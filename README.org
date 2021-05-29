@@ -1,0 +1,38 @@
+#+TITLE: Sticky
+#+author: Hisbaan Noorani
+
+#+begin_html
+<p align="center">
+    <img width="25%" src="img/logo.png" />
+</p
+#+end_html
+
+* Showcase
+
+** The main note organizer view
+
+[[file:img/sticky5.jpg]]
+
+** A specific folder
+
+[[file:img/sticky6.jpg]]
+
+** The navigation menu
+
+[[file:img/sticky3.jpg]]
+
+** Some boards
+
+[[file:img/sticky1.jpg]]
+
+[[file:img/sticky4.jpg]]
+
+* Installation
+
+Download the apk file from [[https://github.com/hisbaan/sticky/releases][the releases]], and install it as you usually would an apk.
+
+This release has been tested on various emulators, a OnePlus 6t, and a Samsung Galaxy S8+.
+
+* Contributing
+
+This repository isn't really ready for contributions but if you want to contribute, shoot me a [[https://hisbaan.com/contact][message]] and we can talk about fixing up the repo.

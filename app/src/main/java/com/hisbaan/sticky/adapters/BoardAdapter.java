@@ -122,8 +122,8 @@ public class BoardAdapter extends RecyclerView.Adapter<BoardAdapter.BoardViewHol
         /**
          * Creates the context menu on long press.
          *
-         * @param menu The menu that is built.
-         * @param v The view that the context menu is called on.
+         * @param menu     The menu that is built.
+         * @param v        The view that the context menu is called on.
          * @param menuInfo Information about the menu.
          */
         @Override
