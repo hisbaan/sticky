@@ -15,7 +15,6 @@ import com.hisbaan.sticky.R;
 import com.hisbaan.sticky.adapters.MoveAdapter;
 
 import java.io.File;
-import java.io.FileFilter;
 import java.util.ArrayList;
 
 /**
@@ -40,13 +39,10 @@ public class MoveActivity extends AppCompatActivity implements MoveAdapter.OnIte
         Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back);
         setSupportActionBar(toolbar);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), InsideFolderActivity.class);
-                intent.putExtra("folder_name", getIntent().getStringExtra("folder_name"));
-                startActivity(intent);
-            }
+        toolbar.setNavigationOnClickListener(v -> {
+            Intent intent = new Intent(getApplicationContext(), InsideFolderActivity.class);
+            intent.putExtra("folder_name", getIntent().getStringExtra("folder_name"));
+            startActivity(intent);
         });
 
         //Sets status bar colour based on the current theme.
@@ -66,12 +62,7 @@ public class MoveActivity extends AppCompatActivity implements MoveAdapter.OnIte
 
         //Creating an array of directory names in the Pictures directory.
         assert directoryToSearch != null;
-        final File[] boardNames = directoryToSearch.listFiles(new FileFilter() {
-            @Override
-            public boolean accept(File pathname) {
-                return pathname.isDirectory();
-            }
-        });
+        final File[] boardNames = directoryToSearch.listFiles(File::isDirectory);
 
         assert boardNames != null;
         for (File boardName : boardNames) {

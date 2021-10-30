@@ -1,5 +1,6 @@
 package com.hisbaan.sticky.activities;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
@@ -63,14 +64,11 @@ public class NamingActivity extends AppCompatActivity implements View.OnClickLis
         //Initializing toolbar.
         Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), CropActivity.class);
-                intent.putExtra("image_path", getIntent().getStringExtra("file_path"));
-                intent.putExtra("is_file_internal", getIntent().getBooleanExtra("is_file_internal", true));
-                startActivity(intent);
-            }
+        toolbar.setNavigationOnClickListener(v -> {
+            Intent intent = new Intent(getApplicationContext(), CropActivity.class);
+            intent.putExtra("image_path", getIntent().getStringExtra("file_path"));
+            intent.putExtra("is_file_internal", getIntent().getBooleanExtra("is_file_internal", true));
+            startActivity(intent);
         });
         setSupportActionBar(toolbar);
 
@@ -110,12 +108,7 @@ public class NamingActivity extends AppCompatActivity implements View.OnClickLis
         //Searching the pictures directory for file names that will then be displayed as groups.
         File directoryToSearch = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         assert directoryToSearch != null;
-        File[] tempDirs = directoryToSearch.listFiles(new FileFilter() {
-            @Override
-            public boolean accept(File pathname) {
-                return pathname.isDirectory();
-            }
-        });
+        File[] tempDirs = directoryToSearch.listFiles(File::isDirectory);
 
         ArrayList<String> dirsInPictures = new ArrayList<>();
 
@@ -137,6 +130,7 @@ public class NamingActivity extends AppCompatActivity implements View.OnClickLis
      *
      * @param v The view that was clicked.
      */
+    @SuppressLint("NonConstantResourceId")
     @Override
     public void onClick(View v) {
         switch (v.getId()) {

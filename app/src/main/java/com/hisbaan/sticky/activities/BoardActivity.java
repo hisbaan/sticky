@@ -72,12 +72,7 @@ public class BoardActivity extends AppCompatActivity implements View.OnClickList
         Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back);
         setSupportActionBar(toolbar);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                NavUtils.navigateUpFromSameTask(BoardActivity.this);
-            }
-        });
+        toolbar.setNavigationOnClickListener(v -> NavUtils.navigateUpFromSameTask(BoardActivity.this));
 
         //Sets status bar colour based on the current theme.
         int currentNightMode = getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
@@ -99,13 +94,10 @@ public class BoardActivity extends AppCompatActivity implements View.OnClickList
 
         //Initializing button to add new notes.
         Button addButton = findViewById(R.id.add_button);
-        addButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //When the add button is clicked, get the note name form the picker activities.
-                Intent intent = new Intent(BoardActivity.this, FolderPickerActivity.class);
-                startActivityForResult(intent, REQUEST_NEW_NOTE);
-            }
+        addButton.setOnClickListener(v -> {
+            //When the add button is clicked, get the note name form the picker activities.
+            Intent intent = new Intent(BoardActivity.this, FolderPickerActivity.class);
+            startActivityForResult(intent, REQUEST_NEW_NOTE);
         });
 
         //Initializing the 'canvas' layout that notes are placed on.
@@ -159,19 +151,19 @@ public class BoardActivity extends AppCompatActivity implements View.OnClickList
         super.onPause();
 
         //Put info from the board into the text variable.
-        String text = "";
+        StringBuilder text = new StringBuilder();
         for (int i = 0; i < imageViews.size(); i++) {
             if (i != 0) {
-                text += "\n";
+                text.append("\n");
             }
-            text += drawnImageViews.get(i).getGroupName() + "," + drawnImageViews.get(i).getNoteName() + "," + (int) (imageViews.get(i).getX()) + "," + (int) (imageViews.get(i).getY());
+            text.append(drawnImageViews.get(i).getGroupName()).append(",").append(drawnImageViews.get(i).getNoteName()).append(",").append((int) (imageViews.get(i).getX())).append(",").append((int) (imageViews.get(i).getY()));
         }
 
         //Save this text variable to a local file.
         FileOutputStream fos = null;
         try {
             fos = openFileOutput(getIntent().getStringExtra("board_name") + ".txt", MODE_PRIVATE);
-            fos.write(text.getBytes());
+            fos.write(text.toString().getBytes());
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
@@ -270,7 +262,6 @@ public class BoardActivity extends AppCompatActivity implements View.OnClickList
                 default:
                     return false;
             }
-            return true;
         } else {
             if (v.getX() <= 0) {
                 v.setX(1);
@@ -281,8 +272,8 @@ public class BoardActivity extends AppCompatActivity implements View.OnClickList
             } else if ((v.getY() + v.getHeight()) >= screenHeight) {
                 v.setY(screenHeight - v.getHeight() - 1);
             }
-            return true;
         }
+        return true;
     } //End method onTouch.
 
     /**
@@ -344,6 +335,7 @@ public class BoardActivity extends AppCompatActivity implements View.OnClickList
      * @param item Information about the menu.
      * @return Whether an action should be performed or not.
      */
+    @SuppressLint("NonConstantResourceId")
     @Override
     public boolean onContextItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {

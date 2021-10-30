@@ -7,7 +7,6 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
-import androidx.exifinterface.media.ExifInterface;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
@@ -19,6 +18,7 @@ import android.widget.ImageView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.NavUtils;
+import androidx.exifinterface.media.ExifInterface;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.hisbaan.sticky.R;
@@ -76,12 +76,7 @@ public class CropActivity extends AppCompatActivity implements View.OnTouchListe
         Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back);
         setSupportActionBar(toolbar);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                NavUtils.navigateUpFromSameTask(CropActivity.this);
-            }
-        });
+        toolbar.setNavigationOnClickListener(v -> NavUtils.navigateUpFromSameTask(CropActivity.this));
 
 
         //Sets status bar colour based on the current theme.
@@ -151,7 +146,7 @@ public class CropActivity extends AppCompatActivity implements View.OnTouchListe
      * Rotates the bitmap based on the current angle.
      *
      * @param source The source bitmap.
-     * @param angle The angle that the bitmap needs to be rotated.
+     * @param angle  The angle that the bitmap needs to be rotated.
      * @return The rotated bitmap.
      */
     private Bitmap rotateBitmap(Bitmap source, int angle) {
@@ -165,6 +160,7 @@ public class CropActivity extends AppCompatActivity implements View.OnTouchListe
      *
      * @param v View of the button that was pressed.
      */
+    @SuppressLint("NonConstantResourceId")
     @Override
     public void onClick(View v) {
         switch (v.getId()) {

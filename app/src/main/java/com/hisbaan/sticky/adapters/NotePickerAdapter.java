@@ -40,7 +40,7 @@ public class NotePickerAdapter extends RecyclerView.Adapter<NotePickerAdapter.No
     /**
      * Constructor that passes the array list of items to this adapter to be added to the recycler view.
      *
-     * @param NotePickerItems List of items to be added to the recycler view.
+     * @param InsideFolderItems List of items to be added to the recycler view.
      */
     public NotePickerAdapter(ArrayList<InsideFolderItem> InsideFolderItems) {
         this.InsideFolderItems = InsideFolderItems;
@@ -104,14 +104,11 @@ public class NotePickerAdapter extends RecyclerView.Adapter<NotePickerAdapter.No
             imageView = itemView.findViewById(R.id.note_image);
             textView = itemView.findViewById(R.id.note_name);
 
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (listener != null) {
-                        int position = getAdapterPosition();
-                        if (position != RecyclerView.NO_POSITION) {
-                            listener.onItemClick(position);
-                        }
+            itemView.setOnClickListener(v -> {
+                if (listener != null) {
+                    int position = getAdapterPosition();
+                    if (position != RecyclerView.NO_POSITION) {
+                        listener.onItemClick(position);
                     }
                 }
             });

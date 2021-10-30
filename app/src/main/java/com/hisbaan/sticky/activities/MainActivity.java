@@ -1,6 +1,7 @@
 package com.hisbaan.sticky.activities;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -106,14 +107,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         toolbar.setNavigationIcon(R.drawable.ic_menu);
         toolbar.getMenu().clear();
         setSupportActionBar(toolbar);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (isFABOpen) {
-                    closeFABMenu();
-                }
-                drawerLayout.openDrawer(GravityCompat.START);
+        toolbar.setNavigationOnClickListener(v -> {
+            if (isFABOpen) {
+                closeFABMenu();
             }
+            drawerLayout.openDrawer(GravityCompat.START);
         });
         //Finding button in XML and initializing matching java component.
         drawerLayout = findViewById(R.id.drawer_layout);
@@ -194,6 +192,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
      *
      * @param v The View of the item interacted with.
      */
+    @SuppressLint("NonConstantResourceId")
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -246,6 +245,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
      * @param item The item in the navigation drawer that was clicked on.
      * @return Whether or not a button was clicked on.
      */
+    @SuppressLint("NonConstantResourceId")
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {

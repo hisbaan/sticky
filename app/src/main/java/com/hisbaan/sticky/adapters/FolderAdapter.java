@@ -20,7 +20,7 @@ import java.util.ArrayList;
  * Controls the order of things added into the recycler view
  */
 public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.FolderViewHolder> {
-    private ArrayList<FolderItem> folderItems;
+    private final ArrayList<FolderItem> folderItems;
     private OnItemClickListener listener;
 
     /**
@@ -119,14 +119,11 @@ public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.FolderView
 
             squareCardView.setOnCreateContextMenuListener(this);
 
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (listener != null) {
-                        int position = getAdapterPosition();
-                        if (position != RecyclerView.NO_POSITION) {
-                            listener.onItemClick(position);
-                        }
+            itemView.setOnClickListener(v -> {
+                if (listener != null) {
+                    int position = getAdapterPosition();
+                    if (position != RecyclerView.NO_POSITION) {
+                        listener.onItemClick(position);
                     }
                 }
             });

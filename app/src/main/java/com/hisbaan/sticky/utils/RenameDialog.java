@@ -3,7 +3,6 @@ package com.hisbaan.sticky.utils;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -40,17 +39,11 @@ public class RenameDialog extends AppCompatDialogFragment {
         renameEditText = view.findViewById(R.id.rename_edit_text);
 
         //Creating the dialog with an okay and cancel button.
-        builder.setView(view).setTitle("Rename").setNegativeButton("cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-            }
-        }).setPositiveButton("okay", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                //Gets the text inside of the box and sends it to the parent activity.
-                String newName = renameEditText.getText().toString();
-                listener.applyText(newName);
-            }
+        builder.setView(view).setTitle("Rename").setNegativeButton("cancel", (dialog, which) -> {
+        }).setPositiveButton("okay", (dialog, which) -> {
+            //Gets the text inside of the box and sends it to the parent activity.
+            String newName = renameEditText.getText().toString();
+            listener.applyText(newName);
         });
         return builder.create();
     } //End method onCreateDialog.

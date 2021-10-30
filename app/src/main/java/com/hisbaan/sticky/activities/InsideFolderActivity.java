@@ -1,10 +1,8 @@
 package com.hisbaan.sticky.activities;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.view.MenuItem;
@@ -28,7 +26,6 @@ import com.hisbaan.sticky.utils.Refactor;
 import com.hisbaan.sticky.utils.RenameDialog;
 
 import java.io.File;
-import java.io.FilenameFilter;
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -59,12 +56,7 @@ public class InsideFolderActivity extends AppCompatActivity implements InsideFol
         Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back);
         setSupportActionBar(toolbar);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                NavUtils.navigateUpFromSameTask(InsideFolderActivity.this);
-            }
-        });
+        toolbar.setNavigationOnClickListener(v -> NavUtils.navigateUpFromSameTask(InsideFolderActivity.this));
 
         //Sets status bar colour based on the current theme.
         int currentNightMode = getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
@@ -83,12 +75,7 @@ public class InsideFolderActivity extends AppCompatActivity implements InsideFol
 
         File directoryToSearch = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES) + "/" + getIntent().getStringExtra("folder_name"));
         System.out.println(directoryToSearch.toString());
-        File[] images = directoryToSearch.listFiles(new FilenameFilter() {
-            @Override
-            public boolean accept(File dir, String name) {
-                return name.substring(name.length() - 4).equals(".jpg");
-            }
-        });
+        File[] images = directoryToSearch.listFiles((dir, name) -> name.endsWith(".jpg"));
 
         assert images != null;
         for (File image : images) {
@@ -120,27 +107,20 @@ public class InsideFolderActivity extends AppCompatActivity implements InsideFol
                 AlertDialog.Builder alert = new AlertDialog.Builder(this);
                 alert.setTitle("Confirm Delete");
                 alert.setMessage("Are you sure you want to delete?\nThis action cannot be undone");
-                alert.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        if (new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES) + "/" + getIntent().getStringExtra("folder_name") + "/" + insideFolderItems.get(item.getGroupId()).getName() + ".jpg").delete()) {
-                            System.out.println("File deleted successfully");
-                        } else {
-                            System.out.println("File deletion failed.");
-                        }
-
-                        Refactor refactor = new Refactor();
-                        refactor.deleteNote(getApplicationContext(), getIntent().getStringExtra("folder_name"), insideFolderItems.get(item.getGroupId()).getName());
-
-                        insideFolderItems.remove(item.getGroupId());
-                        insideFolderAdapter.notifyItemRemoved(item.getGroupId());
+                alert.setPositiveButton(android.R.string.yes, (dialog, which) -> {
+                    if (new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES) + "/" + getIntent().getStringExtra("folder_name") + "/" + insideFolderItems.get(item.getGroupId()).getName() + ".jpg").delete()) {
+                        System.out.println("File deleted successfully");
+                    } else {
+                        System.out.println("File deletion failed.");
                     }
+
+                    Refactor refactor = new Refactor();
+                    refactor.deleteNote(getApplicationContext(), getIntent().getStringExtra("folder_name"), insideFolderItems.get(item.getGroupId()).getName());
+
+                    insideFolderItems.remove(item.getGroupId());
+                    insideFolderAdapter.notifyItemRemoved(item.getGroupId());
                 });
-                alert.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.cancel();
-                    }
-                });
+                alert.setNegativeButton(android.R.string.no, (dialog, which) -> dialog.cancel());
 
                 alert.show();
 

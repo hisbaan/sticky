@@ -18,7 +18,6 @@ import com.hisbaan.sticky.adapters.NotePickerAdapter;
 import com.hisbaan.sticky.models.InsideFolderItem;
 
 import java.io.File;
-import java.io.FilenameFilter;
 import java.util.ArrayList;
 
 /**
@@ -41,12 +40,7 @@ public class NotePickerActivity extends AppCompatActivity implements NotePickerA
         Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back);
         setSupportActionBar(toolbar);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                NavUtils.navigateUpFromSameTask(NotePickerActivity.this);
-            }
-        });
+        toolbar.setNavigationOnClickListener(v -> NavUtils.navigateUpFromSameTask(NotePickerActivity.this));
 
         //Sets status bar colour based on the current theme.
         int currentNightMode = getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
@@ -64,12 +58,7 @@ public class NotePickerActivity extends AppCompatActivity implements NotePickerA
         insideFolderItems = new ArrayList<>();
 
         File directoryToSearch = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES) + "/" + getIntent().getStringExtra("folder_name"));
-        File[] images = directoryToSearch.listFiles(new FilenameFilter() {
-            @Override
-            public boolean accept(File dir, String name) {
-                return name.substring(name.length() - 4).equals(".jpg");
-            }
-        });
+        File[] images = directoryToSearch.listFiles((dir, name) -> name.endsWith(".jpg"));
 
         assert images != null;
         for (File image : images) {

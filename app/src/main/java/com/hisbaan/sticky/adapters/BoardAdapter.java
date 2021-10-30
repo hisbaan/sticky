@@ -44,7 +44,7 @@ public class BoardAdapter extends RecyclerView.Adapter<BoardAdapter.BoardViewHol
      * @param boardItems List of items to be added to the recycler view.
      */
     public BoardAdapter(ArrayList<BoardItem> boardItems) {
-        this.boardItems = boardItems;
+        BoardAdapter.boardItems = boardItems;
     } //End constructor BoardAdapter.
 
     /**
@@ -106,14 +106,11 @@ public class BoardAdapter extends RecyclerView.Adapter<BoardAdapter.BoardViewHol
 
             squareCardView.setOnCreateContextMenuListener(this);
 
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (listener != null) {
-                        int position = getAdapterPosition();
-                        if (position != RecyclerView.NO_POSITION) {
-                            listener.onItemClick(position);
-                        }
+            itemView.setOnClickListener(v -> {
+                if (listener != null) {
+                    int position = getAdapterPosition();
+                    if (position != RecyclerView.NO_POSITION) {
+                        listener.onItemClick(position);
                     }
                 }
             });

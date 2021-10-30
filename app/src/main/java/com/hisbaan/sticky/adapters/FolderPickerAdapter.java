@@ -1,6 +1,5 @@
 package com.hisbaan.sticky.adapters;
 
-import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +11,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.hisbaan.sticky.R;
 import com.hisbaan.sticky.models.FolderItem;
-import com.hisbaan.sticky.models.SquareCardView;
 
 import java.util.ArrayList;
 
@@ -20,7 +18,7 @@ import java.util.ArrayList;
  * Controls the order of things added into the recycler view
  */
 public class FolderPickerAdapter extends RecyclerView.Adapter<FolderPickerAdapter.FolderPickerViewHolder> {
-    private ArrayList<FolderItem> folderItems;
+    private final ArrayList<FolderItem> folderItems;
     private OnItemClickListener listener;
 
     /**
@@ -115,14 +113,11 @@ public class FolderPickerAdapter extends RecyclerView.Adapter<FolderPickerAdapte
             imageView4 = itemView.findViewById(R.id.image_view_4);
             folderName = itemView.findViewById(R.id.folder_name);
 
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (listener != null) {
-                        int position = getAdapterPosition();
-                        if (position != RecyclerView.NO_POSITION) {
-                            listener.onItemClick(position);
-                        }
+            itemView.setOnClickListener(v -> {
+                if (listener != null) {
+                    int position = getAdapterPosition();
+                    if (position != RecyclerView.NO_POSITION) {
+                        listener.onItemClick(position);
                     }
                 }
             });

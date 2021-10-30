@@ -1,6 +1,7 @@
 package com.hisbaan.sticky.fragments;
 
-import android.content.DialogInterface;
+import static android.content.Context.MODE_PRIVATE;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -25,11 +26,8 @@ import com.hisbaan.sticky.utils.RenameDialog;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.ArrayList;
-
-import static android.content.Context.MODE_PRIVATE;
 
 /**
  * Displays the boards in a grid that the user can click on and interact with.
@@ -71,12 +69,7 @@ public class BoardFragment extends Fragment {
 
         //Finding the text files in /data/data/com.hisbaan.sticky/files/ which store data about the boards.
         final File directoryToSearch = requireActivity().getFilesDir();
-        final File[] boardNames = directoryToSearch.listFiles(new FilenameFilter() {
-            @Override
-            public boolean accept(File dir, String name) {
-                return name.substring(name.length() - 4).equals(".txt");
-            }
-        });
+        final File[] boardNames = directoryToSearch.listFiles((dir, name) -> name.endsWith(".txt"));
 
         //Formatting the directory names to remove the .txt from the name.
         assert boardNames != null;
@@ -97,19 +90,16 @@ public class BoardFragment extends Fragment {
         boardRecyclerView.setHasFixedSize(true);
 
         //Setting up the click listener that opens a board when clicked.
-        boardAdapter.setOnItemClickListener(new BoardAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(int position) {
-                //If the add tile is clicked, open a dialog to make a new board. If not, open the board.
-                if (position == boardItems.size() - 1) {
-                    MainActivity.applyTextState = MainActivity.BOARD_ACTIVITY;
-                    NewBoardDialog newBoardDialog = new NewBoardDialog();
-                    newBoardDialog.show(requireActivity().getSupportFragmentManager(), "new board dialog");
-                } else {
-                    Intent intent = new Intent(requireContext().getApplicationContext(), BoardActivity.class);
-                    intent.putExtra("board_name", boardItems.get(position).getBoardName());
-                    startActivity(intent);
-                }
+        boardAdapter.setOnItemClickListener(position -> {
+            //If the add tile is clicked, open a dialog to make a new board. If not, open the board.
+            if (position == boardItems.size() - 1) {
+                MainActivity.applyTextState = MainActivity.BOARD_ACTIVITY;
+                NewBoardDialog newBoardDialog = new NewBoardDialog();
+                newBoardDialog.show(requireActivity().getSupportFragmentManager(), "new board dialog");
+            } else {
+                Intent intent = new Intent(requireContext().getApplicationContext(), BoardActivity.class);
+                intent.putExtra("board_name", boardItems.get(position).getBoardName());
+                startActivity(intent);
             }
         });
     } //End method onViewCreated.
@@ -130,17 +120,8 @@ public class BoardFragment extends Fragment {
                     AlertDialog.Builder alert = new AlertDialog.Builder(requireContext());
                     alert.setTitle("Confirm Delete");
                     alert.setMessage("Are you sure you want to delete?\nThis action cannot be undone");
-                    alert.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            removeItem(item.getGroupId());
-                        }
-                    });
-                    alert.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.cancel();
-                        }
-                    });
+                    alert.setPositiveButton(android.R.string.yes, (dialog, which) -> removeItem(item.getGroupId()));
+                    alert.setNegativeButton(android.R.string.no, (dialog, which) -> dialog.cancel());
 
                     alert.show();
                 }
@@ -155,31 +136,24 @@ public class BoardFragment extends Fragment {
                 AlertDialog.Builder alert = new AlertDialog.Builder(requireContext());
                 alert.setTitle("Confirm Delete");
                 alert.setMessage("Are you sure you want to delete?\nThis action cannot be undone");
-                alert.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        FileOutputStream fos = null;
-                        try {
-                            fos = requireContext().openFileOutput(boardItems.get(item.getGroupId()).getBoardName() + ".txt", MODE_PRIVATE);
-                            fos.write("".getBytes());
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        } finally {
-                            if (fos != null) {
-                                try {
-                                    fos.close();
-                                } catch (IOException e) {
-                                    e.printStackTrace();
-                                }
+                alert.setPositiveButton(android.R.string.yes, (dialog, which) -> {
+                    FileOutputStream fos = null;
+                    try {
+                        fos = requireContext().openFileOutput(boardItems.get(item.getGroupId()).getBoardName() + ".txt", MODE_PRIVATE);
+                        fos.write("".getBytes());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } finally {
+                        if (fos != null) {
+                            try {
+                                fos.close();
+                            } catch (IOException e) {
+                                e.printStackTrace();
                             }
                         }
                     }
                 });
-                alert.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.cancel();
-                    }
-                }).show();
+                alert.setNegativeButton(android.R.string.no, (dialog, which) -> dialog.cancel()).show();
 
                 return true;
             default:

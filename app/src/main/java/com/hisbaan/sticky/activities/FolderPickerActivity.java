@@ -17,13 +17,10 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.hisbaan.sticky.R;
-import com.hisbaan.sticky.adapters.FolderAdapter;
 import com.hisbaan.sticky.adapters.FolderPickerAdapter;
 import com.hisbaan.sticky.models.FolderItem;
 
 import java.io.File;
-import java.io.FileFilter;
-import java.io.FilenameFilter;
 import java.util.ArrayList;
 
 /**
@@ -47,12 +44,7 @@ public class FolderPickerActivity extends AppCompatActivity implements FolderPic
         Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back);
         setSupportActionBar(toolbar);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                NavUtils.navigateUpFromSameTask(FolderPickerActivity.this);
-            }
-        });
+        toolbar.setNavigationOnClickListener(v -> NavUtils.navigateUpFromSameTask(FolderPickerActivity.this));
 
         //Sets status bar colour based on the current theme.
         int currentNightMode = getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
@@ -74,22 +66,12 @@ public class FolderPickerActivity extends AppCompatActivity implements FolderPic
 
         //Creating an array of directory names in the Pictures directory.
         assert directoryToSearch != null;
-        final File[] tempDirs = directoryToSearch.listFiles(new FileFilter() {
-            @Override
-            public boolean accept(File pathname) {
-                return pathname.isDirectory();
-            }
-        });
+        final File[] tempDirs = directoryToSearch.listFiles(File::isDirectory);
 
         //Getting a list of the files inside of the directories that end in .jpg for every single directory then creating an object to go along with it.
         assert tempDirs != null;
         for (File tempDir : tempDirs) {
-            File[] tempImages = tempDir.listFiles(new FilenameFilter() {
-                @Override
-                public boolean accept(File dir, String name) {
-                    return name.substring(name.length() - 4).equals(".jpg");
-                }
-            });
+            File[] tempImages = tempDir.listFiles((dir, name) -> name.endsWith(".jpg"));
 
             //Declaring the variables.
             Bitmap imageBitmap1;

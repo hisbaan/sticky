@@ -6,7 +6,6 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Scanner;
@@ -29,12 +28,7 @@ public class Refactor {
 
         //Getting a list of boards.
         File boardsDir = context.getFilesDir();
-        String[] boards = boardsDir.list(new FilenameFilter() {
-            @Override
-            public boolean accept(File dir, String name) {
-                return name.substring(name.length() - 4).equals(".txt");
-            }
-        });
+        String[] boards = boardsDir.list((dir, name) -> name.endsWith(".txt"));
 
         assert boards != null;
         for (String board : boards) {
@@ -89,19 +83,14 @@ public class Refactor {
     /**
      * Method that deletes reference of a note from all save files.
      *
-     * @param context Context of the application.
+     * @param context    Context of the application.
      * @param folderName Name of the folder that the note is in.
-     * @param noteName Name of the note.
+     * @param noteName   Name of the note.
      */
     public void deleteNote(Context context, String folderName, String noteName) {
         //Getting a list of boards.
         File boardsDir = context.getFilesDir();
-        String[] boards = boardsDir.list(new FilenameFilter() {
-            @Override
-            public boolean accept(File dir, String name) {
-                return name.substring(name.length() - 4).equals(".txt");
-            }
-        });
+        String[] boards = boardsDir.list((dir, name) -> name.endsWith(".txt"));
 
         assert boards != null;
         for (String board : boards) {
@@ -132,12 +121,12 @@ public class Refactor {
 
             assert file != null;
             Scanner sc = new Scanner(file);
-            String output = "";
+            StringBuilder output = new StringBuilder();
 
-            while(sc.hasNextLine()) {
+            while (sc.hasNextLine()) {
                 String currentLine = sc.nextLine();
                 if (!currentLine.contains(folderName + "," + noteName + ",")) {
-                    output += currentLine;
+                    output.append(currentLine);
                 }
             }
 
@@ -145,7 +134,7 @@ public class Refactor {
             FileOutputStream fos = null;
             try {
                 fos = context.openFileOutput(board, Context.MODE_PRIVATE);
-                fos.write(output.getBytes());
+                fos.write(output.toString().getBytes());
             } catch (IOException e) {
                 e.printStackTrace();
             } finally {
@@ -170,12 +159,7 @@ public class Refactor {
      */
     public void renameFolder(Context context, String oldName, String newName) {
         File boardsDir = context.getFilesDir();
-        String[] boards = boardsDir.list(new FilenameFilter() {
-            @Override
-            public boolean accept(File dir, String name) {
-                return name.substring(name.length() - 4).equals(".txt");
-            }
-        });
+        String[] boards = boardsDir.list((dir, name) -> name.endsWith(".txt"));
 
         assert boards != null;
         for (String board : boards) {
@@ -230,18 +214,13 @@ public class Refactor {
     /**
      * Method that deletes reference of a folder from all save files.
      *
-     * @param context Context of the application.
+     * @param context    Context of the application.
      * @param folderName Name of the folder.
      */
     public void deleteFolder(Context context, String folderName) {
         //Getting a list of boards.
         File boardsDir = context.getFilesDir();
-        String[] boards = boardsDir.list(new FilenameFilter() {
-            @Override
-            public boolean accept(File dir, String name) {
-                return name.substring(name.length() - 4).equals(".txt");
-            }
-        });
+        String[] boards = boardsDir.list((dir, name) -> name.endsWith(".txt"));
 
         assert boards != null;
         for (String board : boards) {
@@ -272,12 +251,12 @@ public class Refactor {
 
             assert file != null;
             Scanner sc = new Scanner(file);
-            String output = "";
+            StringBuilder output = new StringBuilder();
 
-            while(sc.hasNextLine()) {
+            while (sc.hasNextLine()) {
                 String currentLine = sc.nextLine();
                 if (!currentLine.contains(folderName + ",")) {
-                    output += currentLine;
+                    output.append(currentLine);
                 }
             }
 
@@ -285,7 +264,7 @@ public class Refactor {
             FileOutputStream fos = null;
             try {
                 fos = context.openFileOutput(board, Context.MODE_PRIVATE);
-                fos.write(output.getBytes());
+                fos.write(output.toString().getBytes());
             } catch (IOException e) {
                 e.printStackTrace();
             } finally {

@@ -6,7 +6,7 @@ import android.graphics.Bitmap;
  * InsideFolderItem model class that stores information for the recycler view inside of the folders.
  */
 public class InsideFolderItem {
-    private Bitmap image;
+    private final Bitmap image;
     private String name;
 
     /**

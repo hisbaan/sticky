@@ -6,7 +6,6 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.view.View;
 import android.widget.Toast;
 
@@ -17,13 +16,8 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.NavUtils;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
-import androidx.preference.SwitchPreference;
 
 import com.hisbaan.sticky.R;
-import com.hisbaan.sticky.utils.Refactor;
-
-import java.io.File;
-import java.util.Objects;
 
 /**
  * Creates the settings activity of the program where the user can manipulate the preferences.
@@ -33,8 +27,7 @@ public class SettingsActivity extends AppCompatActivity {
     //Final variables that are used for SharedPreferences.
     public static final String SHARED_PREFS = "sharedPrefs";
     public static final String THEME = "theme";
-    
-    
+
 
     /**
      * Sets up variables and places the settings fragment inside of the activity.
@@ -50,12 +43,7 @@ public class SettingsActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back);
         setSupportActionBar(toolbar);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                NavUtils.navigateUpFromSameTask(SettingsActivity.this);
-            }
-        });
+        toolbar.setNavigationOnClickListener(v -> NavUtils.navigateUpFromSameTask(SettingsActivity.this));
 
         //Sets status bar colour based on current theme
         int currentNightMode = getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
@@ -123,13 +111,10 @@ public class SettingsActivity extends AppCompatActivity {
                     return true;
                 }
 
-                Preference.OnPreferenceClickListener onPreferenceClickListener = new Preference.OnPreferenceClickListener() {
-                    @Override
-                    public boolean onPreferenceClick(Preference preference) {
-                        String key = preference.getKey();
-                        Toast.makeText(getContext(), key, Toast.LENGTH_SHORT).show();
-                        return false;
-                    }
+                final Preference.OnPreferenceClickListener onPreferenceClickListener = preference -> {
+                    String key = preference.getKey();
+                    Toast.makeText(getContext(), key, Toast.LENGTH_SHORT).show();
+                    return false;
                 };
             });
 
@@ -153,6 +138,7 @@ public class SettingsActivity extends AppCompatActivity {
 
         /**
          * Method that runs when a preference is clicked on.
+         *
          * @param preference The preference that was clicked on.
          * @return Whether or not an action was taken.
          */
@@ -182,12 +168,7 @@ public class SettingsActivity extends AppCompatActivity {
                     AlertDialog.Builder alert = new AlertDialog.Builder(requireContext());
                     alert.setTitle("Credits");
                     alert.setMessage("• Image processing - OpenCV Android Library (v4.3.0)\n\n• Material Design Guidelines - Material.io");
-                    alert.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.cancel();
-                        }
-                    }).show();
+                    alert.setPositiveButton(android.R.string.yes, (dialog, which) -> dialog.cancel()).show();
                     return true;
             }
             return false;

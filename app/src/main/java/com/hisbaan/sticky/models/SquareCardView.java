@@ -32,8 +32,5 @@ public class SquareCardView extends CardView {
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-
-//        int width = getMeasuredWidth();
-//        setMeasuredDimension(width, width);
     } //End method onMeasure.
 } //End class SquareCardView.

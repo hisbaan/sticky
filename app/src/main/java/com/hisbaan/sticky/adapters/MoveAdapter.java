@@ -9,7 +9,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.hisbaan.sticky.R;
-import com.hisbaan.sticky.models.MoveItem;
 
 import java.util.ArrayList;
 
@@ -17,7 +16,7 @@ import java.util.ArrayList;
  * Controls the order of the items added into the recycler view.
  */
 public class MoveAdapter extends RecyclerView.Adapter<MoveAdapter.MoveViewHolder> {
-    private ArrayList<String> MoveItems;
+    private final ArrayList<String> MoveItems;
     private OnItemClickListener listener;
 
     /**
@@ -100,14 +99,11 @@ public class MoveAdapter extends RecyclerView.Adapter<MoveAdapter.MoveViewHolder
 
             boardName = itemView.findViewById(R.id.board_name);
 
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (listener != null) {
-                        int position = getAdapterPosition();
-                        if (position != RecyclerView.NO_POSITION) {
-                            listener.onItemClick(position);
-                        }
+            itemView.setOnClickListener(v -> {
+                if (listener != null) {
+                    int position = getAdapterPosition();
+                    if (position != RecyclerView.NO_POSITION) {
+                        listener.onItemClick(position);
                     }
                 }
             });

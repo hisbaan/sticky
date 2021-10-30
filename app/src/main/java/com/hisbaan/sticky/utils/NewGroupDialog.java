@@ -40,17 +40,11 @@ public class NewGroupDialog extends DialogFragment {
         newGroupEditText = view.findViewById(R.id.new_group_edit_text);
 
         //Creating the dialog with an okay and cancel button.
-        builder.setView(view).setTitle("New Group").setNegativeButton("cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-            }
-        }).setPositiveButton("okay", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                //Gets the text inside of the box and sends it to the parent activity.
-                String newGroupName = newGroupEditText.getText().toString();
-                listener.applyText(newGroupName);
-            }
+        builder.setView(view).setTitle("New Group").setNegativeButton("cancel", (dialog, which) -> {
+        }).setPositiveButton("okay", (dialog, which) -> {
+            //Gets the text inside of the box and sends it to the parent activity.
+            String newGroupName = newGroupEditText.getText().toString();
+            listener.applyText(newGroupName);
         });
         return builder.create();
     } //End method onCreateDialog.

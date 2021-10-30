@@ -9,12 +9,12 @@ import android.graphics.Paint;
  * FolderItem model class that contains information about what is displayed as a folder preview.
  */
 public class FolderItem {
-    private Bitmap imageBitmap1;
-    private Bitmap imageBitmap2;
-    private Bitmap imageBitmap3;
-    private Bitmap imageBitmap4;
+    private final Bitmap imageBitmap1;
+    private final Bitmap imageBitmap2;
+    private final Bitmap imageBitmap3;
+    private final Bitmap imageBitmap4;
     private String name;
-    private int nullColor;
+    private final int nullColor;
 
     /**
      * Constructor that check if the images passed to it are null and if they are, sets a default image.

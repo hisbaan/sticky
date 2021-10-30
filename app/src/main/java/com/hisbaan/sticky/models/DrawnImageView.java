@@ -4,8 +4,8 @@ package com.hisbaan.sticky.models;
  * DrawnImageView model class to store information about the notes drawn in the board activity.
  */
 public class DrawnImageView {
-    private String groupName;
-    private String noteName;
+    private final String groupName;
+    private final String noteName;
 
     /**
      * Constructor that sets the folder name and the note name for the note.

@@ -40,17 +40,11 @@ public class NewBoardDialog extends AppCompatDialogFragment {
         newBoardEditText = view.findViewById(R.id.new_board_edit_text);
 
         //Creating the dialog with an okay and cancel button.
-        builder.setView(view).setTitle("New Board").setNegativeButton("cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-            }
-        }).setPositiveButton("okay", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                //Gets the text inside of the box and sends it to the parent activity.
-                String newBoardName = newBoardEditText.getText().toString();
-                listener.applyText(newBoardName);
-            }
+        builder.setView(view).setTitle("New Board").setNegativeButton("cancel", (dialog, which) -> {
+        }).setPositiveButton("okay", (dialog, which) -> {
+            //Gets the text inside of the box and sends it to the parent activity.
+            String newBoardName = newBoardEditText.getText().toString();
+            listener.applyText(newBoardName);
         });
         return builder.create();
     } //End method onCreateDialog.

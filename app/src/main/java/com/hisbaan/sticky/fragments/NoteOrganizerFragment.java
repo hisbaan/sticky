@@ -1,6 +1,5 @@
 package com.hisbaan.sticky.fragments;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -31,8 +30,6 @@ import com.hisbaan.sticky.utils.RenameDialog;
 import org.apache.commons.io.FileUtils;
 
 import java.io.File;
-import java.io.FileFilter;
-import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -82,22 +79,12 @@ public class NoteOrganizerFragment extends Fragment {
 
         //Creating an array of directory names in the Pictures directory.
         assert directoryToSearch != null;
-        final File[] tempDirs = directoryToSearch.listFiles(new FileFilter() {
-            @Override
-            public boolean accept(File pathname) {
-                return pathname.isDirectory();
-            }
-        });
+        final File[] tempDirs = directoryToSearch.listFiles(File::isDirectory);
 
         //Getting a list of the files inside of the directories that end in .jpg for every single directory then creating an object to go along with it.
         assert tempDirs != null;
         for (File tempDir : tempDirs) {
-            File[] tempImages = tempDir.listFiles(new FilenameFilter() {
-                @Override
-                public boolean accept(File dir, String name) {
-                    return name.substring(name.length() - 4).equals(".jpg");
-                }
-            });
+            File[] tempImages = tempDir.listFiles((dir, name) -> name.endsWith(".jpg"));
 
             //Declaring the variables.
             Bitmap imageBitmap1;
@@ -154,18 +141,16 @@ public class NoteOrganizerFragment extends Fragment {
         folderRecyclerView.setLayoutManager(folderGridLayoutManager);
         folderRecyclerView.setAdapter(folderAdapter);
 
-        folderAdapter.setOnItemClickListener(new FolderAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(int position) {
-                Intent intent = new Intent(requireContext(), InsideFolderActivity.class);
-                intent.putExtra("folder_name", folderItems.get(position).getName());
-                startActivity(intent);
-            }
+        folderAdapter.setOnItemClickListener(position -> {
+            Intent intent = new Intent(requireContext(), InsideFolderActivity.class);
+            intent.putExtra("folder_name", folderItems.get(position).getName());
+            startActivity(intent);
         });
     } //End method onViewCreated.
 
     /**
      * Method that runs when a context menu is selected.
+     *
      * @param item The item on which the context menu was triggered on.
      * @return Whether or not the action was completed.
      */
@@ -176,27 +161,20 @@ public class NoteOrganizerFragment extends Fragment {
                 AlertDialog.Builder alert = new AlertDialog.Builder(requireContext());
                 alert.setTitle("Confirm Delete");
                 alert.setMessage("Are you sure you want to delete?\nThis action cannot be undone");
-                alert.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        try {
-                            FileUtils.deleteDirectory(new File(requireContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES) + "/" + folderItems.get(item.getGroupId()).getName()));
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-
-                        Refactor refactor = new Refactor();
-                        refactor.deleteFolder(requireContext(), folderItems.get(item.getGroupId()).getName());
-
-                        folderItems.remove(item.getGroupId());
-                        folderAdapter.notifyItemRemoved(item.getGroupId());
+                alert.setPositiveButton(android.R.string.yes, (dialog, which) -> {
+                    try {
+                        FileUtils.deleteDirectory(new File(requireContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES) + "/" + folderItems.get(item.getGroupId()).getName()));
+                    } catch (IOException e) {
+                        e.printStackTrace();
                     }
+
+                    Refactor refactor = new Refactor();
+                    refactor.deleteFolder(requireContext(), folderItems.get(item.getGroupId()).getName());
+
+                    folderItems.remove(item.getGroupId());
+                    folderAdapter.notifyItemRemoved(item.getGroupId());
                 });
-                alert.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.cancel();
-                    }
-                });
+                alert.setNegativeButton(android.R.string.no, (dialog, which) -> dialog.cancel());
 
                 alert.show();
 
@@ -214,6 +192,7 @@ public class NoteOrganizerFragment extends Fragment {
 
     /**
      * Method that removes a given item from the recycler view with an animation.
+     *
      * @param position The position in the array of the item to be removed.
      */
     private void removeItem(int position) {
