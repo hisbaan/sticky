@@ -305,8 +305,6 @@ public class BoardActivity extends AppCompatActivity implements View.OnClickList
         if (requestCode == REQUEST_NEW_NOTE && resultCode == RESULT_OK && data != null) {
             String[] result = Objects.requireNonNull(data.getStringExtra("result")).split(",");
 
-            System.out.println(result[0] + " ,,,, " + result[1]);
-
             if (!result[0].equals("") || !result[1].equals("")) {
                 addNote(result[0], result[1] + ".jpg", (int) (screenWidth / 2), (int) (screenHeight / 2));
             } else {

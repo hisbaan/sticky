@@ -210,8 +210,9 @@ public class NamingActivity extends AppCompatActivity implements View.OnClickLis
             bmp = Bitmap.createBitmap(dst.cols(), dst.rows(), Bitmap.Config.ARGB_8888);
             Utils.matToBitmap(dst, bmp);
         } catch (CvException e) {
-            System.out.println("CvException ###");
+            System.out.println("CvException");
             System.out.println(e.getMessage());
+            e.printStackTrace();
         }
 
         //Setting bitmap as imageView image.

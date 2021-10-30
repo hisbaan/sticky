@@ -180,7 +180,6 @@ public class InsideFolderActivity extends AppCompatActivity implements InsideFol
      */
     @Override
     public void applyText(String newName) {
-        System.out.println(newName);
         File currentFile = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES) + "/" + getIntent().getStringExtra("folder_name") + "/" + insideFolderItems.get(renameIndex).getName() + ".jpg");
         File newFile = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES) + "/" + getIntent().getStringExtra("folder_name") + "/" + newName + ".jpg");
 

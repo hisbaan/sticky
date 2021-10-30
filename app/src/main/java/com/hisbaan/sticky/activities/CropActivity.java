@@ -119,7 +119,6 @@ public class CropActivity extends AppCompatActivity implements View.OnTouchListe
             e.printStackTrace();
         }
 
-        System.out.println(angle + " ###############");
         if (angle == 6) {
             angle = 90;
         }

@@ -159,8 +159,6 @@ public class FolderPickerActivity extends AppCompatActivity implements FolderPic
             Intent resultIntent = new Intent();
             resultIntent.putExtra("result", result);
 
-            System.out.println("THIS IS A THING " + result);
-
             setResult(RESULT_OK, resultIntent);
             finish();
         }

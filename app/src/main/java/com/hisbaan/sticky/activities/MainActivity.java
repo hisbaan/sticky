@@ -289,7 +289,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public void onBackPressed() {
         //TODO if the user enables the setting, make the back button open the drawer instead of closing the app.
-        //TODO aks the user for confirmation before closing the app --> Closing the app with the back button will kill the process (make this a setting).
+        //TODO ask the user for confirmation before closing the app --> Closing the app with the back button will kill the process (make this a setting).
         //If the navigation drawer is open, close it instead of exiting out of the app.
         if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
             drawerLayout.closeDrawer(GravityCompat.START);

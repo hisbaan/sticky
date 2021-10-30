@@ -90,7 +90,7 @@ public class NotePickerActivity extends AppCompatActivity implements NotePickerA
         resultIntent.putExtra("result", result);
 
         //TODO find bug where null is created if you exit out of the folder/note select with the back arrow
-        System.out.println("THIS IS A THING " + result);
+        System.out.println("Result: " + result);
 
         setResult(RESULT_OK, resultIntent);
         finish();
